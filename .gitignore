@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.DS_Store
+outputs_results/*.npy
+outputs_results/_per_city/
+data/processed/
+artefacts/
+.venv/
