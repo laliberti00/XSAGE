@@ -1,0 +1,16 @@
+band,city,K,eps,bfrac,ari,in_band
+5%-35%,istanbul,4,0.01,0.199,0.798,True
+5%-35%,bangkok,4,0.03,0.157,1.0,True
+5%-35%,nyc_tist,4,0.01,0.071,0.951,True
+5%-35%,saopaulo,4,0.01,0.052,0.887,True
+5%-35%,tokyo_tist,4,0.07,0.205,0.936,True
+10%-30%,istanbul,4,0.01,0.199,0.798,True
+10%-30%,bangkok,4,0.03,0.157,1.0,True
+10%-30%,nyc_tist,4,0.02,0.163,0.955,True
+10%-30%,saopaulo,4,0.03,0.152,0.862,True
+10%-30%,tokyo_tist,4,0.07,0.205,0.936,True
+15%-25%,istanbul,4,0.01,0.199,0.798,True
+15%-25%,bangkok,4,0.03,0.157,1.0,True
+15%-25%,nyc_tist,4,0.03,0.215,0.955,True
+15%-25%,saopaulo,4,0.03,0.152,0.862,True
+15%-25%,tokyo_tist,4,0.07,0.205,0.936,True

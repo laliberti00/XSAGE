@@ -1,0 +1,6 @@
+city,n_users_train,n_users_test,n_items,n_int_train,n_int_test,n_test,URM_train_density,kcore_user_min_full,kcore_item_min_full,n_cold_dropped,n_users_zero,n_items_zero,K_mac,verdict,fails,notes
+istanbul,22631,22631,9305,998030,136220,136220,0.002718273553575741,9,10,12,0,0,10,PASS,,"user-min (full) = 9 (cold-drop removed 12 interactions post-kcore; expected, not a violation)"
+bangkok,6316,6316,5185,323167,43556,43556,0.005478028585160951,9,10,27,0,0,10,PASS,,"user-min (full) = 9 (cold-drop removed 27 interactions post-kcore; expected, not a violation)"
+nyc_tist,4113,4113,3987,124270,17702,17702,0.005171987661577736,10,10,13,0,0,10,PASS,,
+saopaulo,4395,4395,3207,172781,23821,23821,0.006266511006036639,10,10,11,0,0,10,PASS,,
+tokyo_tist,7160,7160,5723,447563,59561,59561,0.00479706994319696,9,10,11,0,0,9,PASS,,"user-min (full) = 9 (cold-drop removed 11 interactions post-kcore; expected, not a violation); K_mac=9 (city genuinely lacks some macro categories; coherent)"

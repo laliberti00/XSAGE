@@ -1,0 +1,6 @@
+city,K_star,n_attractors,K_mac,n_users,log10_users,exceed_|A|,exceed_K_mac,exceed_log10_users
+istanbul,5,3,10,22631,4.35,2,-5,0.6500000000000004
+bangkok,8,4,10,6316,3.8,4,-2,4.2
+nyc_tist,6,6,10,4113,3.61,0,-4,2.39
+saopaulo,3,3,10,4395,3.64,0,-7,-0.6400000000000001
+tokyo_tist,4,2,9,7160,3.85,2,-5,0.1499999999999999

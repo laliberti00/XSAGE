@@ -1,0 +1,121 @@
+deficit,criterion,param,thr,city,n_sink,sink_ids,touch_share
+D1,outlier_c=1.0,1.0,0.7894,istanbul,5,"[0, 1, 2, 3, 4]",0.7935
+D1,outlier_c=1.0,1.0,0.7894,bangkok,0,[],0.0
+D1,outlier_c=1.0,1.0,0.7894,nyc_tist,0,[],0.0
+D1,outlier_c=1.0,1.0,0.7894,saopaulo,0,[],0.0
+D1,outlier_c=1.0,1.0,0.7894,tokyo_tist,1,[3],0.4063
+D1,outlier_c=1.5,1.5,0.803,istanbul,0,[],0.0
+D1,outlier_c=1.5,1.5,0.803,bangkok,0,[],0.0
+D1,outlier_c=1.5,1.5,0.803,nyc_tist,0,[],0.0
+D1,outlier_c=1.5,1.5,0.803,saopaulo,0,[],0.0
+D1,outlier_c=1.5,1.5,0.803,tokyo_tist,0,[],0.0
+D1,outlier_c=2.0,2.0,0.8166,istanbul,0,[],0.0
+D1,outlier_c=2.0,2.0,0.8166,bangkok,0,[],0.0
+D1,outlier_c=2.0,2.0,0.8166,nyc_tist,0,[],0.0
+D1,outlier_c=2.0,2.0,0.8166,saopaulo,0,[],0.0
+D1,outlier_c=2.0,2.0,0.8166,tokyo_tist,0,[],0.0
+D1,pctl_70,70.0,0.7831,istanbul,5,"[0, 1, 2, 3, 4]",0.7935
+D1,pctl_70,70.0,0.7831,bangkok,0,[],0.0
+D1,pctl_70,70.0,0.7831,nyc_tist,0,[],0.0
+D1,pctl_70,70.0,0.7831,saopaulo,0,[],0.0
+D1,pctl_70,70.0,0.7831,tokyo_tist,2,"[1, 3]",0.5395
+D1,pctl_80,80.0,0.7906,istanbul,5,"[0, 1, 2, 3, 4]",0.7935
+D1,pctl_80,80.0,0.7906,bangkok,0,[],0.0
+D1,pctl_80,80.0,0.7906,nyc_tist,0,[],0.0
+D1,pctl_80,80.0,0.7906,saopaulo,0,[],0.0
+D1,pctl_80,80.0,0.7906,tokyo_tist,0,[],0.0
+D1,pctl_90,90.0,0.7926,istanbul,2,"[0, 2]",0.3721
+D1,pctl_90,90.0,0.7926,bangkok,0,[],0.0
+D1,pctl_90,90.0,0.7926,nyc_tist,0,[],0.0
+D1,pctl_90,90.0,0.7926,saopaulo,0,[],0.0
+D1,pctl_90,90.0,0.7926,tokyo_tist,0,[],0.0
+D2,outlier_c=1.0,1.0,0.0083,istanbul,0,[],0.0
+D2,outlier_c=1.0,1.0,0.0083,bangkok,1,[0],0.1026
+D2,outlier_c=1.0,1.0,0.0083,nyc_tist,1,[3],0.1043
+D2,outlier_c=1.0,1.0,0.0083,saopaulo,1,[0],0.2231
+D2,outlier_c=1.0,1.0,0.0083,tokyo_tist,0,[],0.0
+D2,outlier_c=1.5,1.5,0.0126,istanbul,0,[],0.0
+D2,outlier_c=1.5,1.5,0.0126,bangkok,0,[],0.0
+D2,outlier_c=1.5,1.5,0.0126,nyc_tist,1,[3],0.1043
+D2,outlier_c=1.5,1.5,0.0126,saopaulo,1,[0],0.2231
+D2,outlier_c=1.5,1.5,0.0126,tokyo_tist,0,[],0.0
+D2,outlier_c=2.0,2.0,0.017,istanbul,0,[],0.0
+D2,outlier_c=2.0,2.0,0.017,bangkok,0,[],0.0
+D2,outlier_c=2.0,2.0,0.017,nyc_tist,0,[],0.0
+D2,outlier_c=2.0,2.0,0.017,saopaulo,1,[0],0.2231
+D2,outlier_c=2.0,2.0,0.017,tokyo_tist,0,[],0.0
+D2,pctl_70,70.0,0.0048,istanbul,0,[],0.0
+D2,pctl_70,70.0,0.0048,bangkok,2,"[0, 2]",0.2936
+D2,pctl_70,70.0,0.0048,nyc_tist,2,"[3, 4]",0.2606
+D2,pctl_70,70.0,0.0048,saopaulo,1,[0],0.2231
+D2,pctl_70,70.0,0.0048,tokyo_tist,2,"[1, 3]",0.5395
+D2,pctl_80,80.0,0.0067,istanbul,0,[],0.0
+D2,pctl_80,80.0,0.0067,bangkok,1,[0],0.1026
+D2,pctl_80,80.0,0.0067,nyc_tist,2,"[3, 4]",0.2606
+D2,pctl_80,80.0,0.0067,saopaulo,1,[0],0.2231
+D2,pctl_80,80.0,0.0067,tokyo_tist,1,[3],0.4063
+D2,pctl_90,90.0,0.0096,istanbul,0,[],0.0
+D2,pctl_90,90.0,0.0096,bangkok,1,[0],0.1026
+D2,pctl_90,90.0,0.0096,nyc_tist,1,[3],0.1043
+D2,pctl_90,90.0,0.0096,saopaulo,1,[0],0.2231
+D2,pctl_90,90.0,0.0096,tokyo_tist,0,[],0.0
+D3,outlier_c=1.0,1.0,0.1482,istanbul,0,[],0.0
+D3,outlier_c=1.0,1.0,0.1482,bangkok,0,[],0.0
+D3,outlier_c=1.0,1.0,0.1482,nyc_tist,3,"[3, 4, 5]",0.3736
+D3,outlier_c=1.0,1.0,0.1482,saopaulo,1,[0],0.2231
+D3,outlier_c=1.0,1.0,0.1482,tokyo_tist,0,[],0.0
+D3,outlier_c=1.5,1.5,0.1818,istanbul,0,[],0.0
+D3,outlier_c=1.5,1.5,0.1818,bangkok,0,[],0.0
+D3,outlier_c=1.5,1.5,0.1818,nyc_tist,3,"[3, 4, 5]",0.3736
+D3,outlier_c=1.5,1.5,0.1818,saopaulo,0,[],0.0
+D3,outlier_c=1.5,1.5,0.1818,tokyo_tist,0,[],0.0
+D3,outlier_c=2.0,2.0,0.2155,istanbul,0,[],0.0
+D3,outlier_c=2.0,2.0,0.2155,bangkok,0,[],0.0
+D3,outlier_c=2.0,2.0,0.2155,nyc_tist,2,"[3, 5]",0.2173
+D3,outlier_c=2.0,2.0,0.2155,saopaulo,0,[],0.0
+D3,outlier_c=2.0,2.0,0.2155,tokyo_tist,0,[],0.0
+D3,pctl_70,70.0,0.1043,istanbul,0,[],0.0
+D3,pctl_70,70.0,0.1043,bangkok,1,[0],0.1026
+D3,pctl_70,70.0,0.1043,nyc_tist,5,"[0, 1, 3, 4, 5]",0.5998
+D3,pctl_70,70.0,0.1043,saopaulo,1,[0],0.2231
+D3,pctl_70,70.0,0.1043,tokyo_tist,0,[],0.0
+D3,pctl_80,80.0,0.111,istanbul,0,[],0.0
+D3,pctl_80,80.0,0.111,bangkok,0,[],0.0
+D3,pctl_80,80.0,0.111,nyc_tist,4,"[0, 3, 4, 5]",0.4447
+D3,pctl_80,80.0,0.111,saopaulo,1,[0],0.2231
+D3,pctl_80,80.0,0.111,tokyo_tist,0,[],0.0
+D3,pctl_90,90.0,0.1964,istanbul,0,[],0.0
+D3,pctl_90,90.0,0.1964,bangkok,0,[],0.0
+D3,pctl_90,90.0,0.1964,nyc_tist,3,"[3, 4, 5]",0.3736
+D3,pctl_90,90.0,0.1964,saopaulo,0,[],0.0
+D3,pctl_90,90.0,0.1964,tokyo_tist,0,[],0.0
+D4,outlier_c=1.0,1.0,0.9959,istanbul,0,[],0.0
+D4,outlier_c=1.0,1.0,0.9959,bangkok,0,[],0.0
+D4,outlier_c=1.0,1.0,0.9959,nyc_tist,0,[],0.0
+D4,outlier_c=1.0,1.0,0.9959,saopaulo,1,[0],0.2231
+D4,outlier_c=1.0,1.0,0.9959,tokyo_tist,4,"[0, 1, 2, 3]",0.8271
+D4,outlier_c=1.5,1.5,1.1291,istanbul,0,[],0.0
+D4,outlier_c=1.5,1.5,1.1291,bangkok,0,[],0.0
+D4,outlier_c=1.5,1.5,1.1291,nyc_tist,0,[],0.0
+D4,outlier_c=1.5,1.5,1.1291,saopaulo,0,[],0.0
+D4,outlier_c=1.5,1.5,1.1291,tokyo_tist,2,"[1, 3]",0.5395
+D4,outlier_c=2.0,2.0,1.2624,istanbul,0,[],0.0
+D4,outlier_c=2.0,2.0,1.2624,bangkok,0,[],0.0
+D4,outlier_c=2.0,2.0,1.2624,nyc_tist,0,[],0.0
+D4,outlier_c=2.0,2.0,1.2624,saopaulo,0,[],0.0
+D4,outlier_c=2.0,2.0,1.2624,tokyo_tist,2,"[1, 3]",0.5395
+D4,pctl_70,70.0,0.7209,istanbul,0,[],0.0
+D4,pctl_70,70.0,0.7209,bangkok,1,[0],0.1026
+D4,pctl_70,70.0,0.7209,nyc_tist,0,[],0.0
+D4,pctl_70,70.0,0.7209,saopaulo,2,"[0, 1]",0.323
+D4,pctl_70,70.0,0.7209,tokyo_tist,4,"[0, 1, 2, 3]",0.8271
+D4,pctl_80,80.0,0.8727,istanbul,0,[],0.0
+D4,pctl_80,80.0,0.8727,bangkok,0,[],0.0
+D4,pctl_80,80.0,0.8727,nyc_tist,0,[],0.0
+D4,pctl_80,80.0,0.8727,saopaulo,1,[0],0.2231
+D4,pctl_80,80.0,0.8727,tokyo_tist,4,"[0, 1, 2, 3]",0.8271
+D4,pctl_90,90.0,1.0975,istanbul,0,[],0.0
+D4,pctl_90,90.0,1.0975,bangkok,0,[],0.0
+D4,pctl_90,90.0,1.0975,nyc_tist,0,[],0.0
+D4,pctl_90,90.0,1.0975,saopaulo,0,[],0.0
+D4,pctl_90,90.0,1.0975,tokyo_tist,3,"[1, 2, 3]",0.5907

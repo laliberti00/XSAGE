@@ -28,6 +28,12 @@ DEFAULT_DATA_ROOT = Path(os.environ.get("XSAGE_DATA_ROOT",
                                                 "/Users/lucaaliberti/Downloads/IntentAwareRS_thesis"))
 DEFAULT_CITIES = ("istanbul", "bangkok", "nyc_tist", "saopaulo", "tokyo_tist")
 
+# Backbone scores live LOCALLY in the clean repo after the one-time
+# checksum-verified import (see docs/00_data_backbone/). The loader reads them
+# from here so the repo is standalone; it only falls back to DEFAULT_DATA_ROOT
+# (the old repo) when a local copy is missing.
+LOCAL_BACKBONE_ROOT = Path(__file__).resolve().parent.parent / "data"
+
 
 def load_city(city: str, data_root: Path | None = None) -> dict:
     root = Path(data_root) if data_root else DEFAULT_DATA_ROOT
@@ -74,12 +80,22 @@ def load_fit(city: str, data_root: Path | None = None) -> dict:
 
 def load_backbone_scores(city: str,
                               data_root: Path | None = None) -> tuple[np.ndarray, np.ndarray]:
-    """Return (B_blind (n_users, n_items), B_full (n_test, n_items, mmap))."""
+    """Return (B_blind (n_users, n_items), B_full (n_test, n_items, mmap)).
+
+    Reads the checksum-verified LOCAL copy under data/<city>/backbone/ to keep
+    the repo standalone; falls back to the old repo only if a local file is
+    absent.
+    """
     root = Path(data_root) if data_root else DEFAULT_DATA_ROOT
-    blind = np.load(root / "outputs" / city / "xsage" / "backbone" / "FM.scores.npy",
-                       mmap_mode="r")
-    full = np.load(root / "outputs" / city / "xsage" / "backbone" / "Bfull.scores.npy",
-                      mmap_mode="r")
+
+    def _resolve(fn: str) -> Path:
+        local = LOCAL_BACKBONE_ROOT / city / "backbone" / fn
+        if local.exists():
+            return local
+        return root / "outputs" / city / "xsage" / "backbone" / fn
+
+    blind = np.load(_resolve("FM.scores.npy"), mmap_mode="r")
+    full = np.load(_resolve("Bfull.scores.npy"), mmap_mode="r")
     return blind, full
 
 

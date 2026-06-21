@@ -1,0 +1,16 @@
+band,city,eps_star,in_band
+5%-35%,istanbul,0.01,True
+5%-35%,bangkok,0.01,True
+5%-35%,nyc_tist,0.01,True
+5%-35%,saopaulo,0.05,True
+5%-35%,tokyo_tist,0.07,True
+10%-30%,istanbul,0.01,True
+10%-30%,bangkok,0.01,False
+10%-30%,nyc_tist,0.02,True
+10%-30%,saopaulo,0.05,True
+10%-30%,tokyo_tist,0.07,True
+15%-25%,istanbul,0.01,True
+15%-25%,bangkok,0.01,False
+15%-25%,nyc_tist,0.02,True
+15%-25%,saopaulo,0.05,True
+15%-25%,tokyo_tist,0.07,True

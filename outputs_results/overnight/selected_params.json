@@ -1,0 +1,56 @@
+{
+  "perception_shared": {
+    "gamma": 0.4,
+    "depth": 6,
+    "n": 3,
+    "H": 2,
+    "beta": 0.7
+  },
+  "plateau_score": 0.7617570256149699,
+  "boundary_band": [
+    0.1,
+    0.3
+  ],
+  "per_city": {
+    "istanbul": {
+      "K": 4,
+      "eps": 0.01,
+      "boundary_fraction": 0.1985,
+      "in_band": true,
+      "ari_plateau": 0.6983257406852713,
+      "ari_confirm_S10": 0.670332790154726
+    },
+    "bangkok": {
+      "K": 4,
+      "eps": 0.03,
+      "boundary_fraction": 0.1569,
+      "in_band": true,
+      "ari_plateau": 0.9999675272096884,
+      "ari_confirm_S10": 0.8763741340078595
+    },
+    "nyc_tist": {
+      "K": 4,
+      "eps": 0.02,
+      "boundary_fraction": 0.1628,
+      "in_band": true,
+      "ari_plateau": 0.818184555740291,
+      "ari_confirm_S10": 0.7961906475061283
+    },
+    "saopaulo": {
+      "K": 4,
+      "eps": 0.03,
+      "boundary_fraction": 0.1517,
+      "in_band": true,
+      "ari_plateau": 0.8616888556603491,
+      "ari_confirm_S10": 0.8561245355637069
+    },
+    "tokyo_tist": {
+      "K": 4,
+      "eps": 0.07,
+      "boundary_fraction": 0.2053,
+      "in_band": true,
+      "ari_plateau": 0.9356078074740408,
+      "ari_confirm_S10": 0.8142487168689347
+    }
+  }
+}

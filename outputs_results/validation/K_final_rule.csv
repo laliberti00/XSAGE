@@ -1,0 +1,36 @@
+city,K,silhouette,CH,DB,ARI,max_sil,sil_range,regime,K_star,branch,note
+istanbul,3,0.2834,613446.9,1.4974,0.5471,0.2846,0.0452,diffuse,5,fallback,nessun K≥0.7→argmaxARI
+istanbul,4,0.2776,519938.3,1.5581,0.5449,0.2846,0.0452,diffuse,5,fallback,nessun K≥0.7→argmaxARI
+istanbul,5,0.2846,464154.8,1.3978,0.67,0.2846,0.0452,diffuse,5,fallback,nessun K≥0.7→argmaxARI
+istanbul,6,0.2405,409369.1,1.5344,0.5541,0.2846,0.0452,diffuse,5,fallback,nessun K≥0.7→argmaxARI
+istanbul,7,0.2626,412641.8,1.3632,0.4942,0.2846,0.0452,diffuse,5,fallback,nessun K≥0.7→argmaxARI
+istanbul,8,0.2394,385667.1,1.355,0.6258,0.2846,0.0452,diffuse,5,fallback,nessun K≥0.7→argmaxARI
+istanbul,9,0.2706,418449.2,1.2154,0.6615,0.2846,0.0452,diffuse,5,fallback,nessun K≥0.7→argmaxARI
+bangkok,3,0.2178,114474.2,2.058,0.6537,0.3559,0.1381,sharp,8,principale,"sil=8,CH=9,DB=9,accordo=sì"
+bangkok,4,0.2321,89056.4,1.9157,0.8606,0.3559,0.1381,sharp,8,principale,"sil=8,CH=9,DB=9,accordo=sì"
+bangkok,5,0.3102,132701.2,1.4034,0.5657,0.3559,0.1381,sharp,8,principale,"sil=8,CH=9,DB=9,accordo=sì"
+bangkok,6,0.3245,117199.5,1.3501,0.4069,0.3559,0.1381,sharp,8,principale,"sil=8,CH=9,DB=9,accordo=sì"
+bangkok,7,0.3202,100565.7,1.3466,0.4101,0.3559,0.1381,sharp,8,principale,"sil=8,CH=9,DB=9,accordo=sì"
+bangkok,8,0.3559,136849.4,1.1518,0.4727,0.3559,0.1381,sharp,8,principale,"sil=8,CH=9,DB=9,accordo=sì"
+bangkok,9,0.3521,137198.7,1.0899,0.5763,0.3559,0.1381,sharp,8,principale,"sil=8,CH=9,DB=9,accordo=sì"
+nyc_tist,3,0.353,65227.8,1.336,0.9999,0.3944,0.1043,sharp,6,principale,"sil=6,CH=6,DB=6,accordo=sì"
+nyc_tist,4,0.346,60608.1,1.1772,1.0,0.3944,0.1043,sharp,6,principale,"sil=6,CH=6,DB=6,accordo=sì"
+nyc_tist,5,0.3875,74177.4,1.0452,0.9994,0.3944,0.1043,sharp,6,principale,"sil=6,CH=6,DB=6,accordo=sì"
+nyc_tist,6,0.3944,77035.4,0.9693,0.9976,0.3944,0.1043,sharp,6,principale,"sil=6,CH=6,DB=6,accordo=sì"
+nyc_tist,7,0.3534,66848.7,1.1843,0.8234,0.3944,0.1043,sharp,6,principale,"sil=6,CH=6,DB=6,accordo=sì"
+nyc_tist,8,0.3128,61795.4,1.3086,0.7039,0.3944,0.1043,sharp,6,principale,"sil=6,CH=6,DB=6,accordo=sì"
+nyc_tist,9,0.2901,62234.2,1.3482,0.7857,0.3944,0.1043,sharp,6,principale,"sil=6,CH=6,DB=6,accordo=sì"
+saopaulo,3,0.4663,394792.8,0.8705,0.9999,0.4663,0.0992,sharp,3,principale,"sil=3,CH=3,DB=3,accordo=sì"
+saopaulo,4,0.4073,298858.9,1.0253,0.7718,0.4663,0.0992,sharp,3,principale,"sil=3,CH=3,DB=3,accordo=sì"
+saopaulo,5,0.3811,249540.3,1.0593,0.6556,0.4663,0.0992,sharp,3,principale,"sil=3,CH=3,DB=3,accordo=sì"
+saopaulo,6,0.3759,228123.0,1.1178,0.6985,0.4663,0.0992,sharp,3,principale,"sil=3,CH=3,DB=3,accordo=sì"
+saopaulo,7,0.4136,232544.2,0.9575,0.6425,0.4663,0.0992,sharp,3,principale,"sil=3,CH=3,DB=3,accordo=sì"
+saopaulo,8,0.405,202151.5,1.0003,0.6801,0.4663,0.0992,sharp,3,principale,"sil=3,CH=3,DB=3,accordo=sì"
+saopaulo,9,0.3671,185367.8,1.0762,0.6285,0.4663,0.0992,sharp,3,principale,"sil=3,CH=3,DB=3,accordo=sì"
+tokyo_tist,3,0.4338,280903.5,0.9797,0.7268,0.4549,0.0952,sharp,4,principale,"sil=4,CH=4,DB=4,accordo=sì"
+tokyo_tist,4,0.4549,377089.0,0.962,0.7884,0.4549,0.0952,sharp,4,principale,"sil=4,CH=4,DB=4,accordo=sì"
+tokyo_tist,5,0.4123,322588.7,1.1802,0.667,0.4549,0.0952,sharp,4,principale,"sil=4,CH=4,DB=4,accordo=sì"
+tokyo_tist,6,0.408,265638.0,1.3195,0.6814,0.4549,0.0952,sharp,4,principale,"sil=4,CH=4,DB=4,accordo=sì"
+tokyo_tist,7,0.4227,245677.1,1.1906,0.7143,0.4549,0.0952,sharp,4,principale,"sil=4,CH=4,DB=4,accordo=sì"
+tokyo_tist,8,0.3848,273090.3,1.1879,0.7552,0.4549,0.0952,sharp,4,principale,"sil=4,CH=4,DB=4,accordo=sì"
+tokyo_tist,9,0.3597,263219.3,1.2949,0.7119,0.4549,0.0952,sharp,4,principale,"sil=4,CH=4,DB=4,accordo=sì"

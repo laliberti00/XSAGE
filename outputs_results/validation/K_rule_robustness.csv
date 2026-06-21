@@ -1,0 +1,11 @@
+kind,threshold,outcome
+nitidezza,0.2989,"sharp=['bangkok', 'nyc_tist', 'saopaulo', 'tokyo_tist'] | diffuse=['istanbul']"
+nitidezza,0.3096,"sharp=['bangkok', 'nyc_tist', 'saopaulo', 'tokyo_tist'] | diffuse=['istanbul']"
+nitidezza,0.3203,"sharp=['bangkok', 'nyc_tist', 'saopaulo', 'tokyo_tist'] | diffuse=['istanbul']"
+nitidezza,0.3309,"sharp=['bangkok', 'nyc_tist', 'saopaulo', 'tokyo_tist'] | diffuse=['istanbul']"
+nitidezza,0.3416,"sharp=['bangkok', 'nyc_tist', 'saopaulo', 'tokyo_tist'] | diffuse=['istanbul']"
+adeguatezza/istanbul,0.6,K*=5
+adeguatezza/istanbul,0.65,K*=5
+adeguatezza/istanbul,0.7,"K*=5 (argmaxARI, soglia non raggiunta)"
+adeguatezza/istanbul,0.75,"K*=5 (argmaxARI, soglia non raggiunta)"
+adeguatezza/istanbul,0.8,"K*=5 (argmaxARI, soglia non raggiunta)"

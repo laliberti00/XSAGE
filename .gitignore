@@ -3,6 +3,8 @@ __pycache__/
 .DS_Store
 outputs_results/*.npy
 outputs_results/_per_city/
+data/
 data/processed/
 artefacts/
 .venv/
+logs/

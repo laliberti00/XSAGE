@@ -1,0 +1,25 @@
+city,situation,n_req,M_A,M_B,M_C,intent_top,exposed_top,true_top
+istanbul,0,42687,0.5142,0.5005,0.8517,Outdoors & Recreation,Outdoors & Recreation,Outdoors & Recreation
+istanbul,1,21804,0.4842,0.588,0.8921,Outdoors & Recreation,Outdoors & Recreation,Outdoors & Recreation
+istanbul,2,16473,0.4868,0.5036,0.7762,Outdoors & Recreation,Outdoors & Recreation,Shop & Service
+istanbul,3,35826,0.5216,0.6186,0.8962,Outdoors & Recreation,Outdoors & Recreation,Food
+istanbul,4,19430,0.5186,0.8544,1.3299,Outdoors & Recreation,Outdoors & Recreation,College & University
+bangkok,0,4584,0.5997,0.5259,0.3351,Shop & Service,Shop & Service,Shop & Service
+bangkok,1,19681,0.4844,0.5164,0.4187,Shop & Service,Shop & Service,Shop & Service
+bangkok,2,8648,0.4994,0.4257,0.3418,Shop & Service,Shop & Service,Shop & Service
+bangkok,3,1833,0.5185,0.7255,0.8125,Shop & Service,Shop & Service,Nightlife Spot
+bangkok,4,2254,0.4551,1.1616,1.1078,Shop & Service,Shop & Service,Professional & Other Places
+bangkok,5,6556,0.5266,0.5363,0.374,Shop & Service,Shop & Service,Shop & Service
+nyc_tist,0,1731,0.4126,0.7917,0.5736,Food,Arts & Entertainment,Nightlife Spot
+nyc_tist,1,2887,0.5289,0.5862,0.1955,Shop & Service,Outdoors & Recreation,Shop & Service
+nyc_tist,2,5706,0.4838,0.5319,0.2721,Food,Arts & Entertainment,Food
+nyc_tist,3,2152,0.5021,0.3733,0.3242,Food,Outdoors & Recreation,Outdoors & Recreation
+nyc_tist,4,2794,0.5933,0.6887,0.2576,Travel & Transport,Outdoors & Recreation,Travel & Transport
+nyc_tist,5,2432,0.4539,0.4916,0.1648,Food,Arts & Entertainment,Food
+saopaulo,0,6222,0.3821,0.3253,0.5175,Travel & Transport,Travel & Transport,Travel & Transport
+saopaulo,1,4982,0.4559,0.5716,0.8603,Travel & Transport,Travel & Transport,Travel & Transport
+saopaulo,2,12617,0.5075,0.5128,0.7816,Shop & Service,Shop & Service,Shop & Service
+tokyo_tist,0,18915,0.3445,0.4871,0.8316,Travel & Transport,Travel & Transport,Travel & Transport
+tokyo_tist,1,8635,0.1742,0.3105,0.2498,Travel & Transport,Travel & Transport,Travel & Transport
+tokyo_tist,2,3412,0.3023,0.352,0.6342,Travel & Transport,Travel & Transport,Travel & Transport
+tokyo_tist,3,28599,0.1978,0.1888,0.3599,Travel & Transport,Travel & Transport,Travel & Transport
