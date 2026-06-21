@@ -519,9 +519,8 @@ def build_prep_for_report(city: str, perc: dict, K: int, eps: float, seed=42):
                       .values.astype(np.int64))
     pop = np.asarray((ds["urm_train"] + ds["urm_val"]).sum(axis=0)).ravel()
     _, G1_mask = long_tail_groups(pop, short_head_share=SHORT_HEAD)
-    transition_size = np.ones(len(z_test), dtype=np.float32)
-    transition_size[isb_te] = 2.0          # match clean-pipeline γ convention
-    gamma_req = np.where(isb_te, 1.0 / transition_size, 1.0).astype(np.float32)
+    # γ_S(v) = 1/|T(v)|: 1 on core, 1/|T| on boundary (|T| = competing-set size).
+    gamma_req = (1.0 / np.maximum(comp_te.sum(1), 1).astype(np.float32))
 
     sb, sf = D.load_backbone_scores(city)
     excl = D.load_excluded_mask(city, n_items)
