@@ -59,10 +59,12 @@ def prepare(city: str, data_root: Path | None = None,
     # Long-tail mask (items)
     pop = np.asarray((ds["urm_train"] + ds["urm_val"]).sum(axis=0)).ravel()
     _, G1_mask = long_tail_groups(pop, short_head_share=SHORT_HEAD)
-    # γ per request
-    transition_size = np.ones(len(z_test), dtype=np.float32)
-    transition_size[isb_test] = 2.0
-    gamma = np.where(isb_test, 1.0 / transition_size, 1.0).astype(np.float32)
+    # γ_S(v) = 1/|T(v)| per request: 1 on core (|T|=1), 1/|T| on boundary.
+    # |T| = number of competing situations = count of non-zero memberships
+    # (replaces the hardcoded 0.5; for |T|=2 — 87–94% of boundary points — it
+    # coincides with 0.5 and handles |T|≥3 exactly. See boundary_structural.csv).
+    T_size = (membership_test > 0).sum(axis=1).astype(np.float32)
+    gamma = (1.0 / np.maximum(T_size, 1.0)).astype(np.float32)
     # Backbone scores
     sb, sf = D.load_backbone_scores(city, data_root=data_root)
     excl = D.load_excluded_mask(city, ds["n_items"], data_root=data_root)
