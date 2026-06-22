@@ -2,7 +2,7 @@
 
 > Documento canonico dello stato del progetto. **Va aggiornato e committato a ogni
 > modifica sostanziale**, così la storia git riflette cosa stiamo facendo.
-> Ultimo aggiornamento: 2026-06-22.
+> Ultimo aggiornamento: 2026-06-22 (diagnosi São Paulo: PROPRIETÀ).
 
 ## Changelog (sintetico — il dettaglio è nei commit)
 - Selezione congiunta parametri situazioni (overnight) → poi corretta (ε degenere → boundary-band).
@@ -12,6 +12,7 @@
 - `γ_S = 1/|T|` applicato (sostituisce 0.5 hardcoded).
 - L3 projection: descrittivo/leggibile ma non predittivo (≈persistenza); inerte sul re-ranking.
 - Ablazione intento (FULL vs CTX): **intento costitutivo 4/5, dannoso a Sao Paulo**.
+- São Paulo: il danno è **PROPRIETÀ** (non artefatto di K=3): intento ridondante col contesto (R²=0.91, la più alta) che rimodella il clustering. Beneficio intento ∝ (1−R²).
 
 ---
 
@@ -79,8 +80,15 @@ in negativo, vedi §7).
 **Risultato CORE in sintesi:** il meccanismo situazionale migliora il **rango di categoria** in
 modo **significativo, specifico, robusto al cutoff**. Effetto **piccolo** (+2–10%), **gratis**
 (no costo item) su 3/5 città, con costo-item-in-cima su nyc/saopaulo che svanisce a K=100.
-**L'intento è costitutivo in 4/5** (FULL>CTX signif.), **dannoso a Sao Paulo** (CTX meglio):
-la definizione "situazione=contesto+intento" regge nella maggioranza, con un'eccezione onesta.
+**L'intento è costitutivo in 4/5** (FULL>CTX signif.), **dannoso a Sao Paulo** (CTX meglio).
+**Meccanismo quantitativo** (`saopaulo_diagnosis.csv`, `intent_redundancy.csv`): il beneficio
+dell'intento scala monotòno con la sua **non-ridondanza** col contesto, `1−R²(e|c̃)` —
+nyc R²=0.52 → +0.021; bangkok 0.65 → +0.011; istanbul 0.81 → +0.004; saopaulo 0.91 → **−0.011**.
+São Paulo è **PROPRIETÀ non artefatto**: anche al K/ε internamente ottimale di ciascuna vista
+(K_FULL=3 confermato da silhouette/CH/DB) l'intento danneggia (−0.012, signif.), perché lì
+e≈f(c̃) (R²=0.91) e per giunta **rimodella** la partizione (ARI 0.18; Tokyo ha pari R² ma è
+inerte, ARI 0.92, quindi innocuo). Difesa: *"intento costitutivo dove porta informazione non
+già nel contesto; in domini iper-concentrati dove è ridondante, può danneggiare"*.
 
 ## 6. Aperto / non validato
 | aperto | stato |
@@ -88,7 +96,7 @@ la definizione "situazione=contesto+intento" regge nella maggioranza, con un'ecc
 | **α=50, κ=0.25** | κ fissato a priori; **manca** curva di robustezza α/κ sul Cat-MRR |
 | **vs CPFair sull'asse CALIBRAZIONE** | **non fatto** — head-to-head che prova "situazionale > uniforme sull'asse giusto" |
 | **L3 Projection** | descrittivo/leggibile ma non predittivo (≈persistenza), inerte sul re-ranking. Decisione: descrittivo / nota / rimuovi — **pendente** |
-| **Sao Paulo** | unica città dove l'intento danneggia → capire perché (over-steering?) |
+| ~~**Sao Paulo**~~ | ✅ **CHIUSO**: PROPRIETÀ (intento ridondante R²=0.91 che rimodella), non artefatto K. Vedi §5 |
 | **SARE** | competitor latente, assente dal repo, non confrontato |
 | **Documentazione** | docs 03–07 **vuote**; README e 02 **stale** (vecchio framing) |
 
@@ -110,9 +118,8 @@ fairness" è un **risultato negativo validato**. Artefatti: `sink_*.csv`, `minim
 1. **Decidere L3** (descrittivo / nota / rimuovi).
 2. **Robustezza α/κ** sul Cat-MRR (chiude "ogni numero giustificato").
 3. **Head-to-head vs CPFair sull'asse calibrazione** (non fairness).
-4. **Capire Sao Paulo** (intento dannoso): proprietà o artefatto?
-5. **Documentare il CORE** (docs 03/05/06) + riscrivere README e 02 + scrivere 07 (delimitazione).
-6. (Futuro) confronto vs **SARE**.
+4. **Documentare il CORE** (docs 03/05/06) + riscrivere README e 02 + scrivere 07 (delimitazione).
+5. (Futuro) confronto vs **SARE**.
 
 ## 10. Repo
 **github.com/laliberti00/XSAGE** (privato). `main` = sorgente di verità (tutti i branch di

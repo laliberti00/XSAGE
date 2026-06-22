@@ -1,0 +1,15 @@
+city,view,K,silhouette,calinski_harabasz,davies_bouldin,ceil_A2,chosen
+saopaulo,FULL,3,0.4609,44582.9,0.8776,5,*
+saopaulo,FULL,4,0.4005,33651.6,1.0392,5,
+saopaulo,FULL,5,0.3784,28440.2,1.0672,5,
+saopaulo,FULL,6,0.373,25981.7,1.1204,5,
+saopaulo,FULL,7,0.4105,26554.6,0.9561,5,
+saopaulo,FULL,8,0.4019,23146.4,0.9926,5,
+saopaulo,FULL,9,0.3657,21231.4,1.0664,5,
+saopaulo,CTX,3,0.5753,30775.0,0.6192,5,
+saopaulo,CTX,4,0.5912,32012.3,0.6437,5,*
+saopaulo,CTX,5,0.4248,25802.8,0.9503,5,
+saopaulo,CTX,6,0.4635,25285.7,0.8714,5,
+saopaulo,CTX,7,0.4555,21799.7,0.9267,5,
+saopaulo,CTX,8,0.4427,18922.7,1.1281,5,
+saopaulo,CTX,9,0.4597,27251.4,0.9978,5,

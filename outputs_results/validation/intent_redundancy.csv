@@ -1,0 +1,6 @@
+city,R2_e_from_c,mean_abs_corr,K_used,Kstar_FULL_internal,ceil_A2,K_match
+istanbul,0.8105,0.1283,5,3,5,diff(3vs5)
+bangkok,0.6451,0.0805,6,6,6,OK
+nyc_tist,0.5166,0.1254,6,6,8,OK
+saopaulo,0.9123,0.2276,3,3,5,OK
+tokyo_tist,0.9118,0.2159,4,4,4,OK
