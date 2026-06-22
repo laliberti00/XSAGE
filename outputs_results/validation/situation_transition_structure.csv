@@ -1,0 +1,6 @@
+city,K,rowH_norm,KL_vs_marginal,diag_persistence,diag_lift_vs_marg
+istanbul,5,0.8937,0.1529,0.3374,0.1374
+bangkok,6,0.8216,0.3265,0.3742,0.2075
+nyc_tist,6,0.871,0.2797,0.3703,0.2036
+saopaulo,3,0.7371,0.4188,0.5504,0.2171
+tokyo_tist,4,0.8074,0.2318,0.4437,0.1937
