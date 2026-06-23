@@ -35,45 +35,56 @@ def membership_from_assign(k_star, comp, isb, K):
     return mem
 
 
-def build_mind_prep(K, eps, seed=42, city="mind"):
+def build_descriptor(city="mind", splits=("train", "val", "test")):
+    """Costruisce v=[c̃‖e] per gli split richiesti + oggetti condivisi. NIENTE K/ε fissato
+    (così l'eval può selezionarli). Riusato sia dal prep sia dall'eval baseline."""
     ds = D.load_city(city, data_root=str(CLEAN))
     m2i = ds["macro_to_idx"]; n_macros = ds["n_macros"]; n_items = ds["n_items"]
-    # cat_target = categoria (indice) dell'item-target della richiesta (= cat_macro mappata)
     for k in ("df_train", "df_val", "df_test"):
         ds[k] = ds[k].copy()
         ds[k]["cat_target"] = ds[k]["cat_macro"].map(m2i).astype(np.int64)
-        ds[k]["user_id"] = ds[k]["u_idx"]  # le funzioni L0/L1 OLD usano 'user_id'
+        ds[k]["user_id"] = ds[k]["u_idx"]
     contrib = fit_contribution_functions(ds["df_train"], m2i, attributes=MIND_ATTRS,
                                          max_depth=DEPTH, min_leaf=200)
     W = estimate_macro_transition(ds["df_train"], m2i, transit_macros=[], transit_mode="keep")
     attractors = find_attractors(W, exclude_indices=None)
-    hist_test = pd.concat([ds["df_train"], ds["df_val"]], ignore_index=True)
+    hist = {"train": ds["df_train"], "val": ds["df_train"],
+            "test": pd.concat([ds["df_train"], ds["df_val"]], ignore_index=True)}
 
-    def build(tgt, hist):
-        l0 = build_recent_window(tgt, hist, m2i, n=N)
+    def build(split):
+        tgt = ds[f"df_{split}"]
+        l0 = build_recent_window(tgt, hist[split], m2i, n=N)
         c = contrib.transform(tgt)
         m = compute_profile(l0.recent_macro, l0.n_prior, n_macros, gamma=GAMMA)
         e = compute_intent(m, W, attractors, H=H, beta=BETA, mode="hard")
         return np.concatenate([c, e], axis=1).astype(np.float32)
 
-    vtr = build(ds["df_train"], ds["df_train"])
-    vte = build(ds["df_test"], hist_test)
-    fit = fit_rough_kmeans(vtr, K=K, eps=eps, seed=seed, max_iter=MAX_ITER)
-    z_train = fit.core_label.astype(np.int64)
-    _, k_te, comp_te, isb_te = _assign(vte, fit.prototypes, eps)
-    mem = membership_from_assign(k_te, comp_te, isb_te, K)
+    vs = {s: build(s) for s in splits}
     cmt = ds["df_train"]["cat_macro"].map(m2i).values.astype(np.int64)
-    b_z = fit_situation_biases_z(z_train, cmt, K, n_macros, alpha=ALPHA)
     df_all = pd.concat([ds["df_train"], ds["df_val"], ds["df_test"]], ignore_index=True)
     icm = (df_all.groupby("i_idx")["cat_macro"].first().map(m2i)
            .reindex(np.arange(n_items), fill_value=0).values.astype(np.int64))
     pop = np.asarray((ds["urm_train"] + ds["urm_val"]).sum(0)).ravel()
     _, G1 = long_tail_groups(pop, short_head_share=SHORT_HEAD)
-    gamma = (1.0 / np.maximum(comp_te.sum(1), 1).astype(np.float32))
     sb, _ = D.load_backbone_scores(city, data_root=str(CLEAN))
     excl = D.load_excluded_mask(city, n_items, data_root=str(CLEAN))
-    return dict(ds=ds, K=K, mem=mem, b_z=b_z, icm=icm, G1=G1, gamma=gamma, sb=sb, excl=excl,
-                isb=isb_te, n_macros=n_macros, bfrac=float(isb_te.mean()))
+    return dict(ds=ds, vs=vs, m2i=m2i, n_macros=n_macros, n_items=n_items, cmt=cmt,
+                icm=icm, G1=G1, sb=sb, excl=excl, attractors=attractors)
+
+
+def build_mind_prep(K, eps, seed=42, city="mind"):
+    D0 = build_descriptor(city, splits=("train", "test"))
+    ds = D0["ds"]; m2i = D0["m2i"]; n_macros = D0["n_macros"]; n_items = D0["n_items"]
+    vtr = D0["vs"]["train"]; vte = D0["vs"]["test"]
+    fit = fit_rough_kmeans(vtr, K=K, eps=eps, seed=seed, max_iter=MAX_ITER)
+    z_train = fit.core_label.astype(np.int64)
+    _, k_te, comp_te, isb_te = _assign(vte, fit.prototypes, eps)
+    mem = membership_from_assign(k_te, comp_te, isb_te, K)
+    b_z = fit_situation_biases_z(z_train, D0["cmt"], K, n_macros, alpha=ALPHA)
+    gamma = (1.0 / np.maximum(comp_te.sum(1), 1).astype(np.float32))
+    return dict(ds=ds, K=K, mem=mem, b_z=b_z, icm=D0["icm"], G1=D0["G1"], gamma=gamma,
+                sb=D0["sb"], excl=D0["excl"], isb=isb_te, n_macros=n_macros,
+                bfrac=float(isb_te.mean()))
 
 
 def score(prep, cfg, kappa=0.25):

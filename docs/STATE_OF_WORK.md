@@ -154,4 +154,10 @@ situazione ESPLICITA** (collo di bottiglia interpretabile), non un nudge fuori d
   lente sit3 = sink (16K req). **In range Foursquare.**
 - 🔑 **Lettura cross-dataset**: il segnale situazionale **scala con la profondità comportamentale**
   (ml-1m profondo +0.020 ≫ MIND shallow +0.002). ml-1m = dominio più promettente per l'ipotesi situazionale.
-- ⚠️ tutto vs BASE (cieco) + K/ε placeholder; **NON ancora girati Steck-b/B_full** (i baseline che battono SIT su Foursquare).
+- ⚡ **ml-1m baseline reali** (`eval_baselines.py`, K=3/ε=.07 selezionati, Holm): **SIT BATTE Steck-b
+  (+0.024)**, UNI_mean (+0.016), BASE (+0.015); perde solo vs Steck-a (greedy metric-gaming, ma SIT
+  miglior R@20). **Ribalta Foursquare** (lì Steck-b batteva SIT 4/5) → *il valore situazionale scala
+  con la profondità comportamentale: su domini profondi la situazione batte la personalizzazione statica.*
+- 🔑 **DUE angoli vendibili ora**: (1) lente/audit + legge profondità(1−R²); (2) **dominio (ml-1m) dove
+  SIT è ottimizzatore competitivo** (batte Steck-b) + interpretabile. Gate finale: **B_full su ml-1m**.
+- ⏳ `scripts/mind/train_bfull.py` = scaffold B_full (ContextAwareFM no geo/fine, torch+MPS) — scoring da verificare.

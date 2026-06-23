@@ -43,6 +43,8 @@ explainability) → round-4 multi-città TIST2015 (legge riformulata su ricchezz
 | 26 | MIND step-02/03: eseguibile? | backbone BPR (cornac) + mind_prep (no geohash) + smoke | ✅ **X-SAGE gira end-to-end su MIND**. ΔCat-MRR(SIT−BASE)=+0.002 (K/ε placeholder, no test) |
 | 27 | MIND eval (accuracy+fairness, placeholder) | mind_eval (bootstrap + lente) | SIT−BASE +0.002 (sig, minuscolo); fairness trascurabile; **lente rivela disparità** (KL 0.03–2.03×, sit3 sink) |
 | 28 | ml-1m: stesso porting? | preprocess_ml1m + backbone + eval (city-param) | ✅ **port pulito** (6K utenti PROFONDI ~165 rating, 18 generi). SIT−BASE **+0.020** (sig) + R@20 +0.005 + fairness↑; lente sit3 sink (16K). **Il segnale scala con la profondità utente** |
+| 29 | ml-1m: SIT regge vs baseline reali? | eval_baselines (Steck-b/a, K/ε selezionati, Holm) | ⚡ **SIT BATTE Steck-b (+0.024)** + UNI/BASE; perde solo vs Steck-a (metric-gaming, ma SIT>R@20). **Su dominio profondo la situazione batte la personalizzazione statica** (ribalta Foursquare) |
+| 30 | B_full su MIND/ml1m | train_bfull.py (scaffold, no geo/fine, torch+MPS) | scaffold pronto, scoring DA VERIFICARE — gate finale per l'angolo "competitivo" |
 
 ## Convergenza (lo stato del pensiero, 2026-06-23)
 Pattern inequivocabile e ripetuto: **le situazioni DIAGNOSTICANO ma non sono una leva operativa** —
