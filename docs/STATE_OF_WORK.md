@@ -2,7 +2,7 @@
 
 > Documento canonico dello stato del progetto. **Va aggiornato e committato a ogni
 > modifica sostanziale**, così la storia git riflette cosa stiamo facendo.
-> Ultimo aggiornamento: 2026-06-22 (diagnosi São Paulo: PROPRIETÀ).
+> Ultimo aggiornamento: 2026-06-23 (L3 chiuso: eq.18 non batte la persistenza 4/5).
 
 ## Changelog (sintetico — il dettaglio è nei commit)
 - Selezione congiunta parametri situazioni (overnight) → poi corretta (ε degenere → boundary-band).
@@ -13,6 +13,7 @@
 - L3 projection: descrittivo/leggibile ma non predittivo (≈persistenza); inerte sul re-ranking.
 - Ablazione intento (FULL vs CTX): **intento costitutivo 4/5, dannoso a Sao Paulo**.
 - São Paulo: il danno è **PROPRIETÀ** (non artefatto di K=3): intento ridondante col contesto (R²=0.91, la più alta) che rimodella il clustering. Beneficio intento ∝ (1−R²).
+- L3 eq.18 disambiguazione boundary (5 città TIST): batte il geometrico grezzo 5/5 ma NON la persistenza (vince 1/5, solo NYC) → **L3 chiuso, declassato a nota descrittiva**. São Paulo outlier anche qui (persistenza 0.779).
 
 ---
 
@@ -84,6 +85,11 @@ modo **significativo, specifico, robusto al cutoff**. Effetto **piccolo** (+2–
 **Meccanismo quantitativo** (`saopaulo_diagnosis.csv`, `intent_redundancy.csv`): il beneficio
 dell'intento scala monotòno con la sua **non-ridondanza** col contesto, `1−R²(e|c̃)` —
 nyc R²=0.52 → +0.021; bangkok 0.65 → +0.011; istanbul 0.81 → +0.004; saopaulo 0.91 → **−0.011**.
+**Convergenza cross-test su São Paulo**: è outlier su DUE test indipendenti — ablazione intento
+(dannoso −0.011, R²=0.91) e disambiguazione projection (persistenza dominante 0.779, eq.18 la
+diluisce −0.260). Stessa patologia di iper-concentrazione → corrobora la legge 1−R²: dove il
+dominio è iper-concentrato, ogni segnale oltre il contesto/la persistenza è rumore.
+
 São Paulo è **PROPRIETÀ non artefatto**: anche al K/ε internamente ottimale di ciascuna vista
 (K_FULL=3 confermato da silhouette/CH/DB) l'intento danneggia (−0.012, signif.), perché lì
 e≈f(c̃) (R²=0.91) e per giunta **rimodella** la partizione (ARI 0.18; Tokyo ha pari R² ma è
@@ -95,7 +101,7 @@ già nel contesto; in domini iper-concentrati dove è ridondante, può danneggia
 |---|---|
 | **α=50, κ=0.25** | κ fissato a priori; **manca** curva di robustezza α/κ sul Cat-MRR |
 | **vs CPFair sull'asse CALIBRAZIONE** | **non fatto** — head-to-head che prova "situazionale > uniforme sull'asse giusto" |
-| **L3 Projection** | descrittivo/leggibile ma non predittivo (≈persistenza), inerte sul re-ranking. Decisione: descrittivo / nota / rimuovi — **pendente** |
+| ~~**L3 Projection**~~ | ✅ **CHIUSO, declassato a nota descrittiva**: eq.18 batte il tie-break geometrico grezzo 5/5 (ΔF1 +0.10…+0.27, CI bootstrap > 0) ma NON batte la persistenza triviale (predici z_prev): vince 1/5 (solo NYC +0.067), pari bkk/tky, perde istanbul (−0.015) e crolla a São Paulo (−0.260). → la matrice di transizione T non aggiunge potere di disambiguazione oltre "l'utente resta dov'era" in 4/5 città. L3 = componente di proiezione realizzata (delta su SA-WCS che la rimanda), descrittiva/interpretabile; NON recognition-quality validata, NON re-ranker (ΔR@20≈0 e inerzia sul Cat-MRR confermati). Vedi `projection_disambiguation.csv` |
 | ~~**Sao Paulo**~~ | ✅ **CHIUSO**: PROPRIETÀ (intento ridondante R²=0.91 che rimodella), non artefatto K. Vedi §5 |
 | **SARE** | competitor latente, assente dal repo, non confrontato |
 | **Documentazione** | docs 03–07 **vuote**; README e 02 **stale** (vecchio framing) |
