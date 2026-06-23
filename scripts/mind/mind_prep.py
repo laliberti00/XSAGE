@@ -35,8 +35,8 @@ def membership_from_assign(k_star, comp, isb, K):
     return mem
 
 
-def build_mind_prep(K, eps, seed=42):
-    ds = D.load_city("mind", data_root=str(CLEAN))
+def build_mind_prep(K, eps, seed=42, city="mind"):
+    ds = D.load_city(city, data_root=str(CLEAN))
     m2i = ds["macro_to_idx"]; n_macros = ds["n_macros"]; n_items = ds["n_items"]
     # cat_target = categoria (indice) dell'item-target della richiesta (= cat_macro mappata)
     for k in ("df_train", "df_val", "df_test"):
@@ -70,8 +70,8 @@ def build_mind_prep(K, eps, seed=42):
     pop = np.asarray((ds["urm_train"] + ds["urm_val"]).sum(0)).ravel()
     _, G1 = long_tail_groups(pop, short_head_share=SHORT_HEAD)
     gamma = (1.0 / np.maximum(comp_te.sum(1), 1).astype(np.float32))
-    sb, _ = D.load_backbone_scores("mind", data_root=str(CLEAN))
-    excl = D.load_excluded_mask("mind", n_items, data_root=str(CLEAN))
+    sb, _ = D.load_backbone_scores(city, data_root=str(CLEAN))
+    excl = D.load_excluded_mask(city, n_items, data_root=str(CLEAN))
     return dict(ds=ds, K=K, mem=mem, b_z=b_z, icm=icm, G1=G1, gamma=gamma, sb=sb, excl=excl,
                 isb=isb_te, n_macros=n_macros, bfrac=float(isb_te.mean()))
 
@@ -104,9 +104,10 @@ def score(prep, cfg, kappa=0.25):
 
 
 def main():
+    city = sys.argv[1] if len(sys.argv)>1 else "mind"
     K, eps = 6, 0.02  # PLACEHOLDER (selezione anti-circolare = passo successivo)
-    print(f"[smoke] build_mind_prep K={K} eps={eps} (placeholder)...", flush=True)
-    prep = build_mind_prep(K, eps)
+    print(f"[smoke] {city} build_mind_prep K={K} eps={eps} (placeholder)...", flush=True)
+    prep = build_mind_prep(K, eps, city=city)
     print(f"  situazioni K={K}, boundary_frac={prep['bfrac']:.1%}, macro={prep['n_macros']}", flush=True)
     base_mrr, base_r = score(prep, "BASE")
     sit_mrr, sit_r = score(prep, "SIT", kappa=0.25)

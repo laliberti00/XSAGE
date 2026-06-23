@@ -5,8 +5,10 @@ salva FM.scores.npy (B_blind) + Bfull.scores.npy (stub = B_blind[test_users], no
 import sys
 import numpy as np
 
-IN = "/Users/lucaaliberti/Downloads/xsage-clean/data/processed/mind/_cornac_in.npz"
-BB = "/Users/lucaaliberti/Downloads/xsage-clean/data/mind/backbone"
+import sys
+CITY = sys.argv[1] if len(sys.argv)>1 else "mind"
+IN = f"/Users/lucaaliberti/Downloads/xsage-clean/data/processed/{CITY}/_cornac_in.npz"
+BB = f"/Users/lucaaliberti/Downloads/xsage-clean/data/{CITY}/backbone"
 
 d = np.load(IN)
 tu, ti = d["train_u"].astype(np.int64), d["train_i"].astype(np.int64)

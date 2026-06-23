@@ -9,3 +9,7 @@ artefacts/
 .venv/
 logs/
 outputs_results/lastfm/
+data/mind/
+data/ml1m/
+data/ml-1m/
+data/lastfm-dataset-1K/

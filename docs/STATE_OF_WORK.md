@@ -142,6 +142,16 @@ situazione ESPLICITA** (collo di bottiglia interpretabile), non un nudge fuori d
 - ✅ **step-03 prep+smoke** (`scripts/mind/mind_prep.py`): `build_mind_prep` replica il prep con dati
   clean + attributi MIND (no geohash) + transit off; fix schema (`cat_target`, `user_id` alias).
   **X-SAGE gira end-to-end su MIND**: BASE Cat-MRR=0.352, SIT=0.354, Δ=+0.002 (K/ε placeholder, no test).
-- ⏳ **prossimo**: selezione K/ε anti-circolare per MIND + bootstrap significatività; poi lente/baseline.
-- ⚠️ caveat dichiarati: utenti poco profondi (k-core scarta 86%), span ~1 settimana, niente geo,
-  backbone=BPR (non FM), R@20 basso (top-N su catalogo vs task nativo impression-ranking).
+- ✅ **eval MIND** (placeholder K/ε): SIT−BASE Cat-MRR +0.002 (sig, minuscolo); fairness trascurabile;
+  **lente rivela disparità** (KL 0.03–2.03× tra situazioni).
+- ⚠️ caveat: utenti poco profondi (mediana 3), span 1 settimana, no geo, backbone=BPR.
+
+### Porting MovieLens-1M (city-param, riuso macchina MIND)
+- ✅ **dati** (`scripts/ml1m/preprocess_ml1m.py`): rating=interazione, genere primario=macro, k-core10.
+  **6040 utenti PROFONDI (~165 rating/utente), 3260 film, 18 generi**, contesto temporale (no geo).
+- ✅ **backbone+eval** (riuso `cornac_backbone.py`/`mind_eval.py` city-parametrizzati):
+  **SIT−BASE Cat-MRR +0.020 (sig) + R@20 +0.005 + fairness↑** (LT 0.238→0.245, Gini 0.745→0.740);
+  lente sit3 = sink (16K req). **In range Foursquare.**
+- 🔑 **Lettura cross-dataset**: il segnale situazionale **scala con la profondità comportamentale**
+  (ml-1m profondo +0.020 ≫ MIND shallow +0.002). ml-1m = dominio più promettente per l'ipotesi situazionale.
+- ⚠️ tutto vs BASE (cieco) + K/ε placeholder; **NON ancora girati Steck-b/B_full** (i baseline che battono SIT su Foursquare).
