@@ -15,6 +15,9 @@
   selezione situata **dominati dall'uniforme/casuale/naive**; early-warning proiezione NON batte persistenza.
 - **Verdetto framing**: X-SAGE non è un ottimizzatore competitivo; è uno **strumento situation-aware
   interpretabile/auditabile**. Le situazioni DIAGNOSTICANO, non sono una leva operativa.
+- **Confronto SARE**: spiega il gap (appreso/personalizzato/latente vs non-sup/fisso/grezzo) → §8.
+- **2° dataset** (ricognizione): Last.fm-1K (port pulito, nodo=genere esterno) vs MIND-large
+  (categoria nativa + protocollo SARE). Vedi [STORIA](STORIA_PROGETTO_XSAGE.md).
 
 ---
 
@@ -109,3 +112,22 @@ pur raccomandando meglio. *Quel baratto accuratezza→trasparenza è il contribu
 
 **Bivio**: paper di **trasparenza/audit** (coerente, difendibile oggi) vs continuare a cercare un
 vantaggio da ottimizzatore (i dati attuali dicono di no → servirebbe un dominio nuovo, scommessa).
+
+## 8. Confronto con SARE (Li et al. 2025) — perché loro vincono e noi no
+SARE e X-SAGE condividono il nome ma sono macchine opposte: SARE = rete di **conditioning
+appresa end-to-end, personalizzata** (UCPE per-utente sul full-item, PSF percezione per-utente,
+combiner con confidence, loss rec+situ); X-SAGE = **clustering non supervisionato + nudge additivo
+fisso su ~10 macro, globale**. SARE vince perché ha le 3 cose che X-SAGE ha rinunciato *per scelta*
+— e che i nostri stessi test misurano come gap: **personalizzazione** (= Steck-b batte SIT 4/5),
+**capacità appresa full-item** (= B_full batte SIT 5/5), **supervisione+confidence**. SARE valuta
+inoltre su **impression-ranking** (più facile del nostro top-N). È un **baratto, non un paradosso**:
+la performance di SARE viene dal macchinario che la rende NON ispezionabile; l'ispezionabilità di
+X-SAGE viene dal macchinario che costa la performance. → Per "performance + situazione spiegabile"
+serve un **modello nuovo**: conditioning appreso/personalizzato à-la-SARE ma **condizionato sulla
+situazione ESPLICITA** (collo di bottiglia interpretabile), non un nudge fuori da un backbone congelato.
+
+## 9. Prossimi passi
+- **2° dataset** (ricognizione fatta): **Last.fm-1K** = port pulito del pipeline attuale (1 variabile:
+  genere da MusicBrainz); **MIND-large** = categoria nativa (18 macro) + protocollo impression-ranking
+  nativo per il confronto vs SARE (ma utente non-persistente). Vedi [STORIA timeline](STORIA_PROGETTO_XSAGE.md).
+- **Modello nuovo**: SARE-con-situazione-esplicita (da progettare).
