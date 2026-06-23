@@ -160,4 +160,9 @@ situazione ESPLICITA** (collo di bottiglia interpretabile), non un nudge fuori d
   con la profondità comportamentale: su domini profondi la situazione batte la personalizzazione statica.*
 - 🔑 **DUE angoli vendibili ora**: (1) lente/audit + legge profondità(1−R²); (2) **dominio (ml-1m) dove
   SIT è ottimizzatore competitivo** (batte Steck-b) + interpretabile. Gate finale: **B_full su ml-1m**.
+- ⚡⚡ **ml-1m κ IMPECCABILE** (`eval_kappa.py`, κ selezionato su VAL per-metodo, anti-circolare):
+  SIT batte Steck-b **a 8/8 κ** + al κ\*=0.5; SIT−Steck-b=+0.019 [+0.017,+0.021]. κ ereditato 0.25
+  era subottimale (κ\*ml1m=0.5, dataset-dipendente). Steck-b ha curva monotòna in discesa (la sua
+  spinta danneggia). → **la vittoria ml-1m è ROBUSTA, non un artefatto del κ ereditato**.
 - ⏳ `scripts/mind/train_bfull.py` = scaffold B_full (ContextAwareFM no geo/fine, torch+MPS) — scoring da verificare.
+- ⏳ caveat residuo: percezione (γ/β/H/n/depth) ancora ereditata da Foursquare; κ (il knob critico) ora selezionato.

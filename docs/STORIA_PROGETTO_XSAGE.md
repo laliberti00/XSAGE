@@ -44,15 +44,19 @@ explainability) → round-4 multi-città TIST2015 (legge riformulata su ricchezz
 | 27 | MIND eval (accuracy+fairness, placeholder) | mind_eval (bootstrap + lente) | SIT−BASE +0.002 (sig, minuscolo); fairness trascurabile; **lente rivela disparità** (KL 0.03–2.03×, sit3 sink) |
 | 28 | ml-1m: stesso porting? | preprocess_ml1m + backbone + eval (city-param) | ✅ **port pulito** (6K utenti PROFONDI ~165 rating, 18 generi). SIT−BASE **+0.020** (sig) + R@20 +0.005 + fairness↑; lente sit3 sink (16K). **Il segnale scala con la profondità utente** |
 | 29 | ml-1m: SIT regge vs baseline reali? | eval_baselines (Steck-b/a, K/ε selezionati, Holm) | ⚡ **SIT BATTE Steck-b (+0.024)** + UNI/BASE; perde solo vs Steck-a (metric-gaming, ma SIT>R@20). **Su dominio profondo la situazione batte la personalizzazione statica** (ribalta Foursquare) |
+| 30b | ml-1m: κ impeccabile (su val, per-metodo) | eval_kappa.py | ⚡⚡ **SIT batte Steck-b a 8/8 κ** e al κ*=0.5 (val): +0.019 signif. κ ereditato 0.25 era subottimale. **Vittoria ROBUSTA, non artefatto di κ** |
 | 30 | B_full su MIND/ml1m | train_bfull.py (scaffold, no geo/fine, torch+MPS) | scaffold pronto, scoring DA VERIFICARE — gate finale per l'angolo "competitivo" |
 
-## Convergenza (lo stato del pensiero, 2026-06-23)
-Pattern inequivocabile e ripetuto: **le situazioni DIAGNOSTICANO ma non sono una leva operativa** —
-ogni tentativo di *agire* (re-ranking, fairness item/utente, early-warning, selezione) è eguagliato
-o battuto da un baseline triviale (uniforme/persistenza/casuale/naive); e come *ottimizzatore* SIT
-perde vs personalizzazione (Steck) e context-aware (B_full). Il confronto con **SARE** spiega il
-perché in modo strutturale (interpretabilità ⟂ performance). 
+## Convergenza (lo stato del pensiero, 2026-06-23) — AGGIORNATA
+Il quadro è cambiato col 2°/3° dataset. Su Foursquare valeva: *le situazioni diagnosticano ma non
+ottimizzano* (SIT perde vs Steck/B_full). **Ma il pattern è CONDIZIONATO alla profondità del dominio**:
+- **MIND** (shallow ~5): SIT **dannoso** (perde anche vs BASE, −0.020).
+- **Foursquare** (medio): SIT > BASE ma < Steck-b/B_full.
+- **ml-1m** (profondo ~165): SIT **batte Steck-b** (+0.019, robusto a 8/8 κ, κ selezionato su val).
+→ **Legge di caratterizzazione**: il valore della situazione esplicita scala monotòno con la
+profondità comportamentale, da dannoso a vincente-vs-personalizzazione.
 
-**Due strade aperte:**
-1. **Paper trasparenza/audit** (lente + legge 1−R² + operazionalizzazione Endsley) — difendibile oggi.
-2. **Modello nuovo** SARE-con-situazione-esplicita su un 2° dominio (MIND o Last.fm) — costruzione, scommessa.
+**Due angoli vendibili, non più uno:**
+1. **Lente/audit interpretabile** + **legge profondità/1−R²** — difendibile a prescindere.
+2. **Ottimizzatore competitivo sui domini behavioral-profondi** (ml-1m: SIT>Steck-b robusto).
+   Gate finale: **B_full su ml-1m** (+ ideale: ri-selezione completa percezione su ml-1m).
