@@ -136,8 +136,12 @@ situazione ESPLICITA** (collo di bottiglia interpretabile), non un nudge fuori d
 - ✅ **step-01 dati** (`scripts/mind/preprocess_mind.py`): click→k-core10→split per-utente 80/10/10.
   MIND = "città": **101.131 utenti, 5.278 item, 1.76M interazioni, 15 macro native**, contesto
   temporale (**no geohash**), intent_last_cat. `load_city('mind', data_root='.')` OK.
-- ⏳ **prossimo blocco = BACKBONE**: il pipeline ha bisogno di `FM.scores.npy`/`Bfull.scores.npy`;
-  per MIND vanno generati (il clean repo importa scores, non li allena). Via pragmatica: **BPR via
-  venv-cornac** (riuso `scripts/cornac/`) → matrice [n_users×n_items] come B_blind.
-- ⏳ poi: situazioni (build_v con attributi MIND **senza geohash**), poi SIT/lente/metriche.
-- ⚠️ caveat dichiarati: utenti poco profondi (k-core scarta 86%), span ~1 settimana, niente geo.
+- ✅ **step-02 backbone** (`scripts/mind/cornac_backbone.py`): BPR via venv-cornac →
+  `data/mind/backbone/FM.scores.npy` [101131×5278] (B_blind context-blind, sostituisce l'FM importato;
+  Bfull=stub non context-aware). 0 utenti cold.
+- ✅ **step-03 prep+smoke** (`scripts/mind/mind_prep.py`): `build_mind_prep` replica il prep con dati
+  clean + attributi MIND (no geohash) + transit off; fix schema (`cat_target`, `user_id` alias).
+  **X-SAGE gira end-to-end su MIND**: BASE Cat-MRR=0.352, SIT=0.354, Δ=+0.002 (K/ε placeholder, no test).
+- ⏳ **prossimo**: selezione K/ε anti-circolare per MIND + bootstrap significatività; poi lente/baseline.
+- ⚠️ caveat dichiarati: utenti poco profondi (k-core scarta 86%), span ~1 settimana, niente geo,
+  backbone=BPR (non FM), R@20 basso (top-N su catalogo vs task nativo impression-ranking).

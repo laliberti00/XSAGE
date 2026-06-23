@@ -39,7 +39,8 @@ explainability) → round-4 multi-città TIST2015 (legge riformulata su ricchezz
 | 22 | 2° dataset fattibile? | ricognizione MIND-large + Last.fm-1K | Last.fm=port pulito (nodo: genere esterno); MIND=categoria nativa + protocollo SARE (utente non-persistente) |
 | 23 | Last.fm: scaricare il genere? | fetch MusicBrainz (top-N per play, rate-limit, checkpoint) | ✅ fattibile (top-5000=80% ascolti); fermato a 85 artisti (ripartibile) |
 | 24 | MIND: utenti abbastanza profondi? | diagnostico click/utente | ❌ mediana 3 click/utente → rompe split per-utente; **scelta: k-core=10** (105K utenti profondi) |
-| 25 | MIND porting step-01 | preprocess_mind.py → schema X-SAGE | ✅ **MIND è una "città"**: 101K utenti, 5278 item, 15 macro, split 80/10/10, no geohash. Manca: backbone + situazioni |
+| 25 | MIND porting step-01 | preprocess_mind.py → schema X-SAGE | ✅ **MIND è una "città"**: 101K utenti, 5278 item, 15 macro, split 80/10/10, no geohash |
+| 26 | MIND step-02/03: eseguibile? | backbone BPR (cornac) + mind_prep (no geohash) + smoke | ✅ **X-SAGE gira end-to-end su MIND**. ΔCat-MRR(SIT−BASE)=+0.002 (K/ε placeholder, no test). Prossimo: selezione K/ε + significatività |
 
 ## Convergenza (lo stato del pensiero, 2026-06-23)
 Pattern inequivocabile e ripetuto: **le situazioni DIAGNOSTICANO ma non sono una leva operativa** —
