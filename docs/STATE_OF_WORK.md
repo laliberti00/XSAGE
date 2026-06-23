@@ -131,3 +131,13 @@ situazione ESPLICITA** (collo di bottiglia interpretabile), non un nudge fuori d
   genere da MusicBrainz); **MIND-large** = categoria nativa (18 macro) + protocollo impression-ranking
   nativo per il confronto vs SARE (ma utente non-persistente). Vedi [STORIA timeline](STORIA_PROGETTO_XSAGE.md).
 - **Modello nuovo**: SARE-con-situazione-esplicita (da progettare).
+
+### Porting MIND-large (in corso — scelta utente: k-core=10, setup attuale)
+- ✅ **step-01 dati** (`scripts/mind/preprocess_mind.py`): click→k-core10→split per-utente 80/10/10.
+  MIND = "città": **101.131 utenti, 5.278 item, 1.76M interazioni, 15 macro native**, contesto
+  temporale (**no geohash**), intent_last_cat. `load_city('mind', data_root='.')` OK.
+- ⏳ **prossimo blocco = BACKBONE**: il pipeline ha bisogno di `FM.scores.npy`/`Bfull.scores.npy`;
+  per MIND vanno generati (il clean repo importa scores, non li allena). Via pragmatica: **BPR via
+  venv-cornac** (riuso `scripts/cornac/`) → matrice [n_users×n_items] come B_blind.
+- ⏳ poi: situazioni (build_v con attributi MIND **senza geohash**), poi SIT/lente/metriche.
+- ⚠️ caveat dichiarati: utenti poco profondi (k-core scarta 86%), span ~1 settimana, niente geo.

@@ -8,3 +8,4 @@ data/processed/
 artefacts/
 .venv/
 logs/
+outputs_results/lastfm/
