@@ -52,9 +52,15 @@ def closed_params(city):
 
 
 def build_descriptor(city="mind", splits=("train", "val", "test"),
-                     gamma=None, depth=None, n=None, beta=None, h_hops=None):
+                     gamma=None, depth=None, n=None, beta=None, h_hops=None,
+                     raw_context=False, raw_intent=False):
     """Costruisce v=[c̃‖e]. I parametri percezione vengono da (in ordine): argomenti espliciti →
-    json chiuso da Phase A → default ereditati. Riusato da prep/eval/Phase A."""
+    json chiuso da Phase A → default ereditati. Riusato da prep/eval/Phase A.
+
+    ABLAZIONE DI NEUTRALITÀ (O9): interruttori per slegare la situazione dallo scopo-categoria.
+    - raw_context=True: sostituisce c̃ (informatività vs prossima-macro) con ONE-HOT GREZZO del contesto.
+    - raw_intent=True:  sostituisce e (proiezione sul grafo-macro) con il PROFILO DI RECENCY grezzo m.
+    Con entrambi True, v non ha più alcun goal-coupling nelle feature → testa se il valore è strutturale."""
     P = closed_params(city)
     gamma = P["gamma"] if gamma is None else gamma; depth = P["depth"] if depth is None else depth
     n = P["n"] if n is None else n; beta = P["beta"] if beta is None else beta
@@ -72,12 +78,25 @@ def build_descriptor(city="mind", splits=("train", "val", "test"),
     hist = {"train": ds["df_train"], "val": ds["df_train"],
             "test": pd.concat([ds["df_train"], ds["df_val"]], ignore_index=True)}
 
+    attrs = city_attrs(city)
+    # vocabolari train per il one-hot grezzo (solo se raw_context)
+    voc = {a: {v: i for i, v in enumerate(sorted(ds["df_train"][a].unique()))} for a in attrs} if raw_context else {}
+
+    def onehot_ctx(tgt):
+        blocks = []
+        for a in attrs:
+            vmap = voc[a]; nv = len(vmap)
+            idx = tgt[a].map(lambda x: vmap.get(x, nv)).values.astype(np.int64)  # OOV → bucket extra
+            oh = np.zeros((len(tgt), nv + 1), np.float32); oh[np.arange(len(tgt)), idx] = 1.0
+            blocks.append(oh)
+        return np.concatenate(blocks, axis=1)
+
     def build(split):
         tgt = ds[f"df_{split}"]
         l0 = build_recent_window(tgt, hist[split], m2i, n=n)
-        c = contrib.transform(tgt)
+        c = onehot_ctx(tgt) if raw_context else contrib.transform(tgt)
         m = compute_profile(l0.recent_macro, l0.n_prior, n_macros, gamma=gamma)
-        e = compute_intent(m, W, attractors, H=h_hops, beta=beta, mode="hard")
+        e = m.astype(np.float32) if raw_intent else compute_intent(m, W, attractors, H=h_hops, beta=beta, mode="hard")
         return np.concatenate([c, e], axis=1).astype(np.float32)
 
     vs = {s: build(s) for s in splits}
