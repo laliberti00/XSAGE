@@ -81,12 +81,12 @@ def main():
     # CSV per la matrice allineata
     rows = [{"city": city, "method": m, "dominant_share": round(float(share.max()), 4),
              "macro_active": int((cnt > 0).sum()),
-             "micro": round(cm[m].mean(), 5), "macro": round(macro_avg(cm[m], tm, nmac), 5)}
+             "micro": round(cm[m].mean(), 5), "macro": round(macro_avg(cm[m], tm, nmac)[0], 5)}
             for m in ["BASE", "SIT", "Steck-b"]]
     rows.append({"city": city, "method": "SIT_minus_BASE", "dominant_share": round(float(share.max()), 4),
                  "macro_active": int((cnt > 0).sum()),
                  "micro": round(cm["SIT"].mean() - cm["BASE"].mean(), 5),
-                 "macro": round(macro_avg(cm["SIT"], tm, nmac) - macro_avg(cm["BASE"], tm, nmac), 5)})
+                 "macro": round(macro_avg(cm["SIT"], tm, nmac)[0] - macro_avg(cm["BASE"], tm, nmac)[0], 5)})
     pd.DataFrame(rows).to_csv(CLEAN / "outputs_results" / f"macro_avg_{city}.csv", index=False)
     print(f"\n→ outputs_results/macro_avg_{city}.csv")
     return 0
