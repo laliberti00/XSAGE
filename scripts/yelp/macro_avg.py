@@ -7,6 +7,7 @@ Uso:  python scripts/yelp/macro_avg.py <city>
 import sys
 from pathlib import Path
 import numpy as np
+import pandas as pd
 CLEAN = Path("/Users/lucaaliberti/Downloads/xsage-clean")
 sys.path.insert(0, str(CLEAN / "scripts" / "mind")); sys.path.insert(0, str(CLEAN))
 sys.path.insert(0, "/Users/lucaaliberti/Downloads/IntentAwareRS_thesis")
@@ -77,6 +78,17 @@ def main():
     print(f"  per-categoria Δ(SIT−BASE) [cat: Δ (n_req, quota)]:")
     for c, dd, nrq in sorted(deltas, key=lambda x: -x[2]):
         print(f"    macro {c:>2}: {dd:+.4f}  (n={nrq}, {nrq/cnt.sum():.1%})")
+    # CSV per la matrice allineata
+    rows = [{"city": city, "method": m, "dominant_share": round(float(share.max()), 4),
+             "macro_active": int((cnt > 0).sum()),
+             "micro": round(cm[m].mean(), 5), "macro": round(macro_avg(cm[m], tm, nmac), 5)}
+            for m in ["BASE", "SIT", "Steck-b"]]
+    rows.append({"city": city, "method": "SIT_minus_BASE", "dominant_share": round(float(share.max()), 4),
+                 "macro_active": int((cnt > 0).sum()),
+                 "micro": round(cm["SIT"].mean() - cm["BASE"].mean(), 5),
+                 "macro": round(macro_avg(cm["SIT"], tm, nmac) - macro_avg(cm["BASE"], tm, nmac), 5)})
+    pd.DataFrame(rows).to_csv(CLEAN / "outputs_results" / f"macro_avg_{city}.csv", index=False)
+    print(f"\n→ outputs_results/macro_avg_{city}.csv")
     return 0
 
 

@@ -24,9 +24,12 @@ MIND_ATTRS = ("c_hour", "c_dow", "c_isweekend", "c_month", "intent_last_cat_idx"
 YELP_ATTRS = ("c_hour", "c_dow", "c_isweekend", "c_month", "prev_geohash5", "intent_last_cat_idx")  # CON geo
 
 
+GEO_CITIES = {"yelp", "nyc_tist", "tokyo_tist", "saopaulo", "bangkok", "istanbul"}
+
+
 def city_attrs(city):
-    """Yelp ha il geohash (prev_geohash5, anti-leakage come Foursquare); MIND/ml-1m no."""
-    return YELP_ATTRS if city == "yelp" else MIND_ATTRS
+    """Città CON geo (Yelp + 5 Foursquare TIST) usano prev_geohash5 (anti-leakage); MIND/ml-1m no."""
+    return YELP_ATTRS if city in GEO_CITIES else MIND_ATTRS
 H, BETA, ALPHA, SHORT_HEAD, MAX_ITER = 2, 0.7, 50.0, 0.20, 80
 GAMMA, DEPTH, N = 0.4, 3, 3
 K_TOP, BATCH = 20, 1024
