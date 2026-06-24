@@ -85,3 +85,12 @@ del target-categoria (nessuna macro domina). Evidenza sui 4 dataset, ognuno fall
 - **Foursquare**: medio; tokyo (62.5%) saturo come Yelp, le altre no — SIT-macro pieno = O3.
 La **macro-averaged Cat-MRR** è la metrica che smaschera l'amplificatore (la micro mente sui dati saturi):
 da ora SIT si giudica sulla macro-averaged + wins-per-categoria, non sulla micro.
+
+**CONSULTO asse-portante (2026-06-24).** Tensione "asse=fairness (intuizione)" vs "asse=numeri-che-migliorano
+(accuracy)". Esito: la **fairness-con-guadagno esiste già** — la **macro-averaged È equità per-categoria**
+(qualità equa fra categorie), gain-backed su ml-1m (+0.014, 16/18). L'intervento anti-modale di esposizione NON
+è la via (uniforme domina per costruzione su metriche globali; premessa "pozzo=iniquità" non-validata) → future
+work. **Asse deciso: stato situazionale NEUTRO (L2, una volta) → usi multipli (diagnosi=lente, azione=re-ranking)
++ legge a due gate.** Il decoupling è una virtù da dichiarare. Precisione: lo stato è neutro nel clustering ma le
+feature `[c̃‖e]` sono category-aware a monte → **ablazione di neutralità** (raw vs full) per stabilire se il
+valore è strutturale o cucito nelle feature.

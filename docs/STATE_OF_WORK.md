@@ -1,7 +1,7 @@
 # X-SAGE — Stato del lavoro (documento vivo)
 
 > Documento canonico. Aggiornato e committato a ogni modifica sostanziale.
-> Ultimo aggiornamento: 2026-06-24 (Yelp null + SCOPERTA macro-averaged → LEGGE A DUE GATE: profondità ∧ non-saturazione; vedi §11).
+> Ultimo aggiornamento: 2026-06-24 (CONSULTO asse-portante: stato neutro/usi-molti + macro-averaged = equità-categoria; ablazione-neutralità in prep — vedi §13, O9).
 
 ## Changelog
 - Selezione parametri situazioni (K/ε/depth/n) anti-circolare; γ_S=1/|T|.
@@ -218,3 +218,22 @@ Foursquare; `city_attrs("yelp")` in mind_prep). **4842 utenti PROFONDI (~52 revi
 | O6 | **MIND batteria** (shallow, per il 3° punto della legge) | bassa | controprova: SIT-su-B_full su shallow |
 | O7 | **CPFair reale** vs proxy `UNI_glob` | bassa | deciso: proxy dichiarato, CPFair vero assente |
 | O8 | docs 03–07, README/02 stale (vecchio framing) | media | da riscrivere col framing enhancer/legge-profondità |
+| O9 | **Ablazione di neutralità** (in preparazione) | **alta** | `neutrality_ablation.py`: raw_ctx/raw_int vs full su ml-1m → il valore è strutturale o cucito nelle feature? Blinda la fondazione |
+| O10 | **Anti-modale situazionale** + validazione premessa | future work | servito-vs-domanda nei pozzi (misura cheap) PRIMA del modello; headwind strutturale su metriche globali (P2 consulto) |
+
+## 13. CONSULTO asse-portante: fairness vs accuracy (2026-06-24) — DECISIONE
+Domanda: l'asse del paper dev'essere fairness (intuizione utente) o accuracy? Esito del consulto:
+- **La fairness-con-guadagno ESISTE GIÀ, ma non è l'esposizione-item**: la **Cat-MRR macro-averaged è una
+  metrica di equità per-categoria** (qualità di servizio equa fra le categorie, come macro-F1). ml-1m:
+  +0.014 su 16/18 cat = *equità di qualità, con numero che sale*. Yelp: −0.010 su 1/17 = *iniquità reale*
+  (amplifica la maggioranza) diagnosticata dalla stessa metrica.
+- **L'intervento anti-modale (fairness-esposizione) NON è la via**: (1) l'uniforme domina **per costruzione**
+  su metriche globali (Gini/Cov), strutturale; (2) la premessa "pozzo = iniquità" è **non-validata** (la lente
+  misura concentrazione del *servito*, non *servito−domandato*); → future work (O10).
+- 🔑 **ASSE PORTANTE DECISO**: *uno **stato situazionale neutro** (L2, costruito una volta) → **usi multipli**:
+  **diagnosi** (lente, vince sempre) + **azione** (re-ranking, vince nel regime a **due gate**); più la **legge**
+  che dice quale uso paga e quando.* Il decoupling "stato neutro / usi molti" è una **virtù architetturale da
+  dichiarare**, non un problema da risolvere.
+- **Precisione tecnica**: lo stato è neutro nel *clustering* (k-means non-sup), ma le *feature* `[c̃‖e]` sono già
+  category-aware a monte (c̃ = informatività vs prossima-macro; e = proiettata sul grafo-macro). Da qui O9:
+  l'**ablazione di neutralità** verifica se il valore è strutturale (stato) o cucito nelle feature.
