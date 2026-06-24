@@ -1,7 +1,7 @@
 # X-SAGE — Stato del lavoro (documento vivo)
 
 > Documento canonico. Aggiornato e committato a ogni modifica sostanziale.
-> Ultimo aggiornamento: 2026-06-24 (CONSULTO asse-portante: stato neutro/usi-molti + macro-averaged = equità-categoria; ablazione-neutralità in prep — vedi §13, O9).
+> Ultimo aggiornamento: 2026-06-24 (LEGGE A TRE GATE: KuaiRand isola il 3° gate = predittività situazionale/feed-mediation; ml-1m unico winner — vedi §14).
 
 ## Changelog
 - Selezione parametri situazioni (K/ε/depth/n) anti-circolare; γ_S=1/|T|.
@@ -237,3 +237,28 @@ Domanda: l'asse del paper dev'essere fairness (intuizione utente) o accuracy? Es
 - **Precisione tecnica**: lo stato è neutro nel *clustering* (k-means non-sup), ma le *feature* `[c̃‖e]` sono già
   category-aware a monte (c̃ = informatività vs prossima-macro; e = proiettata sul grafo-macro). Da qui O9:
   l'**ablazione di neutralità** verifica se il valore è strutturale (stato) o cucito nelle feature.
+
+## 14. La LEGGE A TRE GATE — KuaiRand isola il terzo (2026-06-24)
+Dopo Yelp-bal e KuaiRand la legge passa da due a **TRE gate**: SIT aggiunge valore **sse** passa
+*(1) profondità* ∧ *(2) non-saturazione* ∧ *(3) **predittività situazionale*** (la sequenza di categorie
+dev'essere **guidata dall'utente**, non da un algoritmo/feed). **Un dimostratore pulito per gate:**
+
+| dataset | (1) profondità | (2) non-saturazione | (3) predittività | esito | gate isolato |
+|---|---|---|---|---|---|
+| MIND | ❌ ~5 | ✓ 24.9% | — | null | gate 1 |
+| Yelp | ✓ ~52 | ❌ 83.7% | — | amplificatore | gate 2 |
+| **KuaiRand** | ✓ ~41 | ✓ 24.0% | **❌ feed-mediated** | **null** | **gate 3** |
+| ml-1m | ✓ ~165 | ✓ 27.7% | ✓ | **winner** | nessuno |
+
+- **KuaiRand-Pure** (`preprocess_kuairand.py`, click, tag primario, k-core20 → 11.8K utenti, 41 click/ut,
+  43 macro): passa i primi due gate, **ma SIT è inerte** anche a parametri CHIUSI (`params/kuairand.json`
+  γ0.4/d4/n5/β0.7/H2/α50): **κ\*=0.1**, Δmicro +0.0003, Δmacro +0.0002, 19/43 cat, Steck-b vince.
+  → **isola il gate 3**: depth+non-saturazione NON bastano.
+- **Meccanismo (gate 3)**: su un **feed di short-video** la sequenza di categorie è decisa dall'**algoritmo
+  della piattaforma**, non dalla situazione dell'utente → niente intento auto-guidato → niente segnale.
+  (Non a caso KuaiRand-Pure ha il log *random*: il bias di esposizione è il loro problema dichiarato.)
+- **Yelp-bal** (de-saturazione per resampling): conferma che gate 1 e 3 sono **intrecciati** su Yelp
+  (togliere il dominante toglie profondità+segnale) → l'attività di SIT su Yelp era 100% saturazione.
+- 🔑 **Per il paper**: caratterizzazione *completa* — 4 dataset, ogni fallimento spiega *un* gate, ml-1m li
+  passa tutti. KuaiRand è la prova che mancava (depth+balance non sufficienti). Steam scartato (shallow).
+- Artefatti: `params/kuairand.json`, `macro_avg_kuairand.csv`, `param_closure_kuairand.csv`.
