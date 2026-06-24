@@ -50,6 +50,11 @@ explainability) → round-4 multi-città TIST2015 (legge riformulata su ricchezz
 | 32 | chiusura parametri ml-1m | close_params.py (val Cat-MRR + plateau; β/H/α sensibilità) | ✅ γ/n/H **cambiati** (ereditati subottimali); β/α piatti. ⚠️ bordo-griglia |
 | 33 | **batteria due-assi su B_full** | battery_bfull.py (5 seed, params chiusi, bootstrap+Holm+TOST) | ⚡ **SIT-MONTATO-su-B_full MIGLIORA B_full**: Cat-MRR +0.008, R@20 +0.002 (TOST non degrada), LT +0.005, Gini −0.004; JS-user peggiora (by-design). **Enhancer interpretabile a valore aggiunto** |
 | 34 | JS-calibration | lettura tabellone | SIT peggiora JS-**user** (de-calibra dalla media-utente → vince sul task). Manca JS-**situazione** (O1) |
+| 35 | 4° dataset: Yelp fattibile? | sonda business+review (5GB stream) | ✅ port più ricco: 100% geo, k-core20 Philadelphia = **4842 utenti, 52 review/ut** (profondo), 17 macro |
+| 36 | Yelp porting + GEO riabilitato | preprocess_yelp.py + `city_attrs` (prev_geohash5) | ✅ pipeline gira con geo; backbone BPR; Fase A chiusa (γ0.4/d2/n5/β0.7/H2/α10, quasi tutti interni) |
+| 37 | Yelp: SIT regge? (batteria 5 seed) | battery_bfull.py yelp | ❌ **NULL**: SIT-su-B_full −0.0011 (p=0, minuscolo); fairness Δ≈0. Profondità c'era → perché? |
+| 38 | **macro-averaged: perché Yelp è null?** | macro_avg.py (micro vs MACRO per-categoria) | 🔑🔑 Yelp **saturo 83.7%** → SIT è **amplificatore di maggioranza**: macro-Δ **−0.010, 1/17 cat**. Il +micro era artefatto. ml-1m macro-Δ **+0.014, 16/18** (vero). MIND neutro (shallow) |
+| 39 | macro-averaged su MIND+saturazione 4sq | macro_avg.py mind + df_test TIST | ✅ **LEGGE A DUE GATE**: profondità ∧ non-saturazione. MIND fallisce profondità, Yelp saturazione, ml-1m nessuno. tokyo(62.5%) come Yelp. macro-averaged = metrica diagnostica |
 
 ## Convergenza (lo stato del pensiero, 2026-06-23) — AGGIORNATA
 Il quadro è cambiato col 2°/3° dataset. Su Foursquare valeva: *le situazioni diagnosticano ma non
@@ -68,5 +73,15 @@ profondità comportamentale, da dannoso a vincente-vs-personalizzazione.
 
 **Il contributo, consolidato (2026-06-24):** *X-SAGE = enhancer situazionale interpretabile che, sui
 domini behavioral-profondi, aggiunge valore (accuratezza + fairness-esposizione) anche sopra un backbone
-context-aware forte; con una **legge** che caratterizza quando aiuta (profondità/1−R²) e una **lente**
+context-aware forte; con una **legge** che caratterizza quando aiuta e una **lente**
 di audit per-situazione che i latenti non producono. Non un recommender-che-vince-da-solo.*
+
+**LEGGE A DUE GATE (raffinata dal 4° dataset, 2026-06-24):** SIT aggiunge valore **sse passa due gate
+indipendenti** — *(1) profondità* comportamentale (storia utente stimabile) **e** *(2) non-saturazione*
+del target-categoria (nessuna macro domina). Evidenza sui 4 dataset, ognuno fallisce un gate diverso:
+- **MIND** (shallow ~5, NON saturo 24.9%): fallisce **profondità** → SIT **neutro** (κ*→0.05, si auto-spegne; Steck-b vince).
+- **Yelp** (profondo ~52, SATURO 83.7%): fallisce **saturazione** → SIT **amplificatore di maggioranza** (macro-Δ −0.010, 1/17 cat).
+- **ml-1m** (profondo ~165, NON saturo 27.7%): passa **entrambi** → **win vero e distribuito** (macro-Δ +0.014, 16/18 cat).
+- **Foursquare**: medio; tokyo (62.5%) saturo come Yelp, le altre no — SIT-macro pieno = O3.
+La **macro-averaged Cat-MRR** è la metrica che smaschera l'amplificatore (la micro mente sui dati saturi):
+da ora SIT si giudica sulla macro-averaged + wins-per-categoria, non sulla micro.

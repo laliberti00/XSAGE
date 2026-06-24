@@ -1,7 +1,7 @@
 # X-SAGE — Stato del lavoro (documento vivo)
 
 > Documento canonico. Aggiornato e committato a ogni modifica sostanziale.
-> Ultimo aggiornamento: 2026-06-24 (ml-1m CHIUSO+validato: SIT-su-B_full migliora B_full su acc+fairness — vedi §11-12 OPEN POINTS).
+> Ultimo aggiornamento: 2026-06-24 (Yelp null + SCOPERTA macro-averaged → LEGGE A DUE GATE: profondità ∧ non-saturazione; vedi §11).
 
 ## Changelog
 - Selezione parametri situazioni (K/ε/depth/n) anti-circolare; γ_S=1/|T|.
@@ -185,12 +185,34 @@ tabellone {B_blind(BPR), B_full(context-aware)} × {BASE,SIT,Steck-b,Steck-a,UNI
   **enhancer**, non un sostituto.
 - Artefatti: `params/ml1m.json`, `param_closure_ml1m.csv`, `battery_bfull_ml1m.csv`, `gate_bfull_ml1m.csv`.
 
+### Yelp + la SCOPERTA macro-averaged → legge a DUE GATE (2026-06-24)
+**Port Yelp** (`scripts/yelp/preprocess_yelp.py`): metro=Philadelphia, k-core20, macro=categoria-radice
+(17), **GEO riabilitato** (`prev_geohash5` = geohash6 della review precedente, anti-leakage come
+Foursquare; `city_attrs("yelp")` in mind_prep). **4842 utenti PROFONDI (~52 review/utente)**.
+- **Batteria** (`battery_bfull.py yelp 5`): **null** — SIT-su-B_full ΔCat-MRR **−0.0011** (p=0, minuscolo);
+  su B_blind +0.0035 (dentro SD). Fairness Δ trascurabili. Profondità c'era, eppure niente.
+- **PERCHÉ** (`scripts/yelp/macro_avg.py`, Cat-MRR **micro vs MACRO-averaged** su B_blind):
+  Yelp è **saturo all'83.7%** (Restaurants). Il "+micro" di SIT è un **artefatto**: SIT guadagna SOLO
+  sulla dominante (+0.016) e **peggiora le 16 minoritarie** → **macro-Δ = −0.010, vince 1/17 categorie**.
+  *Su dati saturi SIT degenera in AMPLIFICATORE DELLA CLASSE MAGGIORITARIA*; la micro lo nasconde, la
+  macro-averaging lo smaschera. ml-1m (dominante 27.7%): macro-Δ **+0.014, 16/18 cat** → vittoria *vera e
+  distribuita*. MIND (24.9%, ma shallow): micro −0.001 / macro +0.003, κ* val=0.05 (SIT si auto-spegne) →
+  **neutro** (Steck-b vince).
+- 🔑🔑 **LEGGE A DUE GATE**: SIT aggiunge valore sse passa *(1) profondità* **E** *(2) non-saturazione*
+  del target. Ogni dataset ne fallisce uno diverso: **MIND→profondità**, **Yelp→saturazione**,
+  **ml-1m→nessuno** (unico win). Foursquare-tokyo (62.5%) predice lo stesso di Yelp.
+  → La **macro-averaged è la metrica diagnostica** che separa "situazionale vero" da "amplificatore".
+  Artefatti: `battery_bfull_yelp.csv`, `params/yelp.json`, `macro_avg_summary.csv`.
+- ⏳ macro-averaged COMPLETA di SIT su Foursquare = non-gratis (città TIST su repo OLD = O3); la
+  **saturazione** TIST è in `macro_avg_summary.csv` (istanbul 23%…tokyo 62%).
+
 ## 12. OPEN POINTS (cosa resta)
 | # | open point | priorità | nota |
 |---|---|---|---|
 | O1 | **JS-verso-SITUAZIONE** (gemella di JS-user) | alta | senza, un revisore dice "metrica di calibrazione scelta dove SIT perde". SIT *dovrebbe* vincerla. ~30min |
 | O2 | **Fase A griglie larghe** (γ→0.8, n→10, H→5) | alta | γ/n/H al bordo → l'ottimo vero è oltre; il +0.008 è conservativo |
-| O3 | **Foursquare con la batteria** (a 2 assi su B_full) | media | richiede adattare `build_v` OLD-coupled (+geohash); pezzo dedicato |
+| O3 | **Foursquare con la batteria + macro-averaged** | media | adattare `build_v` OLD-coupled (+geohash); chiude il SIT-macro su TIST (saturazione già nota) |
+| O3b | **Yelp macro-fini sul cibo** (riduci saturazione) | media | test falsificabile: se macro-Δ torna >0 era saturazione; giudicare su MACRO non micro |
 | O4 | **β/H NON piatti su ml-1m** (H è una vera selezione, non fix) | media | dichiarare H come selezionato, non fix-by-design |
 | O5 | esposizione **Singh–Joachims** + **permutazione lente** | bassa | solo OLD; se il paper li vuole |
 | O6 | **MIND batteria** (shallow, per il 3° punto della legge) | bassa | controprova: SIT-su-B_full su shallow |

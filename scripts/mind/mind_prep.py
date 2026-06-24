@@ -21,6 +21,12 @@ from xsage.metrics import long_tail_groups
 from xsage.recommendation import fit_situation_biases_z
 
 MIND_ATTRS = ("c_hour", "c_dow", "c_isweekend", "c_month", "intent_last_cat_idx")  # NO geohash
+YELP_ATTRS = ("c_hour", "c_dow", "c_isweekend", "c_month", "prev_geohash5", "intent_last_cat_idx")  # CON geo
+
+
+def city_attrs(city):
+    """Yelp ha il geohash (prev_geohash5, anti-leakage come Foursquare); MIND/ml-1m no."""
+    return YELP_ATTRS if city == "yelp" else MIND_ATTRS
 H, BETA, ALPHA, SHORT_HEAD, MAX_ITER = 2, 0.7, 50.0, 0.20, 80
 GAMMA, DEPTH, N = 0.4, 3, 3
 K_TOP, BATCH = 20, 1024
@@ -59,7 +65,7 @@ def build_descriptor(city="mind", splits=("train", "val", "test"),
         ds[k] = ds[k].copy()
         ds[k]["cat_target"] = ds[k]["cat_macro"].map(m2i).astype(np.int64)
         ds[k]["user_id"] = ds[k]["u_idx"]
-    contrib = fit_contribution_functions(ds["df_train"], m2i, attributes=MIND_ATTRS,
+    contrib = fit_contribution_functions(ds["df_train"], m2i, attributes=city_attrs(city),
                                          max_depth=depth, min_leaf=200)
     W = estimate_macro_transition(ds["df_train"], m2i, transit_macros=[], transit_mode="keep")
     attractors = find_attractors(W, exclude_indices=None)

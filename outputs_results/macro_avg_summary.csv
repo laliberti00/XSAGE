@@ -1,0 +1,9 @@
+dataset,depth,dominant_share,top3_share,macro_active,SIT_micro_delta,SIT_macro_delta,cats_SIT_gt_BASE,gate_failed,verdict
+MIND,5,0.249,0.564,14,-0.00094,0.00273,11/14,depth,neutral (Steck-b wins micro+macro)
+ml1m,165,0.277,0.719,18,0.02517,0.01384,16/18,none,genuine distributed win
+yelp,52,0.837,0.920,17,0.00925,-0.00957,1/17,saturation,majority-amplifier (micro fake)
+istanbul_4sq,medium,0.231,0.536,10,NA,NA,NA,NA,saturation_only_computed
+saopaulo_4sq,medium,0.251,0.635,10,NA,NA,NA,onemin_R2,saturation_only_computed
+nyc_4sq,medium,0.264,0.592,10,NA,NA,NA,NA,saturation_only_computed
+bangkok_4sq,medium,0.336,0.683,10,NA,NA,NA,NA,saturation_only_computed
+tokyo_4sq,medium,0.625,0.816,9,NA,NA,NA,saturation,saturation_only_computed
