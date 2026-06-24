@@ -1,0 +1,9 @@
+city,Bblind_dCatMRR,Bfull_BASE,Bfull_SIT,Bfull_dCatMRR,Bfull_dR20,Bfull_dGini,neut_full_dMacro,neut_rawboth_dMacro,neut_verdict
+mind,,,,,,,,,
+ml1m,0.02517,0.43015,0.43833,0.00818,0.00224,-0.00431,0.01384,0.00553,STRUTT
+yelp,0.00355,0.82132,0.81945,-0.00187,-0.00018,-0.00012,,,
+nyc_tist,,,,,,,,,
+tokyo_tist,,,,,,,,,
+saopaulo,,,,,,,,,
+bangkok,,,,,,,,,
+istanbul,,,,,,,,,
