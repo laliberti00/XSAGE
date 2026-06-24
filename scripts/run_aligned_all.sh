@@ -21,7 +21,9 @@ XPY=/Users/lucaaliberti/Downloads/IntentAwareRS_thesis/.venv/bin/python
 CPY=/Users/lucaaliberti/Downloads/.venv-cornac/bin/python
 cd "$CLEAN"; mkdir -p logs
 
-CITIES="ml1m yelp nyc_tist tokyo_tist saopaulo bangkok istanbul mind"   # mind per ultimo (lento)
+# 4 dataset CORE (la legge a 3 gate). mind per ultimo (lento ~1.5h).
+# Per il tabellone COMPLETO con Foursquare, aggiungi: nyc_tist tokyo_tist saopaulo bangkok istanbul
+CITIES="ml1m yelp kuairand mind"
 FSQ="nyc_tist tokyo_tist saopaulo bangkok istanbul"
 SKIP_EXISTING="${SKIP_EXISTING:-0}"
 
@@ -57,6 +59,11 @@ for CITY in $CITIES; do
   if have "outputs_results/neutrality_ablation_$CITY.csv"; then echo "  (skip: ablazione già presente)";
   else $XPY scripts/yelp/neutrality_ablation.py "$CITY" 2>&1 | tee ${L}_neutrality.log; fi
 done
+
+echo ""; echo "############################ SITUAZIONI (explainability ml-1m) ############################"
+mkdir -p outputs_results/explain
+$XPY scripts/yelp/situation_profiles.py ml1m 2>/dev/null > outputs_results/explain/situation_profiles_ml1m.json && echo "  profiles ok"
+$XPY scripts/yelp/situation_space.py ml1m 2>/dev/null > outputs_results/explain/situation_space_ml1m.json && echo "  space ok"
 
 echo ""; echo "############################ MATRICE FINALE ############################"
 $XPY scripts/foursquare/aligned_matrix.py 2>&1 | tee logs/aligned_matrix.log
