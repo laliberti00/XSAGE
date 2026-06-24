@@ -46,6 +46,10 @@ explainability) → round-4 multi-città TIST2015 (legge riformulata su ricchezz
 | 29 | ml-1m: SIT regge vs baseline reali? | eval_baselines (Steck-b/a, K/ε selezionati, Holm) | ⚡ **SIT BATTE Steck-b (+0.024)** + UNI/BASE; perde solo vs Steck-a (metric-gaming, ma SIT>R@20). **Su dominio profondo la situazione batte la personalizzazione statica** (ribalta Foursquare) |
 | 30b | ml-1m: κ impeccabile (su val, per-metodo) | eval_kappa.py | ⚡⚡ **SIT batte Steck-b a 8/8 κ** e al κ*=0.5 (val): +0.019 signif. κ ereditato 0.25 era subottimale. **Vittoria ROBUSTA, non artefatto di κ** |
 | 30 | B_full su MIND/ml1m | train_bfull.py (scaffold, no geo/fine, torch+MPS) | scaffold pronto, scoring DA VERIFICARE — gate finale per l'angolo "competitivo" |
+| 31 | GATE: SIT-su-BPR batte B_full? | gate_bfull.py (B_full tunato su val, TOST) | ❌ **FAIL**: B_full batte SIT-su-BPR di +0.053 → angolo "sostituto" cade |
+| 32 | chiusura parametri ml-1m | close_params.py (val Cat-MRR + plateau; β/H/α sensibilità) | ✅ γ/n/H **cambiati** (ereditati subottimali); β/α piatti. ⚠️ bordo-griglia |
+| 33 | **batteria due-assi su B_full** | battery_bfull.py (5 seed, params chiusi, bootstrap+Holm+TOST) | ⚡ **SIT-MONTATO-su-B_full MIGLIORA B_full**: Cat-MRR +0.008, R@20 +0.002 (TOST non degrada), LT +0.005, Gini −0.004; JS-user peggiora (by-design). **Enhancer interpretabile a valore aggiunto** |
+| 34 | JS-calibration | lettura tabellone | SIT peggiora JS-**user** (de-calibra dalla media-utente → vince sul task). Manca JS-**situazione** (O1) |
 
 ## Convergenza (lo stato del pensiero, 2026-06-23) — AGGIORNATA
 Il quadro è cambiato col 2°/3° dataset. Su Foursquare valeva: *le situazioni diagnosticano ma non
@@ -56,7 +60,13 @@ ottimizzano* (SIT perde vs Steck/B_full). **Ma il pattern è CONDIZIONATO alla p
 → **Legge di caratterizzazione**: il valore della situazione esplicita scala monotòno con la
 profondità comportamentale, da dannoso a vincente-vs-personalizzazione.
 
-**Due angoli vendibili, non più uno:**
-1. **Lente/audit interpretabile** + **legge profondità/1−R²** — difendibile a prescindere.
-2. **Ottimizzatore competitivo sui domini behavioral-profondi** (ml-1m: SIT>Steck-b robusto).
-   Gate finale: **B_full su ml-1m** (+ ideale: ri-selezione completa percezione su ml-1m).
+**Esito del gate B_full (2026-06-24), che chiude l'angolo nel modo giusto:**
+- SIT-su-backbone-debole (BPR) **< B_full** (gate FAIL, −0.053) → X-SAGE NON è un *sostituto* del context-aware.
+- **SIT-MONTATO su B_full > B_full** (batteria, params chiusi, 5 seed): Cat-MRR +0.008, R@20 +0.002 (TOST
+  non degrada), fairness-esposizione ↑ (LT +0.005, Gini −0.004) → X-SAGE È un **enhancer interpretabile
+  a valore aggiunto**, al costo dichiarato della calibrazione-utente (JS-user ↑, by-design).
+
+**Il contributo, consolidato (2026-06-24):** *X-SAGE = enhancer situazionale interpretabile che, sui
+domini behavioral-profondi, aggiunge valore (accuratezza + fairness-esposizione) anche sopra un backbone
+context-aware forte; con una **legge** che caratterizza quando aiuta (profondità/1−R²) e una **lente**
+di audit per-situazione che i latenti non producono. Non un recommender-che-vince-da-solo.*

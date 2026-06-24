@@ -1,7 +1,7 @@
 # X-SAGE — Stato del lavoro (documento vivo)
 
 > Documento canonico. Aggiornato e committato a ogni modifica sostanziale.
-> Ultimo aggiornamento: 2026-06-23 (consolidamento: optimizer morto, lente/audit viva).
+> Ultimo aggiornamento: 2026-06-24 (ml-1m CHIUSO+validato: SIT-su-B_full migliora B_full su acc+fairness — vedi §11-12 OPEN POINTS).
 
 ## Changelog
 - Selezione parametri situazioni (K/ε/depth/n) anti-circolare; γ_S=1/|T|.
@@ -164,5 +164,35 @@ situazione ESPLICITA** (collo di bottiglia interpretabile), non un nudge fuori d
   SIT batte Steck-b **a 8/8 κ** + al κ\*=0.5; SIT−Steck-b=+0.019 [+0.017,+0.021]. κ ereditato 0.25
   era subottimale (κ\*ml1m=0.5, dataset-dipendente). Steck-b ha curva monotòna in discesa (la sua
   spinta danneggia). → **la vittoria ml-1m è ROBUSTA, non un artefatto del κ ereditato**.
-- ⏳ `scripts/mind/train_bfull.py` = scaffold B_full (ContextAwareFM no geo/fine, torch+MPS) — scoring da verificare.
-- ⏳ caveat residuo: percezione (γ/β/H/n/depth) ancora ereditata da Foursquare; κ (il knob critico) ora selezionato.
+
+### ml-1m — STATO CHIUSO E VALIDATO (2026-06-24)
+**Fase A** (`scripts/ml1m/close_params.py`, val Cat-MRR + plateau): parametri chiusi
+`γ=0.6, depth=2, n=5, β=0.7, H=3, α=10`. γ/n/H **cambiati** dagli ereditati (subottimali);
+β/α confermati piatti. ⚠️ *finding: γ/n/H al bordo-griglia → griglie da allargare.*
+
+**Fase B** (`scripts/ml1m/battery_bfull.py`, 5 seed, parametri chiusi, K/ε/κ su val):
+tabellone {B_blind(BPR), B_full(context-aware)} × {BASE,SIT,Steck-b,Steck-a,UNI_mean,UNI_glob}
+× accuratezza+fairness, bootstrap+Holm+TOST. SD≤0.002.
+- **B_blind**: SIT Cat-MRR **0.385** > BASE 0.360, Steck-b 0.358, UNI_glob 0.359; SIT R@20 0.113.
+- **B_full**: B_full 0.430 → **SIT-su-B_full 0.438**.
+- **HEADLINE (SIT-su-B_full vs B_full)**: ΔCat-MRR **+0.008** p=0 · ΔR@20 **+0.002** (TOST: non degrada)
+  · ΔLT **+0.005** · ΔGini **−0.004** · ΔCoverage **+0.005** · **JS-user +0.036 (peggiora, by-design:
+  SIT calibra sulla situazione, non sull'utente — ed è ciò che lo fa vincere)**.
+- **VERDETTO ml-1m**: *X-SAGE = **enhancer interpretabile** che migliora un backbone context-aware forte
+  su **accuratezza + fairness-esposizione**, al costo dichiarato della calibrazione-utente. Batte Steck-b
+  e UNI_glob; perde solo vs Steck-a (greedy che però azzera la coda lunga).* Distinzione col gate:
+  SIT-su-backbone-debole < B_full (gate FAIL); SIT-**montato su** B_full *lo migliora* → X-SAGE è un
+  **enhancer**, non un sostituto.
+- Artefatti: `params/ml1m.json`, `param_closure_ml1m.csv`, `battery_bfull_ml1m.csv`, `gate_bfull_ml1m.csv`.
+
+## 12. OPEN POINTS (cosa resta)
+| # | open point | priorità | nota |
+|---|---|---|---|
+| O1 | **JS-verso-SITUAZIONE** (gemella di JS-user) | alta | senza, un revisore dice "metrica di calibrazione scelta dove SIT perde". SIT *dovrebbe* vincerla. ~30min |
+| O2 | **Fase A griglie larghe** (γ→0.8, n→10, H→5) | alta | γ/n/H al bordo → l'ottimo vero è oltre; il +0.008 è conservativo |
+| O3 | **Foursquare con la batteria** (a 2 assi su B_full) | media | richiede adattare `build_v` OLD-coupled (+geohash); pezzo dedicato |
+| O4 | **β/H NON piatti su ml-1m** (H è una vera selezione, non fix) | media | dichiarare H come selezionato, non fix-by-design |
+| O5 | esposizione **Singh–Joachims** + **permutazione lente** | bassa | solo OLD; se il paper li vuole |
+| O6 | **MIND batteria** (shallow, per il 3° punto della legge) | bassa | controprova: SIT-su-B_full su shallow |
+| O7 | **CPFair reale** vs proxy `UNI_glob` | bassa | deciso: proxy dichiarato, CPFair vero assente |
+| O8 | docs 03–07, README/02 stale (vecchio framing) | media | da riscrivere col framing enhancer/legge-profondità |
