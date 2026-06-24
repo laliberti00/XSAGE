@@ -24,7 +24,7 @@ MIND_ATTRS = ("c_hour", "c_dow", "c_isweekend", "c_month", "intent_last_cat_idx"
 YELP_ATTRS = ("c_hour", "c_dow", "c_isweekend", "c_month", "prev_geohash5", "intent_last_cat_idx")  # CON geo
 
 
-GEO_CITIES = {"yelp", "nyc_tist", "tokyo_tist", "saopaulo", "bangkok", "istanbul"}
+GEO_CITIES = {"yelp", "yelp_bal", "nyc_tist", "tokyo_tist", "saopaulo", "bangkok", "istanbul"}
 
 
 def city_attrs(city):

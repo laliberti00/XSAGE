@@ -13,9 +13,11 @@ import pandas as pd
 import scipy.sparse as sps
 
 RAW = Path("/Users/lucaaliberti/Downloads/xsage-clean/data/yelp_dataset")
-OUT = Path("/Users/lucaaliberti/Downloads/xsage-clean/data/processed/yelp")
 CITY = sys.argv[1] if len(sys.argv) > 1 else "Philadelphia"
 KCORE = int(sys.argv[2]) if len(sys.argv) > 2 else 20
+BAL = len(sys.argv) > 3 and sys.argv[3] == "bal"          # ribilanciamento categorie (diagnostico)
+CAPMULT = float(sys.argv[4]) if len(sys.argv) > 4 else 3.0  # cap per macro = CAPMULT × mediana
+OUT = Path("/Users/lucaaliberti/Downloads/xsage-clean/data/processed/" + ("yelp_bal" if BAL else "yelp"))
 GH_PREC = 6   # geohash6 ≈ 1.2km — risoluzione intra-metro (nome colonna resta prev_geohash5)
 
 # 22 radici Yelp, in ORDINE DI PRIORITÀ (le consumption/leisure prima: più informative situazionalmente)
@@ -88,6 +90,13 @@ def main():
     df["cat_macro"] = df.item.map(macro); df["geohash"] = df.item.map(gh)
     df = df.drop(columns="date")
     print(f"[2] review in-metro: {len(df)}  utenti={df.user.nunique()}  business={df.item.nunique()}", flush=True)
+
+    # 2b. (diagnostico) RIBILANCIAMENTO categorie: cap per macro = CAPMULT × mediana, downsample casuale
+    if BAL:
+        vc = df.cat_macro.value_counts(); cap = int(CAPMULT * vc.iloc[1])  # CAPMULT × 2° macro (porta la dominante al livello del runner-up)
+        df = df.groupby("cat_macro", group_keys=False).apply(
+            lambda g: g.sample(min(len(g), cap), random_state=42)).reset_index(drop=True)
+        print(f"[2b BAL] cap={cap}/macro (dominante prima={int(vc.iloc[0])}) → {len(df)} interazioni", flush=True)
 
     # 3. k-core
     while True:
