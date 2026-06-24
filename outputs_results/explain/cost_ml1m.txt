@@ -1,0 +1,16 @@
+
+===== COSTO MODULO PLUGGABLE X-SAGE — ML1M =====
+  dati: train=801218 test=97199 | K=5 ε=0.03 macro=18 dim(v)=23
+  stadio                                 secondi
+  descrittore (L0+L1)                       8.25
+  selezione K                              72.47
+  selezione ε                              73.64
+  rough k-means (L2)                       13.89
+  bias situazioni b̃                        0.09
+  inferenza (assegna+re-rank test)          9.89
+  ----------------------------------------------
+  FIT totale (pluggable)                  168.34
+  inferenza per richiesta: 0.102 ms
+  parametri del modulo: 205  (K·macro + K·dim) — vs B_full ≈ (n_users+n_items+ctx)·d
+
+  Confronto (osservato, stessa macchina): BPR fit ~secondi; B_full (FM torch+MPS) ~1-2 min/training.
