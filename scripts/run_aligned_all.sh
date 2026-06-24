@@ -64,6 +64,7 @@ echo ""; echo "############################ SITUAZIONI (explainability ml-1m) ##
 mkdir -p outputs_results/explain
 $XPY scripts/yelp/situation_profiles.py ml1m 2>/dev/null > outputs_results/explain/situation_profiles_ml1m.json && echo "  profiles ok"
 $XPY scripts/yelp/situation_space.py ml1m 2>/dev/null > outputs_results/explain/situation_space_ml1m.json && echo "  space ok"
+$XPY scripts/yelp/situation_transitions.py ml1m 2>/dev/null > outputs_results/explain/situation_transitions_ml1m.json && echo "  transitions(L3) ok"
 
 echo ""; echo "############################ MATRICE FINALE ############################"
 $XPY scripts/foursquare/aligned_matrix.py 2>&1 | tee logs/aligned_matrix.log
