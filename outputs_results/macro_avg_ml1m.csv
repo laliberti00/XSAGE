@@ -1,0 +1,5 @@
+city,method,dominant_share,macro_active,micro,macro
+ml1m,BASE,0.2768,18,0.35962,0.12648
+ml1m,SIT,0.2768,18,0.38479,0.14032
+ml1m,Steck-b,0.2768,18,0.35783,0.12678
+ml1m,SIT_minus_BASE,0.2768,18,0.02517,0.01384

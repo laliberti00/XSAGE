@@ -1,0 +1,5 @@
+city,method,dominant_share,macro_active,micro,macro
+kuairand,BASE,0.2396,43,0.27925,0.07836
+kuairand,SIT,0.2396,43,0.27958,0.07857
+kuairand,Steck-b,0.2396,43,0.28227,0.07962
+kuairand,SIT_minus_BASE,0.2396,43,0.00032,0.00022
