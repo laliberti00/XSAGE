@@ -1,0 +1,5 @@
+city,method,dominant_share,macro_active,micro,macro
+amazoncd,BASE,0.1976,17,0.39287,0.17244
+amazoncd,SIT,0.1976,17,0.4042,0.17846
+amazoncd,Steck-b,0.1976,17,0.40071,0.17549
+amazoncd,SIT_minus_BASE,0.1976,17,0.01133,0.00602
