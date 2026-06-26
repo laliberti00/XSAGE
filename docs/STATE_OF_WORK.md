@@ -293,3 +293,14 @@ ml-1m → SIT-vs-B_full ora pulito). I 5 dataset hanno l'IDENTICO trattamento co
   MPS non bit-riproducibile). Il +0.0082 è 8× la SD → winner stabile a ogni ri-run. Numeri congelati nei CSV.
 - **TASSONOMIA a 2 livelli**: gate1-3 → SIT>BASE; non-ridondanza(1−R²) → SIT>Steck-b. WINNER (ml-1m) passa
   entrambi; RIDONDANTI (amazon, 4sq-nyc/tokyo) solo il primo; NULL (mind/yelp/kuairand) nessuno.
+
+## 16. PROSSIMA SESSIONE (agenda 2026-06-26)
+1. **Eseguire AMAZON** (memory-safe): `bash scripts/run_amazon_safe.sh` — battery 5-seed BFULL_SAFE=1
+   (float16) + macro + neutrality + explain + cost. Chiude l'ultimo buco (amazon era a 1-seed/default).
+2. **Standardizzare la pipeline** (renderla pulita/riusabile) → poi **batteria di modelli CARS**:
+   implementare **CAMF_C / CAMF_CI** (+ event. CSLIM_C) sui NOSTRI dataset, nel NOSTRO task top-N
+   (Cat-MRR/R@20), come baseline context-aware vs SIT/B_full/Steck-b. CARSKit-master = riferimento+
+   citazione (Zheng RecSys'15); NFM/He-Chua'17 = lineage FM. NB: i dataset CARSKit/libfm NON sono
+   X-SAGE-compatibili (no sequenze) → le CARS girano sui nostri dati, non sui loro.
+   In coda: **tabella costi 3-modelli** (X-SAGE vs BPR vs B_full) + **O1 JS-verso-situazione**.
+- *(Stanotte in corso: `run_foursquare_all.sh` — 5 TIST + 2 TSMC nel protocollo uniforme.)*
