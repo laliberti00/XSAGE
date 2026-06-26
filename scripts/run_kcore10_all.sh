@@ -39,8 +39,15 @@ run_dataset(){
   $XPY scripts/ml1m/battery_bfull.py $CITY 5 2>&1 | tee ${L}_batt.log | grep -E "HEADLINE|dCatMRR|dR@20|TOST" | sed 's/^/      /'
   echo "[$CITY] (5/6) macro_avg..."
   $XPY scripts/yelp/macro_avg.py $CITY 2>&1 | tee ${L}_macro.log | grep -E "saturazione|κ\*|Δ\(SIT" | sed 's/^/      /'
-  echo "[$CITY] (6/6) neutrality_ablation..."
+  echo "[$CITY] (6/8) neutrality_ablation..."
   $XPY scripts/yelp/neutrality_ablation.py $CITY 2>&1 | tee ${L}_neut.log | grep -E "VALORE" | sed 's/^/      /'
+  echo "[$CITY] (7/8) explainability (profili/spazio/L3)..."
+  mkdir -p outputs_results/explain
+  $XPY scripts/yelp/situation_profiles.py    $CITY 2>/dev/null > outputs_results/explain/situation_profiles_$CITY.json    && echo "      profiles ok"
+  $XPY scripts/yelp/situation_space.py       $CITY 2>/dev/null > outputs_results/explain/situation_space_$CITY.json       && echo "      space ok"
+  $XPY scripts/yelp/situation_transitions.py $CITY 2>/dev/null > outputs_results/explain/situation_transitions_$CITY.json && echo "      L3 ok"
+  echo "[$CITY] (8/8) profilo costi..."
+  $XPY scripts/yelp/profile_cost.py $CITY 2>/dev/null > outputs_results/explain/cost_$CITY.txt && echo "      cost ok"
 }
 
 START=$(date +%s)
@@ -48,6 +55,17 @@ START=$(date +%s)
 run_dataset yelp     scripts/yelp/preprocess_yelp.py Philadelphia 10
 run_dataset kuairand scripts/kuairand/preprocess_kuairand.py 10
 run_dataset amazoncd scripts/amazon/preprocess_amazon.py 10
+
+# ml-1m e mind sono GIA' k-core10 con battery/macro/neutrality/params: completo solo explainability+costi
+echo ""; echo "############################ explainability+costi per ml1m/mind (gia' k-core10) ############################"
+for C in ml1m mind; do
+  echo "### $C ###"; mkdir -p outputs_results/explain
+  $XPY scripts/yelp/situation_profiles.py    $C 2>/dev/null > outputs_results/explain/situation_profiles_$C.json
+  $XPY scripts/yelp/situation_space.py       $C 2>/dev/null > outputs_results/explain/situation_space_$C.json
+  $XPY scripts/yelp/situation_transitions.py $C 2>/dev/null > outputs_results/explain/situation_transitions_$C.json
+  $XPY scripts/yelp/profile_cost.py          $C 2>/dev/null > outputs_results/explain/cost_$C.txt
+  echo "  ok"
+done
 
 echo ""; echo "############################ MATRICE FINALE (k-core10 uniforme) ############################"
 $XPY scripts/foursquare/aligned_matrix.py 2>&1 | tee logs/k10_matrix.log
