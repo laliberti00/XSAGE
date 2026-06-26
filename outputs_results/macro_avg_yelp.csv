@@ -1,5 +1,5 @@
 city,method,dominant_share,macro_active,micro,macro
-yelp,BASE,0.8367,17,0.81915,0.08772
-yelp,SIT,0.8367,17,0.8284,0.07815
-yelp,Steck-b,0.8367,17,0.81889,0.08851
-yelp,SIT_minus_BASE,0.8367,17,0.00925,-0.00957
+yelp,BASE,0.7622,21,0.74785,0.06895
+yelp,SIT,0.7622,21,0.75422,0.06583
+yelp,Steck-b,0.7622,21,0.74769,0.07085
+yelp,SIT_minus_BASE,0.7622,21,0.00637,-0.00311

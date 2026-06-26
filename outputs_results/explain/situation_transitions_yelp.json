@@ -1,0 +1,1 @@
+{"city": "yelp", "K": 3, "T": [[0.816, 0.184, 0.0], [0.701, 0.299, 0.0], [0.0, 0.0, 0.0]], "situations": [{"k": 0, "size_pct": 75.4, "persist_pct": 81.6, "top": ["Restaurants", "Nightlife"]}, {"k": 1, "size_pct": 24.6, "persist_pct": 29.9, "top": ["Professional Services", "Local Flavor"]}, {"k": 2, "size_pct": 0.0, "persist_pct": 0.0, "top": ["Restaurants", "Food"]}]}

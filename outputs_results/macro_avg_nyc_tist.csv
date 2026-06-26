@@ -1,0 +1,5 @@
+city,method,dominant_share,macro_active,micro,macro
+nyc_tist,BASE,0.2642,10,0.28032,0.20377
+nyc_tist,SIT,0.2642,10,0.32706,0.24214
+nyc_tist,Steck-b,0.2642,10,0.35531,0.31069
+nyc_tist,SIT_minus_BASE,0.2642,10,0.04674,0.03836

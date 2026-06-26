@@ -1,0 +1,16 @@
+
+===== COSTO MODULO PLUGGABLE X-SAGE — KUAIRAND =====
+  dati: train=490859 test=52768 | K=4 ε=0.01 macro=43 dim(v)=48
+  stadio                                 secondi
+  descrittore (L0+L1)                       5.59
+  selezione K                              41.15
+  selezione ε                              21.41
+  rough k-means (L2)                        3.00
+  bias situazioni b̃                        0.02
+  inferenza (assegna+re-rank test)          4.73
+  ----------------------------------------------
+  FIT totale (pluggable)                   71.17
+  inferenza per richiesta: 0.090 ms
+  parametri del modulo: 364  (K·macro + K·dim) — vs B_full ≈ (n_users+n_items+ctx)·d
+
+  Confronto (osservato, stessa macchina): BPR fit ~secondi; B_full (FM torch+MPS) ~1-2 min/training.

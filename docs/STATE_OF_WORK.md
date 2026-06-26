@@ -1,7 +1,7 @@
 # X-SAGE — Stato del lavoro (documento vivo)
 
 > Documento canonico. Aggiornato e committato a ogni modifica sostanziale.
-> Ultimo aggiornamento: 2026-06-24 (LEGGE A TRE GATE: KuaiRand isola il 3° gate = predittività situazionale/feed-mediation; ml-1m unico winner — vedi §14).
+> Ultimo aggiornamento: 2026-06-25 (PROTOCOLLO UNIFORME k-core=10: tabellone validato, ml-1m unico winner +0.0082; amazon-5seed da ri-lanciare. Vedi §15).
 
 ## Changelog
 - Selezione parametri situazioni (K/ε/depth/n) anti-circolare; γ_S=1/|T|.
@@ -262,3 +262,34 @@ dev'essere **guidata dall'utente**, non da un algoritmo/feed). **Un dimostratore
 - 🔑 **Per il paper**: caratterizzazione *completa* — 4 dataset, ogni fallimento spiega *un* gate, ml-1m li
   passa tutti. KuaiRand è la prova che mancava (depth+balance non sufficienti). Steam scartato (shallow).
 - Artefatti: `params/kuairand.json`, `macro_avg_kuairand.csv`, `param_closure_kuairand.csv`.
+
+## 15. PROTOCOLLO UNIFORME k-core=10 + TABELLONE VALIDATO (2026-06-25)
+**Fix metodologico**: k-core era misto (ml-1m/mind=10; yelp/kuairand/amazon=20) → confronto NON valido.
+Riallineato tutto a **k-core=10** (`run_kcore10_all.sh`: per ogni dataset preprocess→backbone→close_params
+FRESH→battery 5-seed→macro_avg→neutrality→explainability→costi). **yelp tolto da GEO_CITIES** (no-geo, come
+ml-1m → SIT-vs-B_full ora pulito). I 5 dataset hanno l'IDENTICO trattamento completo di ml-1m.
+
+**TABELLONE (k-core10, 5 seed, bootstrap+Holm+TOST):**
+| dataset | satur. | SIT-su-B_full ΔCatMRR [CI95] p | SIT vs Steck-b (macro) | macro-Δ | tipo |
+|---|---|---|---|---|---|
+| **ml-1m** | 27.7% | **+0.0082** p≈0 ✅ | **+0.0135** ✅ | **+0.0138** ✅ | **WINNER** |
+| mind | 24.9% | −0.0033 [−.0041,−.0025] p=0 | −0.0092 | +0.0026 | null (gate-1) |
+| yelp | 76.2% | −0.0026 [−.0030,−.0021] p=0 | −0.0050 | −0.0031 | null (gate-2) |
+| kuairand | 24.2% | +0.0009 [+.0001,+.0018] p=.04 ~0 | −0.0049 | +0.0004 | null (gate-3) |
+| amazon* | 23.7% | +0.0004 (⚠️1-seed default) | −0.0071 | +0.0039 | ridondante |
+
+- **ml-1m unico winner** sotto protocollo valido: SIT-su-B_full +0.0082 (8× la SD ±0.001), batte ANCHE
+  Steck-b su B_full (0.438>0.429). yelp **significativamente negativo**; kuairand significativo ma
+  trascurabile e **instabile** (B_full SD enorme: Cov ±0.078); ⚠️ kuairand neutrality passata a STRUTT (era
+  FEATURE a k20, ma è la colonna dim-confounded, irrilevante). I verdetti NON cambiano dal k-core misto.
+- ⚠️ **AMAZON INCOMPLETO**: ha i params CALIBRATI (`params/amazoncd.json`) ma la **battery 5-seed è MORTA al
+  freeze del Mac** (catalogo 20.7K item → RAM satura) → resta a 1-seed/default. **DA RI-LANCIARE** (a Mac
+  fresco): `battery_bfull.py amazoncd 5` + macro_avg + neutrality. È l'unico buco.
+- **Foursquare TSMC2014** (nyc/tokyo): solo diagnostico macro_avg (default params) → **ridondanti** (SIT>BASE
+  forte ma <<Steck-b: i POI sono abitudinari). NON nel protocollo uniforme (vengono da OLD-processed). Per
+  includerli serve port dal RAW TSMC2014 a k-core10 (TODO).
+- **RIPRODUCIBILITÀ ml-1m**: deterministico (seed=42) per preprocess/situazioni/close_params/macro_avg/
+  neutrality/B_blind (SD=0 su 5 seed = prova). B_full (torch+MPS) riproducibile **entro ±0.001** (la SD;
+  MPS non bit-riproducibile). Il +0.0082 è 8× la SD → winner stabile a ogni ri-run. Numeri congelati nei CSV.
+- **TASSONOMIA a 2 livelli**: gate1-3 → SIT>BASE; non-ridondanza(1−R²) → SIT>Steck-b. WINNER (ml-1m) passa
+  entrambi; RIDONDANTI (amazon, 4sq-nyc/tokyo) solo il primo; NULL (mind/yelp/kuairand) nessuno.
