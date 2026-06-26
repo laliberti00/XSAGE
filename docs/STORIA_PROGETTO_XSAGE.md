@@ -94,3 +94,17 @@ work. **Asse deciso: stato situazionale NEUTRO (L2, una volta) → usi multipli 
 + legge a due gate.** Il decoupling è una virtù da dichiarare. Precisione: lo stato è neutro nel clustering ma le
 feature `[c̃‖e]` sono category-aware a monte → **ablazione di neutralità** (raw vs full) per stabilire se il
 valore è strutturale o cucito nelle feature.
+
+## Allineamento finale (2026-06-25)
+- **Scoperto disallineamento k-core** (ml-1m/mind=10; yelp/kuairand/amazon=20) → confronto non valido.
+- **Riallineato a k-core=10 uniforme** (`run_kcore10_all.sh`): preprocess→backbone→close_params(FRESH)→
+  battery5→macro_avg→neutrality→explainability→costi. yelp **no-geo** (come ml-1m).
+- **Tabellone validato (5 seed, bootstrap+Holm+TOST)**: ml-1m UNICO winner (SIT-su-B_full **+0.0082**,
+  8× la SD; batte anche Steck-b); mind/yelp null significativi-negativi; kuairand null trascurabile/instabile;
+  amazon ridondante. **I verdetti non cambiano dal k-core misto** → robusti.
+- **Amazon-5seed**: morta al freeze del Mac (catalogo 20.7K → RAM) → params calibrati ma battery a 1-seed,
+  DA RI-LANCIARE.
+- **Foursquare TSMC2014** (nyc/tokyo): diagnostico → ridondanti (POI abitudinari, Steck-b ≫ SIT).
+- **Riproducibilità ml-1m**: deterministico (seed=42) ovunque tranne B_full su MPS (±0.001 = la SD).
+  Winner stabile a ogni ri-run; numeri congelati nei CSV committati.
+- **Tassonomia a 2 livelli**: gate1-3 → SIT>BASE; non-ridondanza(1−R²) → SIT>Steck-b. Solo ml-1m passa entrambi.
