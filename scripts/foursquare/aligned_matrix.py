@@ -8,7 +8,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 CLEAN = Path("/Users/lucaaliberti/Downloads/xsage-clean"); OUT = CLEAN / "outputs_results"
-CITIES = ["mind", "ml1m", "yelp", "kuairand", "amazoncd", "nyc_tist", "tokyo_tist", "saopaulo", "bangkok", "istanbul"]
+CITIES = ["mind", "ml1m", "yelp", "kuairand", "amazoncd", "tsmc_nyc", "tsmc_tky",
+          "nyc_tist", "tokyo_tist", "saopaulo", "bangkok", "istanbul"]
 
 
 def gm(df, bk, me, col):

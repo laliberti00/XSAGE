@@ -43,14 +43,15 @@ def feats_from_df(df, icm, n_macros):
     }
 
 
-def score_test(model, feats_te, spec, icm, device):
-    """Bfull [n_test x n_items] via score_full_catalogue. ⚠️ DA VERIFICARE con run di prova."""
+def score_test(model, feats_te, spec, icm, device, dtype=np.float32):
+    """Bfull [n_test x n_items] via score_full_catalogue. dtype=np.float16 (MEMORY-SAFE) dimezza la
+    RAM scrivendo direttamente in mezza precisione (peak ~n·I·2B invece di 4B; ranking robusto)."""
     offs = spec.offsets(); I = spec.n_items
     items = torch.arange(I, device=device)
     item_off = items + offs["item"]
     macro_off = torch.from_numpy(icm.astype(np.int64)).to(device) + offs["macro"]
     fine_off = torch.zeros(I, dtype=torch.long, device=device) + offs["fine"]
-    n = len(feats_te["u_idx"]); out = np.zeros((n, I), np.float32)
+    n = len(feats_te["u_idx"]); out = np.zeros((n, I), dtype)
     # context_idx (B,7): user, hour, dow, isw, month, prev_geo, intent_last (offset)
     cols = [("u_idx", "user"), ("c_hour", "hour"), ("c_dow", "dow"), ("c_isw", "isw"),
             ("c_month", "month"), ("prev_geo_idx", "prev_geo"), ("intent_last_idx", "intent_last")]
@@ -63,6 +64,27 @@ def score_test(model, feats_te, spec, icm, device):
             S = model.score_full_catalogue(ctx, item_off, macro_off, fine_off)  # (B,I)
             out[bs:be] = S.cpu().numpy()
     return out
+
+
+def score_provider(model, feats_te, spec, icm, device):
+    """MEMORY-SAFE: invece di materializzare [n_test x n_items] (può essere GB), ritorna una
+    funzione prov(idx)->scores per le sole righe idx, calcolate al volo. Usato dal battery con
+    BFULL_SAFE=1 (più lento — ricalcola — ma RAM costante ~BATCH·n_items)."""
+    offs = spec.offsets(); I = spec.n_items
+    items = torch.arange(I, device=device); item_off = items + offs["item"]
+    macro_off = torch.from_numpy(icm.astype(np.int64)).to(device) + offs["macro"]
+    fine_off = torch.zeros(I, dtype=torch.long, device=device) + offs["fine"]
+    cols = [("u_idx", "user"), ("c_hour", "hour"), ("c_dow", "dow"), ("c_isw", "isw"),
+            ("c_month", "month"), ("prev_geo_idx", "prev_geo"), ("intent_last_idx", "intent_last")]
+    model.eval()
+
+    def prov(idx):
+        idx = np.asarray(idx)
+        with torch.no_grad():
+            ctx = torch.stack([torch.from_numpy(feats_te[c][idx]).to(device) + offs[o]
+                               for c, o in cols], dim=-1)
+            return model.score_full_catalogue(ctx, item_off, macro_off, fine_off).cpu().numpy()
+    return prov
 
 
 def main():

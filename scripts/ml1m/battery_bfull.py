@@ -19,7 +19,13 @@ except Exception:
     def tqdm(x, **k): return x
 from mind_prep import build_descriptor, membership_from_assign
 from eval_kappa import select_K, select_eps
+import os
 from train_bfull import feats_from_df, score_test
+SAFE = os.environ.get("BFULL_SAFE") == "1"   # memory-safe: matrice B_full in float16 (metà RAM)
+def _score(model, feats, spec, icm, dev):
+    return score_test(model, feats, spec, icm, dev, dtype=np.float16 if SAFE else np.float32)
+def _rows(sc):
+    return lambda idx: sc[idx]
 from pipeline.step02_models.xsage.l2_comprehension import _assign, fit_rough_kmeans
 from pipeline.step02_models.xsage.backbone_full import ContextAwareFM, FeatureSpec, train_b_full
 from xsage.recommendation import fit_situation_biases_z
@@ -134,13 +140,13 @@ def run_seed(city, seed, dev):
         torch.manual_seed(seed); spec = FeatureSpec(n_users=nU, n_items=ds["n_items"], n_macros=nmac, n_fine=1, n_geo=0, n_intent_last=nmac); mdl = ContextAwareFM(spec, d=emb).to(dev)
         for st in range(0, BF_EPOCHS, BF_CKPT):
             train_b_full(mdl, ftr, mask, icmF, np.zeros(ds["n_items"], np.int64), dev, lr=lr, n_epochs=BF_CKPT, verbose=False)
-            sc = score_test(mdl, fvs, spec, icmF, dev); vm = full_eval(lambda idx: sc[idx], None, 0, dvs, z_va[sub], gam_va[sub], icm, excl, G1, purv[sub], K, nmac)["cm"].mean()
+            sc = _score(mdl, fvs, spec, icmF, dev); vm = full_eval(_rows(sc), None, 0, dvs, z_va[sub], gam_va[sub], icm, excl, G1, purv[sub], K, nmac)["cm"].mean()
             if vm > best["val"]: best = {"val": vm, "st": copy.deepcopy(mdl.state_dict()), "cfg": (emb, lr, st + BF_CKPT), "spec": spec}
     bm = ContextAwareFM(best["spec"], d=best["cfg"][0]).to(dev); bm.load_state_dict(best["st"])
-    bfv = score_test(bm, fva, best["spec"], icmF, dev); bft = score_test(bm, fte, best["spec"], icmF, dev)
+    bfv = _score(bm, fva, best["spec"], icmF, dev); bft = _score(bm, fte, best["spec"], icmF, dev)
 
     backbones = {"B_blind": (lambda idx, u=uv: sb[u[idx]], lambda idx, u=ut: sb[u[idx]]),  # (val_fn, test_fn)
-                 "B_full": (lambda idx: bfv[idx], lambda idx: bft[idx])}
+                 "B_full": (_rows(bfv), _rows(bft))}
     def dmac(method, split):
         mem = mem_va if split == "val" else mem_te; u = uv if split == "val" else ut
         if method == "SIT": return mem.astype(np.float32) @ b_z

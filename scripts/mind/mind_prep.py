@@ -26,7 +26,7 @@ YELP_ATTRS = ("c_hour", "c_dow", "c_isweekend", "c_month", "prev_geohash5", "int
 
 # yelp tolto dai GEO_CITIES: protocollo UNIFORME a ml-1m (solo contesto temporale, no geo).
 # Le 5 città Foursquare restano geo (suite separata). "yelp con geo" = ablazione a parte se serve.
-GEO_CITIES = {"nyc_tist", "tokyo_tist", "saopaulo", "bangkok", "istanbul"}
+GEO_CITIES = {"nyc_tist", "tokyo_tist", "saopaulo", "bangkok", "istanbul", "tsmc_nyc", "tsmc_tky"}
 
 
 def city_attrs(city):
