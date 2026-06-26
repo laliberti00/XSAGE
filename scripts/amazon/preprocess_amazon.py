@@ -12,7 +12,7 @@ import scipy.sparse as sps
 
 RAW = Path("/Users/lucaaliberti/Downloads/xsage-clean/data/amazoncd")
 OUT = Path("/Users/lucaaliberti/Downloads/xsage-clean/data/processed/amazoncd")
-KCORE = int(sys.argv[1]) if len(sys.argv) > 1 else 20
+KCORE = int(sys.argv[1]) if len(sys.argv) > 1 else 10   # protocollo UNIFORME (come ml-1m)
 
 
 def main():

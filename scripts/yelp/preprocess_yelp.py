@@ -14,7 +14,7 @@ import scipy.sparse as sps
 
 RAW = Path("/Users/lucaaliberti/Downloads/xsage-clean/data/yelp_dataset")
 CITY = sys.argv[1] if len(sys.argv) > 1 else "Philadelphia"
-KCORE = int(sys.argv[2]) if len(sys.argv) > 2 else 20
+KCORE = int(sys.argv[2]) if len(sys.argv) > 2 else 10   # protocollo UNIFORME (come ml-1m)
 BAL = len(sys.argv) > 3 and sys.argv[3] == "bal"          # ribilanciamento categorie (diagnostico)
 CAPMULT = float(sys.argv[4]) if len(sys.argv) > 4 else 3.0  # cap per macro = CAPMULT × mediana
 OUT = Path("/Users/lucaaliberti/Downloads/xsage-clean/data/processed/" + ("yelp_bal" if BAL else "yelp"))

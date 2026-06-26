@@ -15,7 +15,7 @@ import scipy.sparse as sps
 
 RAW = Path("/Users/lucaaliberti/Downloads/xsage-clean/data/KuaiRand-Pure/data")
 OUT = Path("/Users/lucaaliberti/Downloads/xsage-clean/data/processed/kuairand")
-KCORE = int(sys.argv[1]) if len(sys.argv) > 1 else 20
+KCORE = int(sys.argv[1]) if len(sys.argv) > 1 else 10   # protocollo UNIFORME (come ml-1m)
 LOGS = ["log_standard_4_08_to_4_21_pure.csv", "log_standard_4_22_to_5_08_pure.csv"]
 
 
