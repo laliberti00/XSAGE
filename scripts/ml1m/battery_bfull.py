@@ -130,24 +130,25 @@ def run_seed(city, seed, dev):
     dfv, dft = ds["df_val"], ds["df_test"]; uv = dfv["u_idx"].values.astype(np.int64); ut = dft["u_idx"].values.astype(np.int64)
     purv, purt = Pu[uv], Pu[ut]
 
-    # ---- B_full: tuning su val, score val+test ----
-    dfa = pd.concat([ds["df_train"], ds["df_val"], ds["df_test"]], ignore_index=True)
-    icmF = (dfa.groupby("i_idx")["cat_macro"].first().map(ds["macro_to_idx"]).reindex(np.arange(ds["n_items"]), fill_value=0).values.astype(np.int64))
-    ftr = feats_from_df(ds["df_train"], icmF, nmac); fva = feats_from_df(dfv, icmF, nmac); fte = feats_from_df(dft, icmF, nmac)
-    mask = (ds["urm_train"] + ds["urm_val"]).tocsr(); mask.data[:] = 1.
-    sub = rng.choice(len(dfv), min(VAL_SUB, len(dfv)), replace=False); dvs = dfv.iloc[sub].reset_index(drop=True); fvs = {k: v[sub] for k, v in fva.items()}
-    best = {"val": -1, "st": None, "cfg": None}
-    for (emb, lr) in tqdm(BF_GRID, desc=f"B_full s{seed}"):
-        torch.manual_seed(seed); spec = FeatureSpec(n_users=nU, n_items=ds["n_items"], n_macros=nmac, n_fine=1, n_geo=0, n_intent_last=nmac); mdl = ContextAwareFM(spec, d=emb).to(dev)
-        for st in range(0, BF_EPOCHS, BF_CKPT):
-            train_b_full(mdl, ftr, mask, icmF, np.zeros(ds["n_items"], np.int64), dev, lr=lr, n_epochs=BF_CKPT, verbose=False)
-            sc = _score(mdl, fvs, spec, icmF, dev); vm = full_eval(_rows(sc), None, 0, dvs, z_va[sub], gam_va[sub], icm, excl, G1, purv[sub], K, nmac)["cm"].mean()
-            if vm > best["val"]: best = {"val": vm, "st": copy.deepcopy(mdl.state_dict()), "cfg": (emb, lr, st + BF_CKPT), "spec": spec}
-    bm = ContextAwareFM(best["spec"], d=best["cfg"][0]).to(dev); bm.load_state_dict(best["st"])
-    bfv = _score(bm, fva, best["spec"], icmF, dev); bft = _score(bm, fte, best["spec"], icmF, dev)
-
-    backbones = {"B_blind": (lambda idx, u=uv: sb[u[idx]], lambda idx, u=ut: sb[u[idx]]),  # (val_fn, test_fn)
-                 "B_full": (_rows(bfv), _rows(bft))}
+    # ---- B_full: tuning su val, score val+test (saltabile con SKIP_BFULL=1, per run "solo extra") ----
+    SKIP_BF = os.environ.get("SKIP_BFULL") == "1"
+    backbones = {"B_blind": (lambda idx, u=uv: sb[u[idx]], lambda idx, u=ut: sb[u[idx]])}  # (val_fn, test_fn)
+    if not SKIP_BF:
+        dfa = pd.concat([ds["df_train"], ds["df_val"], ds["df_test"]], ignore_index=True)
+        icmF = (dfa.groupby("i_idx")["cat_macro"].first().map(ds["macro_to_idx"]).reindex(np.arange(ds["n_items"]), fill_value=0).values.astype(np.int64))
+        ftr = feats_from_df(ds["df_train"], icmF, nmac); fva = feats_from_df(dfv, icmF, nmac); fte = feats_from_df(dft, icmF, nmac)
+        mask = (ds["urm_train"] + ds["urm_val"]).tocsr(); mask.data[:] = 1.
+        sub = rng.choice(len(dfv), min(VAL_SUB, len(dfv)), replace=False); dvs = dfv.iloc[sub].reset_index(drop=True); fvs = {k: v[sub] for k, v in fva.items()}
+        best = {"val": -1, "st": None, "cfg": None}
+        for (emb, lr) in tqdm(BF_GRID, desc=f"B_full s{seed}"):
+            torch.manual_seed(seed); spec = FeatureSpec(n_users=nU, n_items=ds["n_items"], n_macros=nmac, n_fine=1, n_geo=0, n_intent_last=nmac); mdl = ContextAwareFM(spec, d=emb).to(dev)
+            for st in range(0, BF_EPOCHS, BF_CKPT):
+                train_b_full(mdl, ftr, mask, icmF, np.zeros(ds["n_items"], np.int64), dev, lr=lr, n_epochs=BF_CKPT, verbose=False)
+                sc = _score(mdl, fvs, spec, icmF, dev); vm = full_eval(_rows(sc), None, 0, dvs, z_va[sub], gam_va[sub], icm, excl, G1, purv[sub], K, nmac)["cm"].mean()
+                if vm > best["val"]: best = {"val": vm, "st": copy.deepcopy(mdl.state_dict()), "cfg": (emb, lr, st + BF_CKPT), "spec": spec}
+        bm = ContextAwareFM(best["spec"], d=best["cfg"][0]).to(dev); bm.load_state_dict(best["st"])
+        bfv = _score(bm, fva, best["spec"], icmF, dev); bft = _score(bm, fte, best["spec"], icmF, dev)
+        backbones["B_full"] = (_rows(bfv), _rows(bft))
     # ---- backbone CITABILI extra (env-gated): score val+test precalcolati a parte ----
     # XTRA_BACKBONES="EASE,SASRec,xDeepFM". Convenzione file in data/<city>/backbone/:
     #   <NAME>.scores_user.npy  [n_users x n_items]  → statico per-utente (come B_blind)
