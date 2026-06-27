@@ -1,0 +1,16 @@
+
+===== COSTO MODULO PLUGGABLE X-SAGE — TSMC_NYC =====
+  dati: train=118736 test=14298 | K=7 ε=0.02 macro=9 dim(v)=15
+  stadio                                 secondi
+  descrittore (L0+L1)                       1.47
+  selezione K                              26.13
+  selezione ε                               7.15
+  rough k-means (L2)                        0.57
+  bias situazioni b̃                        0.00
+  inferenza (assegna+re-rank test)          1.70
+  ----------------------------------------------
+  FIT totale (pluggable)                   35.32
+  inferenza per richiesta: 0.119 ms
+  parametri del modulo: 168  (K·macro + K·dim) — vs B_full ≈ (n_users+n_items+ctx)·d
+
+  Confronto (osservato, stessa macchina): BPR fit ~secondi; B_full (FM torch+MPS) ~1-2 min/training.

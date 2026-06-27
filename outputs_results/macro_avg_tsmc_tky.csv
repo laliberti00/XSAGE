@@ -1,0 +1,5 @@
+city,method,dominant_share,macro_active,micro,macro
+tsmc_tky,BASE,0.5691,9,0.57306,0.15942
+tsmc_tky,SIT,0.5691,9,0.59321,0.16771
+tsmc_tky,Steck-b,0.5691,9,0.61468,0.28396
+tsmc_tky,SIT_minus_BASE,0.5691,9,0.02016,0.0083

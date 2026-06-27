@@ -1,0 +1,5 @@
+city,method,dominant_share,macro_active,micro,macro
+bangkok,BASE,0.3359,10,0.37773,0.19159
+bangkok,SIT,0.3359,10,0.39453,0.20031
+bangkok,Steck-b,0.3359,10,0.41656,0.243
+bangkok,SIT_minus_BASE,0.3359,10,0.0168,0.00873

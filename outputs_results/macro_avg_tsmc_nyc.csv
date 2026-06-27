@@ -1,0 +1,5 @@
+city,method,dominant_share,macro_active,micro,macro
+tsmc_nyc,BASE,0.1691,9,0.21083,0.17035
+tsmc_nyc,SIT,0.1691,9,0.3066,0.28662
+tsmc_nyc,Steck-b,0.1691,9,0.39786,0.40991
+tsmc_nyc,SIT_minus_BASE,0.1691,9,0.09577,0.11627

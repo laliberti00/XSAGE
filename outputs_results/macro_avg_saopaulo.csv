@@ -1,0 +1,5 @@
+city,method,dominant_share,macro_active,micro,macro
+saopaulo,BASE,0.2505,10,0.36483,0.18271
+saopaulo,SIT,0.2505,10,0.40045,0.20535
+saopaulo,Steck-b,0.2505,10,0.438,0.28511
+saopaulo,SIT_minus_BASE,0.2505,10,0.03562,0.02263

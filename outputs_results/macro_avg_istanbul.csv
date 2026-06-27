@@ -1,0 +1,5 @@
+city,method,dominant_share,macro_active,micro,macro
+istanbul,BASE,0.2313,10,0.29745,0.19471
+istanbul,SIT,0.2313,10,0.3162,0.21173
+istanbul,Steck-b,0.2313,10,0.37305,0.30257
+istanbul,SIT_minus_BASE,0.2313,10,0.01874,0.01701

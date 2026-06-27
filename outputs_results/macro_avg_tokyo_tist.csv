@@ -1,5 +1,5 @@
 city,method,dominant_share,macro_active,micro,macro
 tokyo_tist,BASE,0.6255,9,0.60104,0.17627
-tokyo_tist,SIT,0.6255,9,0.62635,0.19316
-tokyo_tist,Steck-b,0.6255,9,0.63008,0.2429
-tokyo_tist,SIT_minus_BASE,0.6255,9,0.02531,0.01688
+tokyo_tist,SIT,0.6255,9,0.62771,0.19075
+tokyo_tist,Steck-b,0.6255,9,0.63016,0.2377
+tokyo_tist,SIT_minus_BASE,0.6255,9,0.02667,0.01447

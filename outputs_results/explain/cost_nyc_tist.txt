@@ -1,0 +1,16 @@
+
+===== COSTO MODULO PLUGGABLE X-SAGE — NYC_TIST =====
+  dati: train=124270 test=17702 | K=8 ε=0.02 macro=10 dim(v)=16
+  stadio                                 secondi
+  descrittore (L0+L1)                       1.60
+  selezione K                              23.09
+  selezione ε                               5.73
+  rough k-means (L2)                        0.43
+  bias situazioni b̃                        0.00
+  inferenza (assegna+re-rank test)          1.19
+  ----------------------------------------------
+  FIT totale (pluggable)                   30.85
+  inferenza per richiesta: 0.068 ms
+  parametri del modulo: 208  (K·macro + K·dim) — vs B_full ≈ (n_users+n_items+ctx)·d
+
+  Confronto (osservato, stessa macchina): BPR fit ~secondi; B_full (FM torch+MPS) ~1-2 min/training.

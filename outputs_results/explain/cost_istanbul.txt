@@ -1,0 +1,16 @@
+
+===== COSTO MODULO PLUGGABLE X-SAGE — ISTANBUL =====
+  dati: train=998030 test=136220 | K=5 ε=0.01 macro=10 dim(v)=16
+  stadio                                 secondi
+  descrittore (L0+L1)                      10.94
+  selezione K                             110.18
+  selezione ε                              29.62
+  rough k-means (L2)                        6.61
+  bias situazioni b̃                        0.04
+  inferenza (assegna+re-rank test)         24.05
+  ----------------------------------------------
+  FIT totale (pluggable)                  157.39
+  inferenza per richiesta: 0.177 ms
+  parametri del modulo: 130  (K·macro + K·dim) — vs B_full ≈ (n_users+n_items+ctx)·d
+
+  Confronto (osservato, stessa macchina): BPR fit ~secondi; B_full (FM torch+MPS) ~1-2 min/training.
