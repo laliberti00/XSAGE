@@ -92,11 +92,12 @@ def boot(a, b, rng):
     return float(d.mean()), float(np.std(bs)), float(lo), float(hi), float(min(p, 1.))
 
 
-def greedy_steck(sb, df, pur, icm, excl, nmac):
+def greedy_steck(sb, df, pur, icm, excl, nmac, rows=None):
+    # rows=None: sb è per-utente [n_users x n_items] (sb[uu]); rows!=None: matrice per-richiesta [n x n_items] (rows[r])
     u = df["u_idx"].values.astype(np.int64); i_t = df["i_idx"].values.astype(np.int64); tm = icm[i_t]; n = len(df)
     cm = np.zeros(n); cn = np.zeros(n); ht = np.zeros(n); idc = np.zeros(n)
     for r in tqdm(range(n), desc="Steck-a", leave=False):
-        uu = int(u[r]); s = sb[uu].astype(np.float64).copy(); cc = excl.indices[excl.indptr[uu]:excl.indptr[uu + 1]]
+        uu = int(u[r]); s = (rows[r] if rows is not None else sb[uu]).astype(np.float64).copy(); cc = excl.indices[excl.indptr[uu]:excl.indptr[uu + 1]]
         if len(cc): s[cc] = -np.inf
         cand = np.argpartition(-s, N_CAND - 1)[:N_CAND]; cs = s[cand]; fin = np.isfinite(cs); cand = cand[fin]; cs = cs[fin]
         if len(cand) == 0: continue
@@ -147,6 +148,24 @@ def run_seed(city, seed, dev):
 
     backbones = {"B_blind": (lambda idx, u=uv: sb[u[idx]], lambda idx, u=ut: sb[u[idx]]),  # (val_fn, test_fn)
                  "B_full": (_rows(bfv), _rows(bft))}
+    # ---- backbone CITABILI extra (env-gated): score val+test precalcolati a parte ----
+    # XTRA_BACKBONES="EASE,SASRec,xDeepFM". Convenzione file in data/<city>/backbone/:
+    #   <NAME>.scores_user.npy  [n_users x n_items]  → statico per-utente (come B_blind)
+    #   <NAME>.scores_val.npy + <NAME>.scores_test.npy  [n_rows x n_items]  → per-richiesta
+    # Ogni backbone così aggiunto eredita IDENTICO il trattamento (BASE/SIT/Steck-b/UNI, κ* su val, stat).
+    bdir = CLEAN / "data" / city / "backbone"
+    xtra_steck = {}   # name -> ('user', M_user) | ('rows', M_test)  per Steck-a coerente sui nuovi backbone
+    for name in [x.strip() for x in os.environ.get("XTRA_BACKBONES", "").split(",") if x.strip()]:
+        fu = bdir / f"{name}.scores_user.npy"
+        if fu.exists():
+            M = np.load(fu, mmap_mode="r")        # memory-map: resta su disco, batch on-demand (RAM-safe ml1m)
+            backbones[name] = (lambda idx, M=M, u=uv: M[u[idx]], lambda idx, M=M, u=ut: M[u[idx]])
+            xtra_steck[name] = ("user", M)
+        else:
+            sv = np.load(bdir / f"{name}.scores_val.npy", mmap_mode="r"); st = np.load(bdir / f"{name}.scores_test.npy", mmap_mode="r")
+            backbones[name] = (_rows(sv), _rows(st))
+            xtra_steck[name] = ("rows", st)
+        print(f"  [+] backbone extra: {name}", flush=True)
     def dmac(method, split):
         mem = mem_va if split == "val" else mem_te; u = uv if split == "val" else ut
         if method == "SIT": return mem.astype(np.float32) @ b_z
@@ -166,6 +185,11 @@ def run_seed(city, seed, dev):
         best_k = max(KAPPA_GRID, key=lambda kap: full_eval(vfn, ("glob", None), kap, dfv, zv, gv, icm, excl, G1, purv, K, nmac)["cm"].mean())
         e = full_eval(tfn, ("glob", None), best_k, dft, zt, gt, icm, excl, G1, purt, K, nmac); e["kstar"] = best_k; store[(bbn, "UNI_glob")] = e
     store[("B_blind", "Steck-a")] = greedy_steck(sb, dft, Pu, icm, excl, nmac)
+    # Steck-a (calibrazione greedy di Steck) anche sui backbone extra → set metodi COMPLETO come ml-1m
+    if os.environ.get("XTRA_STECKA", "1") == "1":
+        for name, (kind, Mx) in xtra_steck.items():
+            if kind == "user": store[(name, "Steck-a")] = greedy_steck(Mx, dft, Pu, icm, excl, nmac)
+            else: store[(name, "Steck-a")] = greedy_steck(None, dft, Pu, icm, excl, nmac, rows=Mx)
 
     for (bbn, mth), e in store.items():
         mx, nsink = lens_spread(e["sit_mac"]) if e["sit_mac"].shape[0] == K else (np.nan, 0)
@@ -208,6 +232,21 @@ def main():
         print(f"  dLT@20 = {sit['lt'].mean()-bf['lt'].mean():+.5f}  dGini = {gini(sit['expo'])-gini(bf['expo']):+.5f}  dCoverage = {(sit['expo']>0).mean()-(bf['expo']>0).mean():+.5f}")
     except Exception as ex:
         print(f"[headline saltato: {ex}; CSV salvato]")
+    # headline per i backbone extra citabili (SIT-su-<NAME> vs <NAME>)
+    try:
+        store, ut = last; rng = np.random.default_rng(123)
+        extra = sorted({bb for (bb, mth) in store if bb not in ("B_blind", "B_full")})
+        for bb in extra:
+            if (bb, "SIT") not in store or (bb, "BASE") not in store: continue
+            s = store[(bb, "SIT")]; b = store[(bb, "BASE")]
+            m, sd, lo, hi, p = boot(s["cm"], b["cm"], rng)
+            dr, sdr, lor, hir, pr = boot(s["ht"], b["ht"], rng)
+            tost = "EQUIVALENTE (non degrada)" if (lor > -TOST_MARGIN and hir < TOST_MARGIN) else ("NON degrada (>=)" if lor >= 0 else "DEGRADA")
+            print(f"\n===== HEADLINE: SIT-su-{bb} vs {bb} (ultimo seed) =====")
+            print(f"  dCatMRR = {m:+.5f} +- {sd:.5f} [{lo:+.5f},{hi:+.5f}] p={p:.4f}")
+            print(f"  dR@20   = {dr:+.5f} +- {sdr:.5f} [{lor:+.5f},{hir:+.5f}] p={pr:.4f}  | TOST R@20: {tost}")
+    except Exception as ex:
+        print(f"[headline extra saltato: {ex}; CSV salvato]")
     print(f"\n-> outputs_results/battery_bfull_{city}.csv")
     return 0
 
