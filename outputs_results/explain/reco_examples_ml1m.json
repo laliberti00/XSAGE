@@ -3,89 +3,119 @@
   "kappa": 0.5,
   "examples": [
     {
+      "gain": 0.9565217391304348,
       "situazione": "Commedia serale",
       "k": 0,
-      "core": true,
-      "contesto_ora": 23,
+      "contesto_ora": 21,
       "weekend": true,
-      "intento_recente": "Animation",
+      "intento_recente": "Adventure",
+      "guardato": {
+        "genere": "Comedy",
+        "titolo": "Mask, The (1994)"
+      },
+      "rank_base": 23,
+      "rank_sit": 1,
       "BASE_top": {
-        "genere": "Drama",
-        "titolo": "Shawshank Redemption, The (1994)"
+        "genere": "Action",
+        "titolo": "Independence Day (ID4) (1996)"
       },
       "SIT_top": {
         "genere": "Comedy",
-        "titolo": "American Beauty (1999)"
+        "titolo": "Forrest Gump (1994)"
       },
-      "nudge_genere_promosso": 1.785
+      "nudge_cat_vera": 1.785
     },
     {
+      "gain": 0.9782608695652174,
       "situazione": "Horror pomeridiano",
       "k": 1,
-      "core": true,
-      "contesto_ora": 2,
-      "weekend": true,
-      "intento_recente": "Drama",
-      "BASE_top": {
-        "genere": "Comedy",
-        "titolo": "Wonder Boys (2000)"
-      },
-      "SIT_top": {
-        "genere": "Crime",
-        "titolo": "Croupier (1998)"
-      },
-      "nudge_genere_promosso": 0.073
-    },
-    {
-      "situazione": "Azione notturna",
-      "k": 2,
-      "core": true,
-      "contesto_ora": 12,
+      "contesto_ora": 7,
       "weekend": false,
-      "intento_recente": "Sci-Fi",
+      "intento_recente": "Horror",
+      "guardato": {
+        "genere": "Horror",
+        "titolo": "Nightmare on Elm Street 3: Dream Warriors, A (1987)"
+      },
+      "rank_base": 46,
+      "rank_sit": 1,
       "BASE_top": {
         "genere": "Drama",
-        "titolo": "Silence of the Lambs, The (1991)"
+        "titolo": "Edward Scissorhands (1990)"
       },
       "SIT_top": {
-        "genere": "Action",
-        "titolo": "Saving Private Ryan (1998)"
+        "genere": "Horror",
+        "titolo": "Wes Craven's New Nightmare (1994)"
       },
-      "nudge_genere_promosso": 2.342
+      "nudge_cat_vera": 2.463
     },
     {
-      "situazione": "Fantasy pomeridiano",
-      "k": 3,
-      "core": true,
+      "gain": 0.9642857142857143,
+      "situazione": "Azione notturna",
+      "k": 2,
       "contesto_ora": 18,
       "weekend": false,
       "intento_recente": "Action",
+      "guardato": {
+        "genere": "Action",
+        "titolo": "Out of Sight (1998)"
+      },
+      "rank_base": 28,
+      "rank_sit": 1,
       "BASE_top": {
-        "genere": "Drama",
-        "titolo": "Boogie Nights (1997)"
+        "genere": "Comedy",
+        "titolo": "Raising Arizona (1987)"
       },
       "SIT_top": {
         "genere": "Action",
-        "titolo": "Jurassic Park (1993)"
+        "titolo": "Princess Bride, The (1987)"
       },
-      "nudge_genere_promosso": 0.223
+      "nudge_cat_vera": 2.342
     },
     {
-      "situazione": "Dramma del weekend",
-      "k": 4,
-      "core": true,
-      "contesto_ora": 19,
+      "gain": 0.8,
+      "situazione": "Fantasy pomeridiano",
+      "k": 3,
+      "contesto_ora": 0,
       "weekend": false,
-      "intento_recente": "Drama",
+      "intento_recente": "Action",
+      "guardato": {
+        "genere": "Sci-Fi",
+        "titolo": "Mission to Mars (2000)"
+      },
+      "rank_base": 5,
+      "rank_sit": 1,
       "BASE_top": {
         "genere": "Action",
-        "titolo": "Tron (1982)"
+        "titolo": "Jaws (1975)"
       },
       "SIT_top": {
-        "genere": "Drama",
-        "titolo": "Courage Under Fire (1996)"
+        "genere": "Sci-Fi",
+        "titolo": "Clockwork Orange, A (1971)"
       },
-      "nudge_genere_promosso": 1.214
+      "nudge_cat_vera": 1.383
+    },
+    {
+      "gain": 0.9411764705882353,
+      "situazione": "Dramma del weekend",
+      "k": 4,
+      "contesto_ora": 0,
+      "weekend": true,
+      "intento_recente": "Drama",
+      "guardato": {
+        "genere": "Crime",
+        "titolo": "Carlito's Way (1993)"
+      },
+      "rank_base": 17,
+      "rank_sit": 1,
+      "BASE_top": {
+        "genere": "Action",
+        "titolo": "Alien (1979)"
+      },
+      "SIT_top": {
+        "genere": "Crime",
+        "titolo": "Sneakers (1992)"
+      },
+      "nudge_cat_vera": 1.081
     }
   ]
 }

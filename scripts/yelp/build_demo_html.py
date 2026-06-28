@@ -98,10 +98,11 @@ svg{max-width:100%;height:auto;background:var(--card);border:1px solid var(--lin
 </section>
 
 <section id="s3">
-<h2>Esempi reali di raccomandazione spiegati</h2>
-<p class="lead"><b>Casi reali</b> presi dall'insieme di test di MovieLens-1M (non inventati): per ciascuno mostriamo cosa avrebbe proposto il modello base e come X-SAGE lo cambia, con la spiegazione accanto.</p>
-<div class="key"><span class="q">i</span><b>Cos'è il "nudge"?</b> È la spinta che X-SAGE aggiunge a un genere in quella situazione, misurata in <b>deviazioni standard</b> sopra la media (es. +1.8 = spinta forte). Il numero <i>è</i> la spiegazione: non c'è nessun calcolo nascosto, il punteggio finale è semplicemente «punteggio base + questa spinta». <b>"core"</b> = situazione riconosciuta con sicurezza.</div>
+<h2>Esempi reali — e hanno migliorato il consiglio?</h2>
+<p class="lead"><b>Casi reali</b> dal test di MovieLens-1M, con un controllo: sappiamo cosa l'utente ha <b>effettivamente guardato</b> in quella richiesta. Mostriamo dove il modello base teneva quel genere <b>in fondo</b> e come X-SAGE lo fa <b>risalire</b>.</p>
+<div class="key"><span class="q">i</span><b>Come si misura il beneficio.</b> Per ogni richiesta conosciamo il film che l'utente ha poi scelto (e il suo genere). Guardiamo in che <b>posizione</b> compariva il primo film di quel genere nella lista: più è in alto, meglio è. Qui il modello base lo nascondeva (es. posizione 23, fuori dai consigli visibili), mentre X-SAGE — riconoscendo la situazione — lo porta in cima. Il "<b>nudge</b>" è la spinta data a quel genere, in deviazioni standard: il numero <i>è</i> la spiegazione, niente di nascosto.</div>
 <div id="reco"></div>
+<div class="key"><span class="q">!</span><b>Onestà.</b> Non ogni richiesta è una vittoria così netta: in media il guadagno è piccolo ma <b>consistente e statisticamente significativo</b>. Questi sono casi rappresentativi in cui il backbone sbagliava e la situazione ha aiutato.</div>
 </section>
 </div>
 <script>const D=/*DATA*/;
@@ -158,12 +159,18 @@ document.getElementById('profiles').innerHTML=D.profiles.map(s=>{
  s+=`</svg>`;document.getElementById('heat').innerHTML=s;})();
 // reco
 document.getElementById('reco').innerHTML=D.reco.examples.map(e=>{
- const wd=e.weekend?'weekend':'giorno feriale';
- return `<div class="card"><div class="sit-h"><span class="dot" style="background:${COL[e.k]}"></span><b>${e.situazione}</b><span class="sz">${e.core?'situazione riconosciuta con sicurezza (core)':'di confine'}</span></div>
-  <div class="ctx">contesto della richiesta: ore ${e.contesto_ora}, ${wd}, ultimo genere visto: ${e.intento_recente}</div>
-  <div class="reco"><div class="pick base"><div class="g">Modello base propone</div><div class="t">${e.BASE_top.genere} · ${e.BASE_top.titolo}</div></div>
-  <div class="arrow">→<br>spinta +${e.nudge_genere_promosso}<br>su «${e.SIT_top.genere}»</div>
-  <div class="pick sit"><div class="g">X-SAGE propone</div><div class="t">${e.SIT_top.genere} · ${e.SIT_top.titolo}</div></div></div></div>`;
+ const wd=e.weekend?'weekend':'giorno feriale';const bad=e.rank_base>20;
+ return `<div class="card"><div class="sit-h"><span class="dot" style="background:${COL[e.k]}"></span><b>${e.situazione}</b><span class="sz">situazione riconosciuta con sicurezza</span></div>
+  <div class="ctx">contesto: ore ${e.contesto_ora}, ${wd}, ultimo genere visto: ${e.intento_recente}</div>
+  <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:8px 12px;font-size:14px;margin-bottom:10px">Verità — l'utente ha poi guardato: <b>${e.guardato.genere} · ${e.guardato.titolo}</b></div>
+  <div style="font-size:12.5px;color:#6b7280;margin-bottom:6px">posizione del primo film «${e.guardato.genere}» nella lista raccomandata:</div>
+  <div class="reco">
+   <div class="pick base" style="text-align:center"><div class="g">modello base</div><div class="t" style="color:${bad?'#b91c1c':'#374151'}">posizione ${e.rank_base}${bad?'<div style="font-size:11px;font-weight:400">fuori dai top-20</div>':''}</div></div>
+   <div class="arrow">→<br>spinta +${e.nudge_cat_vera}<br>su «${e.guardato.genere}»</div>
+   <div class="pick sit" style="text-align:center"><div class="g">X-SAGE</div><div class="t" style="color:#15803d">posizione ${e.rank_sit}${e.rank_sit==1?'<div style="font-size:11px;font-weight:400">in cima ai consigli</div>':''}</div></div>
+  </div>
+  <div style="font-size:12.5px;color:#6b7280;margin-top:10px">primo consiglio in lista: <b>${e.BASE_top.genere}</b> «${e.BASE_top.titolo}» &nbsp;→&nbsp; <b>${e.SIT_top.genere}</b> «${e.SIT_top.titolo}»</div>
+ </div>`;
 }).join('');
 </script></body></html>"""
 html = TEMPLATE.replace("/*DATA*/", json.dumps(DATA, ensure_ascii=False))
