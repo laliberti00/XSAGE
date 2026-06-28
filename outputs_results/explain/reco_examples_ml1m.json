@@ -3,7 +3,7 @@
   "kappa": 0.5,
   "examples": [
     {
-      "situazione": "Serata in famiglia",
+      "situazione": "Commedia serale",
       "k": 0,
       "core": true,
       "contesto_ora": 23,
@@ -20,7 +20,7 @@
       "nudge_genere_promosso": 1.785
     },
     {
-      "situazione": "Pomeriggio brivido",
+      "situazione": "Horror pomeridiano",
       "k": 1,
       "core": true,
       "contesto_ora": 2,
@@ -37,7 +37,7 @@
       "nudge_genere_promosso": 0.073
     },
     {
-      "situazione": "Notte d'azione",
+      "situazione": "Azione notturna",
       "k": 2,
       "core": true,
       "contesto_ora": 12,
@@ -54,7 +54,7 @@
       "nudge_genere_promosso": 2.342
     },
     {
-      "situazione": "Pomeriggio avventura",
+      "situazione": "Fantasy pomeridiano",
       "k": 3,
       "core": true,
       "contesto_ora": 18,
@@ -71,7 +71,7 @@
       "nudge_genere_promosso": 0.223
     },
     {
-      "situazione": "Cinema d'autore",
+      "situazione": "Dramma del weekend",
       "k": 4,
       "core": true,
       "contesto_ora": 19,
