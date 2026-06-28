@@ -25,6 +25,9 @@ def main():
     city = sys.argv[1] if len(sys.argv) > 1 else "nyc_tist"
     dev = sys.argv[2] if len(sys.argv) > 2 else "mps"
     epochs = int(sys.argv[3]) if len(sys.argv) > 3 else 20
+    seed = int(sys.argv[4]) if len(sys.argv) > 4 else None   # Path A: per-seed → file .s<seed>
+    TAG = f".s{seed}" if seed is not None else ""
+    SEED = seed if seed is not None else 42
     P = CLEAN / "data" / "processed" / city
     dtr = pd.read_parquet(P / "df_train.parquet"); dva = pd.read_parquet(P / "df_val.parquet"); dte = pd.read_parquet(P / "df_test.parquet")
     n_items = int(pd.concat([dtr, dva, dte]).i_idx.max()) + 1
@@ -44,7 +47,7 @@ def main():
         inv_i[int(c)] = int(si)                                 # cornac_item → our i_idx
 
     m = SASRec(embedding_dim=64, n_epochs=epochs, max_len=50, num_blocks=2, num_heads=1,
-               device=dev, seed=42, batch_size=256, verbose=False)
+               device=dev, seed=SEED, batch_size=256, verbose=False)
     m.fit(ds)
 
     Mv = np.zeros((nv, n_items), np.float16); Mt = np.zeros((nt, n_items), np.float16)
@@ -63,8 +66,8 @@ def main():
         ic = iid.get(str(r.i_idx))
         if ic is not None: hist[u].append(int(ic))              # aggiorna DOPO lo score (causale)
     out = CLEAN / "data" / city / "backbone"; out.mkdir(parents=True, exist_ok=True)
-    np.save(out / "SASRec.scores_val.npy", Mv); np.save(out / "SASRec.scores_test.npy", Mt)
-    print(f"[{city}] -> SASRec.scores_{{val,test}}.npy  val{Mv.shape} test{Mt.shape}  scorate val={nsv}/{nv} test={nst}/{nt}", flush=True)
+    np.save(out / f"SASRec{TAG}.scores_val.npy", Mv); np.save(out / f"SASRec{TAG}.scores_test.npy", Mt)
+    print(f"[{city}] -> SASRec{TAG}.scores_{{val,test}}.npy  val{Mv.shape} test{Mt.shape}  scorate val={nsv}/{nv} test={nst}/{nt}", flush=True)
     return 0
 
 

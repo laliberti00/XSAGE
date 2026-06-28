@@ -163,10 +163,16 @@ def run_seed(city, seed, dev):
             backbones[name] = (lambda idx, M=M, u=uv: M[u[idx]], lambda idx, M=M, u=ut: M[u[idx]])
             xtra_steck[name] = ("user", M)
         else:
-            sv = np.load(bdir / f"{name}.scores_val.npy", mmap_mode="r"); st = np.load(bdir / f"{name}.scores_test.npy", mmap_mode="r")
+            # Path A: usa la matrice PER-SEED se esiste (SD multi-seed coerente), altrimenti la seedless (riusata)
+            ps = bdir / f"{name}.s{seed}.scores_val.npy"
+            if ps.exists():
+                sv = np.load(ps, mmap_mode="r"); st = np.load(bdir / f"{name}.s{seed}.scores_test.npy", mmap_mode="r")
+            else:
+                sv = np.load(bdir / f"{name}.scores_val.npy", mmap_mode="r"); st = np.load(bdir / f"{name}.scores_test.npy", mmap_mode="r")
             backbones[name] = (_rows(sv), _rows(st))
             xtra_steck[name] = ("rows", st)
-        print(f"  [+] backbone extra: {name}", flush=True)
+        tg = f"(s{seed})" if (bdir / f"{name}.s{seed}.scores_val.npy").exists() else ""
+        print(f"  [+] backbone extra: {name} {tg}", flush=True)
     def dmac(method, split):
         mem = mem_va if split == "val" else mem_te; u = uv if split == "val" else ut
         if method == "SIT": return mem.astype(np.float32) @ b_z
@@ -205,12 +211,16 @@ def run_seed(city, seed, dev):
 def main():
     city = sys.argv[1] if len(sys.argv) > 1 else "ml1m"; nseed = int(sys.argv[2]) if len(sys.argv) > 2 else 1
     dev = torch.device("mps" if torch.backends.mps.is_available() else "cpu"); rng = np.random.default_rng(0)
-    print(f"=== BATTERIA B_full {city} (device={dev}, seeds={nseed}) ===", flush=True)
+    ONLY = os.environ.get("ONLY_SEED"); APPEND = os.environ.get("APPEND_CSV") == "1"   # Path A: 1 seed alla volta, append
+    seeds = [int(ONLY)] if ONLY else [42 + s for s in range(nseed)]
+    print(f"=== BATTERIA B_full {city} (device={dev}, seeds={seeds}, append={APPEND}) ===", flush=True)
     allrows = []; last = None
-    for s in range(nseed):
-        print(f"\n--- SEED {42+s} ---", flush=True); r, store, K, eps, ut = run_seed(city, 42 + s, dev); allrows += r; last = (store, ut)
+    for sd in seeds:
+        print(f"\n--- SEED {sd} ---", flush=True); r, store, K, eps, ut = run_seed(city, sd, dev); allrows += r; last = (store, ut)
     df = pd.DataFrame(allrows)
-    OUT = CLEAN / "outputs_results"; df.to_csv(OUT / f"battery_bfull_{city}.csv", index=False)
+    OUT = CLEAN / "outputs_results"; OUTF = OUT / f"battery_bfull_{city}.csv"
+    if APPEND and OUTF.exists(): df = pd.concat([pd.read_csv(OUTF), df], ignore_index=True)
+    df.to_csv(OUTF, index=False)
     try:  # riepilogo difensivo: il CSV è già salvato, un bug qui non rovina l'overnight
         num = ["CatMRR", "CatNDCG", "R20", "NDCG20", "JS", "LT20", "Coverage", "Gini", "lensKLmax"]
         agg = df.groupby(["backbone", "method"])[num].agg(['mean', 'std']).round(5)

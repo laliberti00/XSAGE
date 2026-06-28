@@ -85,6 +85,10 @@ def main():
     city = sys.argv[1] if len(sys.argv) > 1 else "nyc_tist"
     name = sys.argv[2] if len(sys.argv) > 2 else "DeepFM"
     n_ep = int(sys.argv[3]) if len(sys.argv) > 3 else EPOCHS_DEF
+    seed = int(sys.argv[4]) if len(sys.argv) > 4 else None    # Path A: per-seed → file .s<seed>
+    TAG = f".s{seed}" if seed is not None else ""
+    SEED = seed if seed is not None else 42
+    torch.manual_seed(SEED); np.random.seed(SEED)             # init del modello + negativi dipendono dal seed
     dev = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
     ds = D.load_city(city, data_root=str(CLEAN)); nmac = int(ds["n_macros"]); nI = int(ds["n_items"]); nU = int(ds["n_users"])
     dfa = pd.concat([ds["df_train"], ds["df_val"], ds["df_test"]], ignore_index=True)
@@ -95,11 +99,11 @@ def main():
     print(f"[{city}] {name} (dev={dev}) nU={nU} nI={nI} nmac={nmac} ep={n_ep}", flush=True)
     ftr = feats_from_df(ds["df_train"], icm, nmac); fva = feats_from_df(ds["df_val"], icm, nmac); fte = feats_from_df(ds["df_test"], icm, nmac)
     mask = (ds["urm_train"] + ds["urm_val"]).tocsr(); mask.data[:] = 1.
-    train(model, ftr, mask, icm, dev, n_ep)
+    train(model, ftr, mask, icm, dev, n_ep, seed=SEED)
     Mv = score_split(model, fva, icm, dev); Mt = score_split(model, fte, icm, dev)
     out = CLEAN / "data" / city / "backbone"; out.mkdir(parents=True, exist_ok=True)
-    np.save(out / f"{name}.scores_val.npy", Mv); np.save(out / f"{name}.scores_test.npy", Mt)
-    print(f"[{city}] -> {name}.scores_{{val,test}}.npy  val{Mv.shape} test{Mt.shape}", flush=True)
+    np.save(out / f"{name}{TAG}.scores_val.npy", Mv); np.save(out / f"{name}{TAG}.scores_test.npy", Mt)
+    print(f"[{city}] -> {name}{TAG}.scores_{{val,test}}.npy  val{Mv.shape} test{Mt.shape}", flush=True)
     return 0
 
 
