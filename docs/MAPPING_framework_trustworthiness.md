@@ -96,11 +96,24 @@ Questa è **fairness di esposizione** (LT/Coverage/Gini), **non** correzione str
 
 → **Onestà richiesta:** solo sul **saturo estremo (yelp, 76%)** la macro-Cat-MRR scende: lì il meccanismo spinge la categoria modale e **approfondisce il pozzo**. Sui saturi *moderati* (tokyo/tsmc, ~57-63%) migliora ancora. Quindi: **non è un correttore di fairness**, ed è diagnostico (la lente lo *misura*), ma l'effetto sulla qualità-categoria è positivo ovunque tranne l'estremo saturo.
 
-### D.5 — Equità di qualità categoriale (group-fairness lato-utilità)
-Sui 3 winner, **SIT migliora la macro-Cat-MRR rispetto a BASE** (+0.043 / +0.023 / +0.014, vedi D.4) — distinto da "SIT vs Steck-b" (che è non-ridondanza, altra cosa). *Limite del dato:* la macro-Cat-MRR è calcolata sul backbone **B_blind** (lo script `macro_avg.py` gira lì); per i 7 backbone non è ricomputata (→ se serve, calcolo gratuito sui per-richiesta, ma fuori scope qui).
+### D.5 — Equità di qualità categoriale (macro-Cat-MRR) vs BASE, per TUTTI i 7 backbone
+Macro-Cat-MRR = media delle Cat-MRR per-categoria (le minoritarie pesano uguale → demaschera l'amplificazione della maggioranza). Calcolata sulle matrici-score TEST + κ* della battery (script `scripts/yelp/macro_all_backbones.py`, `outputs_results/macro_allbk_*.csv`). **Auto-validata:** il BASE micro ricalcolato combacia col CSV della battery per **tutti i 7 backbone** (B_full riallenato seed 42 con selezione su val).
+
+**Δmacro-Cat-MRR (SIT − BASE):**
+| backbone | nyc_tist | saopaulo | ml1m |
+|---|---|---|---|
+| B_blind | +0.0433 | +0.0226 | +0.0138 |
+| B_full | +0.0079 | +0.0031 | +0.0038 |
+| EASE | +0.0305 | +0.0332 | +0.0128 |
+| SASRec | +0.0076 | +0.0072 | +0.0013 |
+| FPMC | +0.0125 | +0.0118 | +0.0063 |
+| DeepFM | **−0.0204** | +0.0086 | +0.0048 |
+| AFM | +0.0640 | +0.0524 | +0.0097 |
+
+→ **SIT migliora la macro-Cat-MRR rispetto al backbone su 20/21 combinazioni** (tutte le famiglie: statico, CF, context-aware, sequenziale). **Unica eccezione: nyc/DeepFM (−0.020) a κ*=1.50** — quando il κ selezionato è aggressivo, su un backbone con BASE-equità già alta il nudge spinge troppo la categoria modale e peggiora l'equità (stesso fenomeno dell'amplificazione, qui indotto da κ alto, non da saturazione del dataset). Sui saopaulo/ml1m DeepFM (κ* moderato 0.25/0.10) Δmacro è positivo. → l'equità-qualità migliora quasi-ovunque vs backbone, ma il **κ aggressivo è un rischio** (collega F2/F3 future work: gate selettivo).
 
 ### D.6 — Conclusione (una frase)
-> **Rispetto al backbone, X-SAGE migliora l'esposizione in modo consistente (Gini↓ 21/21, Coverage↑ 21/21, LT↑ 20/21) e l'equità-di-qualità-categoriale (macro-Cat-MRR↑ sui non-saturi), in modo Pareto sui backbone forti (esposizione↑ senza costo accuracy, 10/21, tutti i 5 su ml1m) e con trade-off sui deboli/POI; NON corregge i pozzi e sul saturo estremo (yelp) li amplifica — è fairness di esposizione e diagnostica (la lente la misura), non correttiva.**
+> **Rispetto al backbone, X-SAGE migliora l'esposizione in modo consistente (Gini↓ 21/21, Coverage↑ 21/21, LT↑ 20/21) e l'equità-di-qualità-categoriale (macro-Cat-MRR↑ su 20/21 backbone×dataset, tutte le famiglie), in modo Pareto sui backbone forti (esposizione↑ senza costo accuracy, 10/21, tutti i 5 su ml1m) e con trade-off sui deboli/POI; NON corregge i pozzi e sul saturo estremo a livello dataset (yelp) o con κ aggressivo (nyc/DeepFM) li amplifica — è fairness di esposizione e diagnostica (la lente la misura), non correttiva.**
 
 ---
 
