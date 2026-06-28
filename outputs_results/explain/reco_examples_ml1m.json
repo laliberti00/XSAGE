@@ -1,0 +1,91 @@
+{
+  "city": "ml1m",
+  "kappa": 0.5,
+  "examples": [
+    {
+      "situazione": "sera, settimana, dopo Comedy",
+      "k": 0,
+      "core": true,
+      "contesto_ora": 23,
+      "weekend": true,
+      "intento_recente": "Animation",
+      "BASE_top": {
+        "genere": "Drama",
+        "titolo": "Shawshank Redemption, The (1994)"
+      },
+      "SIT_top": {
+        "genere": "Comedy",
+        "titolo": "American Beauty (1999)"
+      },
+      "nudge_genere_promosso": 1.785
+    },
+    {
+      "situazione": "pomeriggio, settimana, dopo Horror",
+      "k": 1,
+      "core": true,
+      "contesto_ora": 2,
+      "weekend": true,
+      "intento_recente": "Drama",
+      "BASE_top": {
+        "genere": "Comedy",
+        "titolo": "Wonder Boys (2000)"
+      },
+      "SIT_top": {
+        "genere": "Crime",
+        "titolo": "Croupier (1998)"
+      },
+      "nudge_genere_promosso": 0.073
+    },
+    {
+      "situazione": "notte, weekend, dopo Action",
+      "k": 2,
+      "core": true,
+      "contesto_ora": 12,
+      "weekend": false,
+      "intento_recente": "Sci-Fi",
+      "BASE_top": {
+        "genere": "Drama",
+        "titolo": "Silence of the Lambs, The (1991)"
+      },
+      "SIT_top": {
+        "genere": "Action",
+        "titolo": "Saving Private Ryan (1998)"
+      },
+      "nudge_genere_promosso": 2.342
+    },
+    {
+      "situazione": "pomeriggio, settimana, dopo Action",
+      "k": 3,
+      "core": true,
+      "contesto_ora": 18,
+      "weekend": false,
+      "intento_recente": "Action",
+      "BASE_top": {
+        "genere": "Drama",
+        "titolo": "Boogie Nights (1997)"
+      },
+      "SIT_top": {
+        "genere": "Action",
+        "titolo": "Jurassic Park (1993)"
+      },
+      "nudge_genere_promosso": 0.223
+    },
+    {
+      "situazione": "sera, weekend, dopo Drama",
+      "k": 4,
+      "core": true,
+      "contesto_ora": 19,
+      "weekend": false,
+      "intento_recente": "Drama",
+      "BASE_top": {
+        "genere": "Action",
+        "titolo": "Tron (1982)"
+      },
+      "SIT_top": {
+        "genere": "Drama",
+        "titolo": "Courage Under Fire (1996)"
+      },
+      "nudge_genere_promosso": 1.214
+    }
+  ]
+}
