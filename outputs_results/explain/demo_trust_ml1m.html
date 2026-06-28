@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>X-SAGE — Trustworthiness</title><style>
+:root{--bg:#f7f8fa;--card:#fff;--ink:#1a1d24;--mut:#6b7280;--line:#e5e7eb;--accent:#2563eb}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+.wrap{max-width:980px;margin:0 auto;padding:28px 22px 60px}
+h1{font-size:26px;font-weight:600;margin:0 0 4px}.sub{color:var(--mut);font-size:15px;margin:0 0 14px}
+.intro{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;font-size:15px;margin-bottom:16px}.intro b{color:var(--accent)}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;min-width:130px}.stat b{font-size:20px;font-weight:600;display:block}.stat span{color:var(--mut);font-size:12px}
+h2{font-size:20px;font-weight:600;margin:26px 0 4px}.lead{color:var(--mut);font-size:14px;margin:0 0 14px;max-width:780px}
+.tcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.th{display:flex;align-items:center;gap:10px;margin-bottom:10px}.th b{font-size:16px}
+.vb{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em}
+.row{display:grid;grid-template-columns:130px 1fr;gap:12px;padding:7px 0;border-top:1px solid #f1f3f5;font-size:14px}
+.row .k{color:var(--mut);font-size:12.5px;font-weight:600;padding-top:2px}
+.codes{display:flex;flex-wrap:wrap;gap:6px}code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:2px 8px;color:#334155}
+@media(max-width:560px){.row{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<h1>X-SAGE — Affidabilità (trustworthiness), proprietà per proprietà</h1>
+<div class="sub">MovieLens-1M e oltre · cosa significa, cosa facciamo, come nel codice</div>
+<div class="intro"><b>L'idea.</b> L'affidabilità non è un'aggiunta finale: in X-SAGE è <b>distribuita lungo tutta la pipeline</b> (sensing → percezione → comprensione → proiezione → raccomandazione). Qui leggiamo il sistema <b>per proprietà</b> — secondo le dimensioni di affidabilità della letteratura (Ge et al. 2024) — con un verdetto onesto a tre livelli: <span class="vb" style="background:#dcfce7;color:#15803d">implementato</span> <span class="vb" style="background:#fef9c3;color:#a16207">parziale</span> <span class="vb" style="background:#fee2e2;color:#b91c1c">non coperto</span>. I limiti sono dichiarati apertamente: anche questo è trasparenza.</div>
+<div class="stats">
+<div class="stat"><b style="color:#15803d">3</b><span>proprietà implementate</span></div>
+<div class="stat"><b style="color:#a16207">4</b><span>coperture parziali</span></div>
+<div class="stat"><b style="color:#b91c1c">4</b><span>limiti dichiarati</span></div>
+</div>
+<h2>Punti di forza</h2><p class="lead">Proprietà pienamente implementate, con evidenza nel codice e nei numeri.</p><div class="tcard"><div class="th"><span class="vb" style="background:#dcfce7;color:#15803d">implementato</span><b>Trasparenza & spiegabilità</b></div>
+<div class="row"><span class="k">Cosa significa</span><div>Si può capire <i>perché</i> il sistema raccomanda una certa cosa, senza fidarsi ciecamente.</div></div>
+<div class="row"><span class="k">Cosa facciamo</span><div>Le situazioni non sono fattori nascosti ma stati <b>nominati e leggibili</b> (es. «Commedia serale»). E il consiglio è spiegabile <b>per costruzione</b>: il punteggio finale è «punteggio del modello base + una spinta situazionale» — quella spinta <i>è</i> la spiegazione, esatta, non un'approssimazione costruita a posteriori. Una <b>lente</b> rende anche ispezionabili le situazioni che concentrano troppo l'esposizione.</div></div>
+<div class="row"><span class="k">Nel codice</span><div class="codes"><code>xsage/recommendation.py · combiner additivo</code><code>scripts/yelp/situation_profiles.py · situazioni nominate</code><code>battery_bfull.py · lens_spread (lente)</code></div></div>
+<div class="row"><span class="k">Evidenza</span><div>5 situazioni nominate su ml-1m; spiegazione fedele al 100% (additiva); vedi il demo di explainability.</div></div></div><div class="tcard"><div class="th"><span class="vb" style="background:#dcfce7;color:#15803d">implementato</span><b>Efficienza & sostenibilità (green)</b></div>
+<div class="row"><span class="k">Cosa significa</span><div>Un sistema affidabile non dovrebbe costare enormi risorse di calcolo/energia.</div></div>
+<div class="row"><span class="k">Cosa facciamo</span><div>Il modulo situazionale è un <b>re-ranker leggero</b> calcolato in forma chiusa, <b>senza addestramento a gradiente</b> e senza ri-allenare il modello sotto. Si aggancia a qualsiasi backbone.</div></div>
+<div class="row"><span class="k">Nel codice</span><div class="codes"><code>scripts/yelp/profile_cost.py · misura di costo</code></div></div>
+<div class="row"><span class="k">Evidenza</span><div><b>205 parametri</b> totali · inferenza <b>0.102 ms / richiesta</b> · fit completo <b>~168 s</b> — ordini di grandezza più piccolo di un backbone neurale.</div></div></div><div class="tcard"><div class="th"><span class="vb" style="background:#dcfce7;color:#15803d">implementato</span><b>Fondamenta causali (niente leakage)</b></div>
+<div class="row"><span class="k">Cosa significa</span><div>Valutare in modo onesto: il sistema non deve «sbirciare nel futuro» dell'utente.</div></div>
+<div class="row"><span class="k">Cosa facciamo</span><div>Lo split è <b>temporale per-utente 80/10/10</b> (prima nel tempo = train, dopo = test) e il proxy d'intento legge solo l'interazione <b>precedente</b> (shift causale). Tutti i parametri sono scelti su validation, il test misurato una volta sola (anti-circolarità).</div></div>
+<div class="row"><span class="k">Nel codice</span><div class="codes"><code>scripts/*/preprocess_*.py · split temporale per-utente</code><code>intent_last = categoria interazione precedente (shift)</code></div></div>
+<div class="row"><span class="k">Evidenza</span><div>Garanzia strutturale: nessuna richiesta è descritta con informazioni dal proprio futuro.</div></div></div><h2>Coperture parziali</h2><p class="lead">Proprietà affrontate con un meccanismo reale, ma con un limite dichiarato onestamente.</p><div class="tcard"><div class="th"><span class="vb" style="background:#fef9c3;color:#a16207">parziale</span><b>Equità & non-discriminazione</b></div>
+<div class="row"><span class="k">Cosa significa</span><div>Non concentrare l'esposizione sempre sugli stessi item popolari; dare visibilità anche al resto.</div></div>
+<div class="row"><span class="k">Cosa facciamo</span><div>La spinta situazionale premia le categorie tipiche della situazione invece dei soli popolari globali del backbone → <b>ridistribuisce l'esposizione</b>. Inoltre la <b>lente</b> rende l'iniquità <i>misurabile</i> per situazione.</div></div>
+<div class="row"><span class="k">Nel codice</span><div class="codes"><code>xsage/recommendation.py · combiner (bias per-situazione)</code><code>scripts/yelp/macro_avg.py · equità macro</code></div></div>
+<div class="row"><span class="k">Evidenza</span><div>Rispetto al backbone: Gini↓ <b>21/21</b>, Coverage↑ <b>21/21</b>, coda-lunga↑ <b>20/21</b>, equità-categoria↑ <b>20/21</b>. <span style='color:#b45309'>Limite onesto:</span> è equità di <b>esposizione + diagnostica</b>, non un correttore; su saturazione estrema (un dataset, yelp) amplifica la maggioranza.</div></div></div><div class="tcard"><div class="th"><span class="vb" style="background:#fef9c3;color:#a16207">parziale</span><b>Robustezza & sicurezza</b></div>
+<div class="row"><span class="k">Cosa significa</span><div>Il metodo deve reggere su modelli e condizioni diverse, non solo su un caso fortunato.</div></div>
+<div class="row"><span class="k">Cosa facciamo</span><div>È un <b>re-ranker pluggable</b>: lo abbiamo montato su <b>7 backbone</b> di famiglie diverse (statici, context-aware, sequenziali) con lo stesso protocollo. Validazione con 5 seed, bootstrap e test di equivalenza; l'identità κ=0 garantisce che non si possa mai fare peggio del backbone.</div></div>
+<div class="row"><span class="k">Nel codice</span><div class="codes"><code>scripts/ml1m/battery_bfull.py · 7 backbone, 5 seed, bootstrap, TOST</code></div></div>
+<div class="row"><span class="k">Evidenza</span><div>Coerente su 7 backbone × 3 dataset. <span style='color:#b45309'>Limite:</span> nessun test adversarial/poisoning/distribution-shift.</div></div></div><div class="tcard"><div class="th"><span class="vb" style="background:#fef9c3;color:#a16207">parziale</span><b>Privacy</b></div>
+<div class="row"><span class="k">Cosa significa</span><div>Raccomandare bene chiedendo meno dati personali persistenti possibile.</div></div>
+<div class="row"><span class="k">Cosa facciamo</span><div>La situazione si costruisce solo dalla <b>continuità intra-sessione</b> (la finestra causale recente), <b>non</b> da un'identità persistente tracciata fra sessioni → un vantaggio «cookieless» di design: il sistema reagisce al <i>momento</i>, non a un profilo permanente.</div></div>
+<div class="row"><span class="k">Nel codice</span><div class="codes"><code>xsage/l0_sensing.py · build_recent_window (finestra causale, locale)</code></div></div>
+<div class="row"><span class="k">Evidenza</span><div><span style='color:#b45309'>Limite onesto:</span> è un argomento di design, non una garanzia formale — non implementiamo privacy differenziale (DP).</div></div></div><div class="tcard"><div class="th"><span class="vb" style="background:#fef9c3;color:#a16207">parziale</span><b>Controllabilità & accountability</b></div>
+<div class="row"><span class="k">Cosa significa</span><div>Chi gestisce il sistema deve poter ispezionare e regolare il suo comportamento.</div></div>
+<div class="row"><span class="k">Cosa facciamo</span><div>L'intensità dell'intervento è un <b>singolo parametro leggibile</b> (κ): separa la decisione di <i>quanto</i> agire, ed è impostabile/auditabile. La lente per-situazione fornisce una traccia ispezionabile di dove e come la situazione agisce.</div></div>
+<div class="row"><span class="k">Nel codice</span><div class="codes"><code>xsage/recommendation.py · κ (coefficiente esplicito)</code><code>battery_bfull.py · lens_spread (audit)</code></div></div>
+<div class="row"><span class="k">Evidenza</span><div><span style='color:#b45309'>Limite:</span> nessun audit formale/processo di accountability codificato.</div></div></div><h2>Limiti dichiarati</h2><p class="lead">Proprietà che la letteratura elenca ma che NON copriamo — diventano future work. Dichiararle è parte della trasparenza.</p><div class="tcard"><div class="th"><span class="vb" style="background:#fee2e2;color:#b91c1c">non coperto</span><b>Federated / decentralizzazione</b></div>
+<div class="row"><span class="k">Cosa significa</span><div>Addestrare/servire senza centralizzare i dati degli utenti.</div></div>
+<div class="row"><span class="k">Cosa facciamo</span><div>Non implementato in questo lavoro — direzione futura dichiarata.</div></div>
+
+<div class="row"><span class="k">Evidenza</span><div>→ future work.</div></div></div><div class="tcard"><div class="th"><span class="vb" style="background:#fee2e2;color:#b91c1c">non coperto</span><b>Privacy formale (Differential Privacy)</b></div>
+<div class="row"><span class="k">Cosa significa</span><div>Garanzie matematiche di privacy (es. rumore DP) sui dati/parametri.</div></div>
+<div class="row"><span class="k">Cosa facciamo</span><div>Non implementata: la privacy qui è un vantaggio di design (cookieless), non una garanzia formale.</div></div>
+
+<div class="row"><span class="k">Evidenza</span><div>→ limite dichiarato.</div></div></div><div class="tcard"><div class="th"><span class="vb" style="background:#fee2e2;color:#b91c1c">non coperto</span><b>Valutazione etica / impatto sociale</b></div>
+<div class="row"><span class="k">Cosa significa</span><div>Studio dell'impatto sociale, responsibility audit, effetti a lungo termine.</div></div>
+<div class="row"><span class="k">Cosa facciamo</span><div>Non condotto: la valutazione è tecnica (accuratezza + equità di esposizione + diagnostica), non uno studio di impatto sociale.</div></div>
+
+<div class="row"><span class="k">Evidenza</span><div>→ limite dichiarato.</div></div></div><div class="tcard"><div class="th"><span class="vb" style="background:#fee2e2;color:#b91c1c">non coperto</span><b>Robustezza adversarial</b></div>
+<div class="row"><span class="k">Cosa significa</span><div>Tenuta contro attacchi mirati (poisoning, manipolazione del ranking).</div></div>
+<div class="row"><span class="k">Cosa facciamo</span><div>Non testata in questo lavoro.</div></div>
+
+<div class="row"><span class="k">Evidenza</span><div>→ future work.</div></div></div>
+</div></body></html>
