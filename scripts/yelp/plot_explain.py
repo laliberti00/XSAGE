@@ -32,7 +32,9 @@ def main():
     K = pr["K"]; genres = pr["genres"]
     lab = {s["k"]: s["label"] for s in pr["situations"]}
     lensKL = {s["k"]: s["lens_KL"] for s in pr["situations"]}
-    short = {k: f"S{k}: {lab[k]}" for k in range(K)}
+    nm_f = EXP / f"situation_names_{city}.json"                # nomi curati (override) se presenti
+    names = {int(k): v for k, v in json.load(open(nm_f)).items()} if nm_f.exists() else lab
+    short = {k: f"S{k}: {names.get(k, lab[k])}" for k in range(K)}
 
     # ---- FIG 1: spazio delle situazioni (PCA) ----
     pts = np.array(sp["points"]); var = sp["var"]; bfrac = sp["bfrac"]

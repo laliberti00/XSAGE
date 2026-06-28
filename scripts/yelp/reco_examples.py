@@ -55,8 +55,11 @@ def main():
     b_z = fit_situation_biases_z(z_tr, cmt, K, nmac, alpha=ALPHA)
     _, kte, compte, isbte = _assign(vte, fit.prototypes, eps)
     mem_te = membership_from_assign(kte, compte, isbte, K); gam_te = 1.0 / np.maximum(compte.sum(1), 1).astype(np.float32)
-    labels = json.load(open(CLEAN / "outputs_results" / "explain" / "situation_profiles_ml1m.json"))["situations"]
+    EXP = CLEAN / "outputs_results" / "explain"
+    labels = json.load(open(EXP / "situation_profiles_ml1m.json"))["situations"]
     name = {s["k"]: s["label"] for s in labels}
+    nm_f = EXP / "situation_names_ml1m.json"                    # nomi curati se presenti
+    if nm_f.exists(): name = {int(k): v for k, v in json.load(open(nm_f)).items()}
     csv = pd.read_csv(CLEAN / "outputs_results" / "battery_bfull_ml1m.csv")
     kap = float(csv[(csv.seed == 42) & (csv.backbone == "B_blind") & (csv.method == "SIT")]["kstar"].iloc[0])
 
