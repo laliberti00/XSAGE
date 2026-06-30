@@ -74,7 +74,7 @@ Da committare con questo `METRICS_FORMULAS.md`; annotare l'hash di freeze in §7
 
 ## 7. Provenienza e freeze (operativo)
 1. Commit di `results_record.py` + `aggregate_record.py` + `METRICS_FORMULAS.md` + questo doc.
-   **freeze commit = __________** (annotare l'hash qui dopo il commit).
+   **freeze commit = f1743d7** (branch `exp/second-dataset-feasibility`).
 2. Ambiente: `IntentAwareRS_thesis/.venv` (torch, numpy<2, pandas); seed globali = SEEDS.
 3. Re-run UNA volta (caso cheap, score-cache già k10 → no re-train):
    `python scripts/yelp/results_record.py <7 primari [+ 5 appendice]>` → cache + CSV.
