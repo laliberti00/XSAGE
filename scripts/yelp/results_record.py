@@ -242,7 +242,11 @@ def run_city(city, dev):
                 if fu.exists(): M = np.load(fu, mmap_mode="r"); sfn = (lambda idx, M=M, u=ute: M[u[idx]])
                 elif ft.exists(): Mt = np.load(ft, mmap_mode="r"); sfn = (lambda idx, Mt=Mt: Mt[idx])
                 else: continue   # score-cache assente per questo dataset (backbone extra solo sui 3 ricchi) → salta
-            kget = lambda mth: float(csvb[(csvb.seed == seed) & (csvb.backbone == bk) & (csvb.method == mth)]["kstar"].iloc[0])
+            def kget(mth, bk=bk, seed=seed):
+                r = csvb[(csvb.seed == seed) & (csvb.backbone == bk) & (csvb.method == mth)]["kstar"]
+                if not len(r):  # broad-set: κ* selezionato su val solo a seed 42 → riuso (dichiarato)
+                    r = csvb[(csvb.seed == 42) & (csvb.backbone == bk) & (csvb.method == mth)]["kstar"]
+                return float(r.iloc[0])
             ev = {"BASE": per_request_eval(sfn, None, 0., gam_te, ute, ite, icm, excl, G1, nmac, pur),
                   "SIT": per_request_eval(sfn, nudge, kget("SIT"), gam_te, ute, ite, icm, excl, G1, nmac, pur),
                   "Steck-b": per_request_eval(sfn, nudge_stb, kget("Steck-b"), gam_te, ute, ite, icm, excl, G1, nmac, pur)}
