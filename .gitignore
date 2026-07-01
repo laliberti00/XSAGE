@@ -2,6 +2,8 @@ __pycache__/
 *.pyc
 .DS_Store
 outputs_results/*.npy
+outputs_results/cache/
+.backup_freeze_20260630/
 outputs_results/_per_city/
 data/
 data/processed/
