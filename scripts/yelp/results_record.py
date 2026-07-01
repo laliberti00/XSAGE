@@ -88,6 +88,7 @@ def per_request_eval(scores_fn, nudge, kappa, gam, u, i_t, icm, excl, G1, nmac, 
     n = len(u); tm = icm[i_t]; nI = len(icm)
     rk = np.zeros(n, np.int32); catrk = np.zeros(n, np.int32)
     g = np.zeros(n, np.int32); gc = np.zeros(n, np.int32); tk50 = np.zeros((n, KSAVE), np.int32)
+    cat_cols = [np.where(icm == c)[0] for c in range(nmac)]   # item per categoria (per catrk vettoriale)
     for bs in range(0, n, 1024):
         be = min(n, bs + 1024); idx = np.arange(bs, be)
         S = np.asarray(scores_fn(idx)).astype(np.float32, copy=True)
@@ -102,9 +103,12 @@ def per_request_eval(scores_fn, nudge, kappa, gam, u, i_t, icm, excl, G1, nmac, 
         s_t = S[np.arange(be - bs), i_t[idx]]
         rk[idx] = (S > s_t[:, None]).sum(1) + 1; g[idx] = (S == s_t[:, None]).sum(1)
         tmb = tm[idx]
-        for j in range(be - bs):
-            best = S[j][icm == tmb[j]].max()
-            catrk[bs + j] = int((S[j] > best).sum()) + 1; gc[bs + j] = int((S[j] == best).sum())
+        catmax = np.full((be - bs, nmac), -np.inf, np.float32)   # max score per categoria (loop su nmac, non su richieste)
+        for c in range(nmac):
+            cc2 = cat_cols[c]
+            if cc2.size: catmax[:, c] = S[:, cc2].max(1)
+        best = catmax[np.arange(be - bs), tmb]
+        catrk[idx] = (S > best[:, None]).sum(1) + 1; gc[idx] = (S == best[:, None]).sum(1)
     return derive(dict(rk=rk, catrk=catrk, g=g, gc=gc, tk50=tk50, u=u, tm=tm), icm, G1, nmac, nI, pur)
 
 
