@@ -21,6 +21,11 @@ Da committare con questo `METRICS_FORMULAS.md`; annotare l'hash di freeze in §7
   una sola coppia POI (nyc/sao, città diverse).
 - **APPENDICE (5)** — robustezza/replica, fuori dai claim di testa: `istanbul`, `bangkok`,
   `tokyo_tist` (replica POI), `tsmc_nyc`, `tsmc_tky` (<4K, replica NYC/Tokyo).
+
+> **Stato ESEGUITO (deviation):** eseguiti i **7 primari** — ml1m (winner, 7bk), nyc_tist + saopaulo
+> (ridondanti POI, 7bk), amazoncd (ridondante non-POI, 2bk), mind + yelp + kuairand (null, 2bk). L'**appendice
+> è rimandata** (bassa informatività: replica una casella POI-ridondante già doppia). Il set primario copre
+> le 3 caselle su domini diversi (film / POI / retail / news / business / video). Dettaglio in `PROCESSO_SPERIMENTALE.md`.
 - k-core = **10** su utenti e item, **uniforme** (verificato: tutti min_u/min_i ≥10; Amazon = 23 059
   utenti = versione k10, non il falso-winner k20 a 716). Conteggi post-filtro loggati nel run.
 

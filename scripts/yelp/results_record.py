@@ -300,7 +300,7 @@ def aggregate(per_seed, seed42, city, nmac, nI):
             for m in METHODS:
                 v = np.array(per_seed[(bk, m, met)]); lo, hi, se = ci[m]
                 r = dict(dataset=city, backbone=bk, metric=met, method=m,
-                         mean=round(float(v.mean()), 5), sd_seed=round(float(v.std(ddof=1)), 5), mean_s42=round(m42[m][met], 5),
+                         mean=round(float(v.mean()), 5), sd_seed=round(float(v.std(ddof=1)), 7), mean_s42=round(m42[m][met], 5),
                          se_boot=round(se, 5), ci_lo=round(lo, 5), ci_hi=round(hi, 5), box="",
                          delta_l1="", ci_l1_lo="", ci_l1_hi="", p_l1="", p_l1_seed="", seeds_l1="", holm_l1="", sig_l1="",
                          delta_l2="", ci_l2_lo="", ci_l2_hi="", p_l2="", p_l2_seed="", seeds_l2="", holm_l2="", sig_l2="", tost_equiv="")
