@@ -121,8 +121,9 @@ drawScatter(false);
 document.getElementById('tgB').onchange=e=>drawScatter(e.target.checked);
 document.getElementById('leg').innerHTML=D.space.centroids.map(c=>`<span><span class="dot" style="background:${COL[c.sit]}"></span>${nm(c.sit)}</span>`).join('')+`<span><span class="dot" style="background:none;border:1.5px solid #94a3b8"></span>richiesta di confine (incertezza)</span>`;
 // profiles
+const sinkThr=1.5*(D.profiles.reduce((a,x)=>a+x.lens_KL,0)/D.profiles.length); // pozzo = KL >= 1.5×media (regola relativa del repo: battery_bfull.py:86, overnight_selection.py:58)
 document.getElementById('profiles').innerHTML=D.profiles.map(s=>{
- const sink=s.lens_KL>=0.4;const fav=s.fav_genres.slice(0,3);const mx=Math.max(...fav.map(g=>g[1]));
+ const sink=s.lens_KL>=sinkThr;const fav=s.fav_genres.slice(0,3);const mx=Math.max(...fav.map(g=>g[1]));
  const bars=fav.map(g=>`<div class="gen"><span>${g[0]}</span><span>+${g[1].toFixed(2)}</span></div><div class="bar"><i style="width:${Math.round(g[1]/mx*100)}%;background:${COL[s.k]}"></i></div>`).join('');
  return `<div class="card"><div class="sit-h"><span class="dot" style="background:${COL[s.k]}"></span><b>${nm(s.k)}</b><span class="sz">${s.size_pct}% delle richieste</span></div>
   <div style="font-size:12px;color:#6b7280;margin-bottom:6px">generi che questa situazione favorisce</div>${bars}

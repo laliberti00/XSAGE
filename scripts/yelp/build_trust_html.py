@@ -46,7 +46,7 @@ CARDS = [
   f"Rispetto al backbone: Gini↓ <b>{c['Gini']}/21</b>, Coverage↑ <b>{c['Cov']}/21</b>, coda-lunga↑ <b>{c['LT']}/21</b>, equità-categoria↑ <b>{macro}/21</b>. <span style='color:#b45309'>Limite onesto:</span> è equità di <b>esposizione + diagnostica</b>, non un correttore; su saturazione estrema (un dataset, yelp) amplifica la maggioranza."),
  ("B", "part", "Robustezza & sicurezza",
   "Il metodo deve reggere su modelli e condizioni diverse, non solo su un caso fortunato.",
-  "È un <b>re-ranker pluggable</b>: lo abbiamo montato su <b>7 backbone</b> di famiglie diverse (statici, context-aware, sequenziali) con lo stesso protocollo. Validazione con 5 seed, bootstrap e test di equivalenza; l'identità κ=0 garantisce che non si possa mai fare peggio del backbone.",
+  "È un <b>re-ranker pluggable</b>: lo abbiamo montato su <b>7 backbone</b> di famiglie diverse (statici, context-aware, sequenziali) con lo stesso protocollo. Validazione con 5 seed, bootstrap e test di equivalenza; l'identità κ=0 <b>recupera esattamente il backbone come fallback sicuro</b> (con il κ scelto su validation una singola metrica può comunque regredire su test).",
   ["scripts/ml1m/battery_bfull.py · 7 backbone, 5 seed, bootstrap, TOST"],
   "Coerente su 7 backbone × 3 dataset. <span style='color:#b45309'>Limite:</span> nessun test adversarial/poisoning/distribution-shift."),
  ("B", "part", "Privacy",
