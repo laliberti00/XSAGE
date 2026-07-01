@@ -238,9 +238,10 @@ def run_city(city, dev):
             if bk == "B_blind": sfn = (lambda idx, u=ute: sb[u[idx]])
             elif bk == "B_full": sfn = (lambda idx: bft[idx])
             else:
-                fu = bdir / f"{bk}.scores_user.npy"
+                fu = bdir / f"{bk}.scores_user.npy"; ft = bdir / f"{bk}.scores_test.npy"
                 if fu.exists(): M = np.load(fu, mmap_mode="r"); sfn = (lambda idx, M=M, u=ute: M[u[idx]])
-                else: Mt = np.load(bdir / f"{bk}.scores_test.npy", mmap_mode="r"); sfn = (lambda idx, Mt=Mt: Mt[idx])
+                elif ft.exists(): Mt = np.load(ft, mmap_mode="r"); sfn = (lambda idx, Mt=Mt: Mt[idx])
+                else: continue   # score-cache assente per questo dataset (backbone extra solo sui 3 ricchi) → salta
             kget = lambda mth: float(csvb[(csvb.seed == seed) & (csvb.backbone == bk) & (csvb.method == mth)]["kstar"].iloc[0])
             ev = {"BASE": per_request_eval(sfn, None, 0., gam_te, ute, ite, icm, excl, G1, nmac, pur),
                   "SIT": per_request_eval(sfn, nudge, kget("SIT"), gam_te, ute, ite, icm, excl, G1, nmac, pur),
@@ -269,7 +270,7 @@ def aggregate(per_seed, seed42, city, nmac, nI):
     Steck-b}) con mean/sd/se/CI; sulla riga SIT i contrasti L1=SIT−BASE e L2=SIT−Steck-b (Δ,p). NESSUN Holm
     qui (è cross-dataset → finalize()). Riusata da aggregate_record.py."""
     rng = np.random.default_rng(2024); rows = []
-    for bk in BK:
+    for bk in seed42:   # solo i backbone effettivamente eseguiti (i 5 extra esistono solo sui 3 ricchi)
         ev = seed42[bk]; m42 = {m: metrics_from(ev[m], nmac, nI) for m in METHODS}
         for met in METRICS:
             (loBA, hiBA, seBA), (loSI, hiSI, seSI), pb1, (loD1, hiD1) = boot_paired(ev["BASE"], ev["SIT"], met, nmac, nI, rng)

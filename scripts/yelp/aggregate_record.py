@@ -36,9 +36,10 @@ def run(city):
     z = np.load(CLEAN / "outputs_results" / "cache" / f"raw_{city}.npz")
     sh = dict(u=z["_shared|u"].astype(np.int64), tm=z["_shared|tm"].astype(np.int64), G1=z["_shared|G1"],
               icm=z["_shared|icm"].astype(np.int64), Pu=z["_shared|Pu"], nI=int(z["_shared|nI"]), nmac=int(z["_shared|nmac"]))
-    per_seed = {(bk, m, met): [] for bk in rr.BK for m in rr.METHODS for met in rr.METRICS}; seed42 = {}
+    present = [bk for bk in rr.BK if f"{bk}|SIT|42|rk" in z.files]   # backbone effettivamente in cache
+    per_seed = {(bk, m, met): [] for bk in present for m in rr.METHODS for met in rr.METRICS}; seed42 = {}
     for s in rr.SEEDS:
-        for bk in rr.BK:
+        for bk in present:
             ev = {m: edict(z, bk, m, s, sh) for m in rr.METHODS}
             for m in rr.METHODS:
                 mm = rr.metrics_from(ev[m], sh["nmac"], sh["nI"])
