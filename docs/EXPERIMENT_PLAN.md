@@ -16,14 +16,19 @@
 **Quantità testata.** Contrasto `Δ = macro(joint) − macro(best)`, dove **best = argmax(ctx, intent)** per
 quel dataset (best su saopaulo = intent; su ml1m = ctx), **non** un fisso joint−ctx.
 
-**Regola di decisione (fissata a priori):**
-> Rivendichiamo **`joint > best-single-component`** per un dataset **⟺** tutte e tre:
-> 1. `Δ` (media 5-seed) **supera la banda**: `Δ > +0.005`;
-> 2. **5/5 seed concordi**: `Δ_seed > 0` su tutti e cinque i seed;
-> 3. **CI-bootstrap esclude lo zero**: il bootstrap per-richiesta della differenza (ricampiona le
->    richieste, paired) ha `CI_lo > 0`.
+**Regola di decisione (fissata a priori) — IDENTICA ai contrasti principali (regola-casella a 3 condizioni):**
+> **`joint > best-single-component`** per un dataset **⟺** tutte e tre:
+> 1. **`Δ > 0`** (media 5-seed);
+> 2. **CI-bootstrap esclude lo zero**: il bootstrap per-richiesta della differenza (ricampiona le richieste, paired) ha `CI_lo > 0`;
+> 3. **5/5 seed concordi**: `Δ_seed > 0` su tutti e cinque i seed.
 >
-> Se **non** valgono tutte e tre → riportiamo **equivalenza** (`joint ≈ best`) sotto la stessa banda ±0.005.
+> **`joint ≈ best`** (equivalenza) **⟺ TOST ±0.005**: il CI-bootstrap del Δ è **dentro** `(−0.005, +0.005)`.
+> Se non vale né la superiorità né l'equivalenza → **inconcludente** (Δ piccolo ma seed-fragile).
+
+> **Deviation log (2026-07-01):** la prima versione (commit 74b0564) usava `Δ > +0.005` come 1ª condizione.
+> Corretta **prima del run finale (5 dataset)** a `Δ > 0`, per **coerenza con la regola-casella dei contrasti
+> principali** (winner/ridondante/null); la banda ±0.005 resta come test di **equivalenza (TOST)** separato,
+> non come soglia di superiorità. Nessun numero visto tra le due versioni (il run finale non era ancora girato).
 
 **Requisiti tecnici del test (obbligatori):**
 - il bootstrap è sulla **differenza per-richiesta** di macro-Cat-MRR (ricampiona le richieste), non sul

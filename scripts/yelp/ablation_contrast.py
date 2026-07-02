@@ -71,13 +71,15 @@ def run(city, bk="B_blind"):
     dseed = macro["joint"] - macro[best]                     # Delta per-seed
     rng = np.random.default_rng(2024)
     lo, hi = macro_boot(cm42["joint"], cm42[best], tm42, nmac, rng)   # (2) bootstrap sulla diff per-richiesta
-    passband = dseed.mean() > BAND; conc = int((dseed > 0).sum()) == len(rr.SEEDS); ci0 = lo > 0
-    verdict = "joint > best" if (passband and conc and ci0) else "EQUIVALENZA (joint ~ best)"
+    conc = int((dseed > 0).sum()) == len(rr.SEEDS); ci0 = lo > 0
+    superior = (dseed.mean() > 0) and conc and ci0     # STESSA regola dei contrasti principali: Δ>0 ∧ CI esclude 0 ∧ 5/5 seed
+    equiv = (lo > -BAND) and (hi < BAND)               # TOST ±0.005 sul Δ (CI dentro banda) → joint ≈ best
+    verdict = "joint > best" if superior else ("joint ~ best (equivalenza, TOST)" if equiv else "inconcludente")
     print(f"\n### {city} — contrasto joint - best(={best})   [best-half = argmax(ctx,intent)]")
     print(f"  macro 5-seed: ctx={macro['ctx'].mean():.5f} joint={macro['joint'].mean():.5f} intent={macro['intent'].mean():.5f}")
     print(f"  Δ=joint−best = {dseed.mean():+.5f} ± {dseed.std(ddof=1):.5f}  | seeds Δ>0 = {int((dseed>0).sum())}/5")
-    print(f"  CI bootstrap per-richiesta (seed42) = [{lo:+.5f}, {hi:+.5f}]  (esclude 0: {ci0})")
-    print(f"  banda ±{BAND}: mean>banda={passband} · 5/5={conc} · CI≠0={ci0}  →  VERDETTO: {verdict}")
+    print(f"  CI bootstrap per-richiesta (seed42) = [{lo:+.5f}, {hi:+.5f}]")
+    print(f"  regola: Δ>0 ∧ CI esclude 0 ∧ 5/5 → superiore={superior} · TOST±{BAND} equiv={equiv}  →  VERDETTO: {verdict}")
     return verdict
 
 
