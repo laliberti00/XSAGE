@@ -1,0 +1,32 @@
+ABLATION — FUSIONE A STADI del descrittore v=[c‖e]   (ml1m, 2026-07-08)
+======================================================================
+Script: scripts/yelp/ablation_staged.py   Log: logs/staged_ml1m.log
+Metrica-faro: macro-Cat-MRR@20 (min-support 20), backbone B_blind, 5 seed {42-46}.
+Regola: pre-registrata (EXPERIMENT_PLAN.md) — Δ>0 ∧ CI-bootstrap esclude 0 ∧ 5/5 seed.
+
+Domanda: la fusione ANTICIPATA (concatenazione v=[c‖e]) è l'unica? Confronto con due
+fusioni A STADI (livello-1 hard su un blocco, livello-2 soft/boundary sull'altro).
+
+RISULTATI
+---------
+  joint(concat)        = 0.14032 ± 0.00000   [5 situazioni]
+  staged-A ctx→intent  = 0.14687 ± 0.00197   [~10 foglie]   Δ=+0.00654  5/5  CI[+0.00599,+0.00894]  → staged > joint
+  staged-B intent→ctx  = 0.14902 ± 0.00094   [12 foglie]    Δ=+0.00869  5/5  CI[+0.00751,+0.01114]  → staged > joint
+
+Entrambi gli ordini battono la concatenazione (sopra la banda ±0.005, 5/5, CI esclude 0).
+Intento→contesto è il più forte.
+
+CAVEAT (da chiarire PRIMA di qualsiasi claim)
+---------------------------------------------
+1. CONFONDENTE GRANULARITÀ: staged usa 2× situazioni (10-12 vs 5). Più foglie = tabella
+   bias b̃ più fine = più capacità. Parte del guadagno può essere "più cluster", non
+   "staging più intelligente". CONTROLLO NECESSARIO: joint con K forzato ≈10-12 → se
+   raggiunge staged, è granularità; se resta sotto, è la STRUTTURA a stadi. (K auto per
+   joint sceglie 5 via silhouette sullo spazio 23-dim.)
+2. SCOPE: un solo dataset (ml1m), un solo backbone (B_blind, il faro dell'ablation, NON
+   il focale B_full), una sola metrica. Serve replica su B_full e altri dataset.
+3. Nota tecnica coerente col codice: la L2 non pesata su [c‖e] è già dominata dall'intento
+   (5 dim contesto vs 18 dim intento); che 'intento→contesto' sia il migliore è consistente.
+
+PROSSIMO PASSO: control 'joint @ K matched' (K=10 e K=12) su ml1m; poi replica su B_full
+e nyc/sao/kuairand/yelp se il control regge.

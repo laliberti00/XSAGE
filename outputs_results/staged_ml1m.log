@@ -1,0 +1,13 @@
+=== ABLATION FUSIONE A STADI (regola pre-registrata: EXPERIMENT_PLAN.md) ===
+  [ml1m] seed 42 ok  (L: joint=5 A=10 B=12)
+  [ml1m] seed 43 ok  (L: joint=5 A=10 B=12)
+  [ml1m] seed 44 ok  (L: joint=5 A=13 B=12)
+  [ml1m] seed 45 ok  (L: joint=5 A=10 B=12)
+  [ml1m] seed 46 ok  (L: joint=5 A=7 B=12)
+
+### ml1m — FUSIONE A STADI vs concatenazione (macro-Cat-MRR@20, backbone B_blind, 5 seed)
+  joint(concat) = 0.14032 ± 0.00000   [foglie medie 5.0]
+  staged-A  ctx→intent: 0.14687 ± 0.00197   [foglie medie 10.0]
+      Δ=staged−joint = +0.00654 ± 0.00197  | seeds Δ>0 = 5/5  | CI-boot(seed42) = [+0.00599, +0.00894]  →  VERDETTO: staged > joint
+  staged-B  intent→ctx: 0.14902 ± 0.00094   [foglie medie 12.0]
+      Δ=staged−joint = +0.00869 ± 0.00094  | seeds Δ>0 = 5/5  | CI-boot(seed42) = [+0.00751, +0.01114]  →  VERDETTO: staged > joint
