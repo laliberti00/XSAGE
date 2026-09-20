@@ -1,0 +1,8 @@
+nome_manoscritto,valor_manoscritto_ml1m_MCMRR,chiave_repo,valore_repo,file_punteggi,algoritmo_reale,riferimento_codice,corrisponde
+BPR,0.1265,B_blind,0.12648,data/<ds>/backbone/FM.scores.npy,BPR (cornac),scripts/mind/cornac_backbone.py:26,SI
+FM,0.2346,B_full,0.23462,data/<ds>/backbone/Bfull.scores.npy,ContextAwareFM,pipeline/step02_models/xsage/backbone_full.py,SI
+EASE,0.1294,EASE,0.12939,data/<ds>/backbone/EASE.scores_user.npy,EASE^R (cornac),scripts/cars/gen_scores_ease.py,SI
+DeepFM,0.2275,DeepFM,0.22754,data/<ds>/backbone/DeepFM.scores_test.npy,DeepFM,scripts/cars/backbone_deep.py,SI
+AFM,0.2102,AFM,0.21025,data/<ds>/backbone/AFM.scores_test.npy,AFM,scripts/cars/backbone_deep.py,SI
+FPMC,0.2902,FPMC,0.2902,data/<ds>/backbone/FPMC.scores_test.npy,FPMC (cornac),scripts/cars/gen_scores_fpmc.py,SI
+SASRec,0.343,SASRec,0.34299,data/<ds>/backbone/SASRec.scores_test.npy,SASRec (cornac),scripts/cars/gen_scores_sasrec.py,SI

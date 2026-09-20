@@ -1,0 +1,21 @@
+voce,valore,n,nota
+HEAD xsage-clean,db608f8,,branch exp/second-dataset-feasibility · remote laliberti00/XSAGE
+HEAD X-SAGE,5724fe6,,branch main · remote knowmis/X-SAGE = URL CITATO NEL PAPER
+db608f8 presente in X-SAGE,NO,,storie git NON collegate: nessun antenato comune
+file tracciati,303 vs 63,,xsage-clean vs X-SAGE
+file in comune,11,11.0,"di cui 9 DIFFERISCONO nel contenuto, 2 identici"
+solo in xsage-clean,292,292.0,"docs/, scripts/, outputs_results/, tests/, paper/"
+solo in X-SAGE,52,52.0,config/ (hparams+params) e data/processed/ committati
+DIVERSO: xsage/recommendation.py,contenuto differente,,file comune ai due repo ma non identico
+DIVERSO: xsage/l0_sensing.py,contenuto differente,,file comune ai due repo ma non identico
+DIVERSO: xsage/l1_perception.py,contenuto differente,,file comune ai due repo ma non identico
+DIVERSO: xsage/l3_projection.py,contenuto differente,,file comune ai due repo ma non identico
+DIVERSO: xsage/data.py,contenuto differente,,file comune ai due repo ma non identico
+DIVERSO: xsage/__init__.py,contenuto differente,,file comune ai due repo ma non identico
+DIVERSO: README.md,contenuto differente,,file comune ai due repo ma non identico
+DIVERSO: requirements.txt,contenuto differente,,file comune ai due repo ma non identico
+DIVERSO: .gitignore,contenuto differente,,file comune ai due repo ma non identico
+X-SAGE ha backbone propri,SI,7.0,"xsage/backbones/{bpr,fm,ease,fpmc,sasrec,deepfm_afm,deep}.py — assenti in xsage-clean"
+X-SAGE ha pipeline propria,SI,,scripts/run_pipeline.py + scripts/aggregate.py + scripts/preprocess/
+recommendation.py: formula,diversa,,X-SAGE documenta il combiner SENZA lambda e senza m_sel (coerente col paper V2); xsage-clean li documenta ancora
+equivalenza numerica verificata,NO,,nessuno ha mai verificato che X-SAGE riproduca results_record.csv / il gate 0.38479

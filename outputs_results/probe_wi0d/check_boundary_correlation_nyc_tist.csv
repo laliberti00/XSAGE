@@ -1,0 +1,4 @@
+dataset,coppia,spearman_rho,n_utenti,soglia_preregistrata,supera
+nyc_tist,boundary_share ~ entropia,0.2729,4113,0.3,0.0
+nyc_tist,boundary_share ~ n_situazioni,0.2727,4113,0.3,0.0
+nyc_tist,boundary_share ~ lunghezza_test,0.0427,4113,,

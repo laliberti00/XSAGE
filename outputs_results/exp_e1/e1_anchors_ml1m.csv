@@ -1,0 +1,5 @@
+dataset,sorgente,BASE_CatMRR,SIT_CatMRR,BASE_macro,SIT_macro
+ml1m,EASE_salvata_PUBBLICATA,0.375581,0.401146,0.12947,0.14229
+ml1m,EASE_ricostruita_pool_TRAIN_only,0.375666,0.401276,0.12943,0.14232
+ml1m,EASE_ricostruita_pool_TRAIN+VAL,0.395428,0.413205,0.14044,0.15349
+ml1m,GATE_B_blind (riferimento harness),,0.38479,,0.38479

@@ -1,0 +1,32 @@
+{
+  "dataset": "saopaulo",
+  "K": 4,
+  "eps": 0.03,
+  "kstar_SIT": 0.25,
+  "anchor_catmrr_sit": 0.4004476549976816,
+  "anchor_ref": 0.40045,
+  "anchor_ok": true,
+  "base_catmrr": 0.36482953290965103,
+  "A": {
+    "ss_sit_first": 0.03906612896109928,
+    "ss_sit_given_user": 0.0013620357026889723,
+    "ss_user_first": 0.3647720930479102,
+    "ss_user_given_sit": 0.3270679997894999,
+    "icc_user": 0.2211526340973813,
+    "icc_sit": 0.05588886942261827,
+    "share_users_multi": 0.326962457337884,
+    "spread_median": 0.2462962962962963,
+    "n_req": 23821,
+    "n_users": 4395
+  },
+  "B": {
+    "r2_median": 0.09891770727565015,
+    "r2_pooled": 0.03483254182020663,
+    "cos_median": 0.20650976104500748,
+    "flip_argmax": 0.7709164182863859,
+    "flip_top1": 0.29129759455942233,
+    "r2_ctx": 0.07528304183411005,
+    "n_req": 23821
+  },
+  "C": null
+}

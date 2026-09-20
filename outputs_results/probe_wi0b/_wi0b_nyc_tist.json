@@ -1,0 +1,60 @@
+{
+  "dataset": "nyc_tist",
+  "gate_ok": true,
+  "anchor": 0.3416243469027141,
+  "anchor_ref": 0.34162,
+  "K": 8,
+  "A2": {
+    "share_users_multi": 0.07561390712375395,
+    "share_req_multi": 0.09936730312958987,
+    "n_users_multi": 311,
+    "ss_sit_given_user": 0.003296651626615413,
+    "ss_user_alone": 0.3212225987121236,
+    "spread_obs": 0.17222222222222222,
+    "spread_null": 0.17185125504979182,
+    "perm_p": 0.3532934131736527,
+    "kruskal_p": 0.7299808927201993,
+    "n_sit_positive": 7,
+    "n_sit": 8,
+    "delta_aggregate": 0.06130714108523028
+  },
+  "C2": {
+    "h": {
+      "train": {
+        "ent_med": 0.7026110702748711,
+        "dom_med": 0.4,
+        "share80": 0.018477996596158522,
+        "dis_med": 6.0,
+        "n_users": 4113
+      },
+      "val": {
+        "ent_med": 0.0,
+        "dom_med": 1.0,
+        "share80": 0.9288389513108615,
+        "dis_med": 1.0,
+        "n_users": 1068
+      },
+      "test": {
+        "ent_med": 0.0,
+        "dom_med": 1.0,
+        "share80": 0.919748229740362,
+        "dis_med": 1.0,
+        "n_users": 1271
+      },
+      "all": {
+        "ent_med": 0.7053727379260987,
+        "dom_med": 0.4,
+        "share80": 0.017019207391198637,
+        "dis_med": 6.0,
+        "n_users": 4113
+      },
+      "win20": 0.6711798412221923,
+      "win50": 0.701817133103882
+    },
+    "median_test_len": 3.0,
+    "median_tl_len": 28.0,
+    "split_violations": 0,
+    "split_ties": 0
+  },
+  "D": null
+}

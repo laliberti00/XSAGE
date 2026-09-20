@@ -1,0 +1,9 @@
+dataset,check,block,key,subkey,metric,value,n,note
+saopaulo,C2,sliding_window,N20,entropy_norm,p25,0.4958800740904867,3549,
+saopaulo,C2,sliding_window,N20,entropy_norm,median,0.6661756372187928,3549,
+saopaulo,C2,sliding_window,N20,entropy_norm,p75,0.7847297122108117,3549,
+saopaulo,C2,sliding_window,N20,entropy_norm,n_users_eligible,3549.0,3549,
+saopaulo,C2,sliding_window,N50,entropy_norm,p25,0.5453476128953909,1404,
+saopaulo,C2,sliding_window,N50,entropy_norm,median,0.7145305746877186,1404,
+saopaulo,C2,sliding_window,N50,entropy_norm,p75,0.8265017181293721,1404,
+saopaulo,C2,sliding_window,N50,entropy_norm,n_users_eligible,1404.0,1404,

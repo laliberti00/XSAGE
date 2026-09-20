@@ -1,0 +1,8 @@
+dataset,term,coef,se_cluster,t,sig,n_obs,n_clusters,r2
+saopaulo,intercept,0.01434,0.006708,2.138,1.0,21975,4395,0.0048
+saopaulo,beta1_entropy,-0.058289,0.010441,-5.582,1.0,21975,4395,0.0048
+saopaulo,beta2_loglen,0.009676,0.004054,2.387,1.0,21975,4395,0.0048
+saopaulo,beta3_ntrans,0.002404,0.001447,1.661,0.0,21975,4395,0.0048
+saopaulo,"corr(entropy,loglen)",0.1621,,,,21975,4395,
+saopaulo,"corr(entropy,ntrans)",0.7072,,,,21975,4395,
+saopaulo,"corr(loglen,ntrans)",0.379,,,,21975,4395,

@@ -1,0 +1,9 @@
+dataset,check,block,key,subkey,metric,value,n,note
+nyc_tist,C2,sliding_window,N20,entropy_norm,p25,0.5733243646739917,2818,
+nyc_tist,C2,sliding_window,N20,entropy_norm,median,0.6711798412221923,2818,
+nyc_tist,C2,sliding_window,N20,entropy_norm,p75,0.7501519386527664,2818,
+nyc_tist,C2,sliding_window,N20,entropy_norm,n_users_eligible,2818.0,2818,
+nyc_tist,C2,sliding_window,N50,entropy_norm,p25,0.6112828615227387,931,
+nyc_tist,C2,sliding_window,N50,entropy_norm,median,0.701817133103882,931,
+nyc_tist,C2,sliding_window,N50,entropy_norm,p75,0.7927894406103424,931,
+nyc_tist,C2,sliding_window,N50,entropy_norm,n_users_eligible,931.0,931,

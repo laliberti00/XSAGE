@@ -1,0 +1,79 @@
+{
+  "dataset": "ml1m",
+  "gate_ok": true,
+  "anchor": 0.3847889590127849,
+  "anchor_ref": 0.38479,
+  "K": 5,
+  "A2": {
+    "share_users_multi": 0.44056291390728475,
+    "share_req_multi": 0.5096142964433791,
+    "n_users_multi": 2661,
+    "ss_sit_given_user": 0.002692813755810838,
+    "ss_user_alone": 0.20240473390528319,
+    "spread_obs": 0.21052631578947367,
+    "spread_null": 0.18298304360243062,
+    "perm_p": 0.001996007984031936,
+    "kruskal_p": 6.960300060283986e-06,
+    "n_sit_positive": 4,
+    "n_sit": 5,
+    "delta_aggregate": 0.025170242026910816
+  },
+  "C2": {
+    "h": {
+      "train": {
+        "ent_med": 0.8195868955087653,
+        "dom_med": 0.43500458649157536,
+        "share80": 0.04056291390728477,
+        "dis_med": 5.0,
+        "n_users": 6040
+      },
+      "val": {
+        "ent_med": 0.0,
+        "dom_med": 1.0,
+        "share80": 0.6990699734278122,
+        "dis_med": 1.0,
+        "n_users": 4516
+      },
+      "test": {
+        "ent_med": 0.0,
+        "dom_med": 1.0,
+        "share80": 0.6836710924761239,
+        "dis_med": 1.0,
+        "n_users": 4293
+      },
+      "all": {
+        "ent_med": 0.8241123916683768,
+        "dom_med": 0.42932852386237513,
+        "share80": 0.0390728476821192,
+        "dis_med": 5.0,
+        "n_users": 6040
+      },
+      "win20": 0.5919809376357819,
+      "win50": 0.6948328767082732
+    },
+    "median_test_len": 9.0,
+    "median_tl_len": 96.0,
+    "split_violations": 0,
+    "split_ties": 120
+  },
+  "D": {
+    "gender": {
+      "majority": 0.7170529801324503,
+      "a_situation_label": 0.7170529801324503,
+      "b_situation_histogram": 0.7259933774834437,
+      "c_item_history": 0.7801324503311259
+    },
+    "age": {
+      "majority": 0.34701986754966885,
+      "a_situation_label": 0.34701986754966885,
+      "b_situation_histogram": 0.3468543046357616,
+      "c_item_history": 0.4730132450331126
+    },
+    "occupation": {
+      "majority": 0.12566225165562914,
+      "a_situation_label": 0.1326158940397351,
+      "b_situation_histogram": 0.1390728476821192,
+      "c_item_history": 0.15033112582781458
+    }
+  }
+}

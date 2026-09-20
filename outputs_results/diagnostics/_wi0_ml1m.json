@@ -1,0 +1,43 @@
+{
+  "dataset": "ml1m",
+  "K": 5,
+  "eps": 0.03,
+  "kstar_SIT": 0.5,
+  "anchor_catmrr_sit": 0.3847889590127849,
+  "anchor_ref": 0.38479,
+  "anchor_ok": true,
+  "base_catmrr": 0.3596187169858741,
+  "A": {
+    "ss_sit_first": 0.0304316590701979,
+    "ss_sit_given_user": 0.0011884429124787421,
+    "ss_user_first": 0.3079636806330523,
+    "ss_user_given_sit": 0.27872046447533316,
+    "icc_user": 0.26219410483374295,
+    "icc_sit": 0.03947150140954913,
+    "share_users_multi": 0.44056291390728475,
+    "spread_median": 0.21052631578947367,
+    "n_req": 97199,
+    "n_users": 6040
+  },
+  "B": {
+    "r2_median": 0.05654450631430504,
+    "r2_pooled": 0.003862714560667663,
+    "cos_median": 0.05147505464116043,
+    "flip_argmax": 0.9185794092531816,
+    "flip_top1": 0.32501363182748794,
+    "r2_ctx": 0.031849103225233155,
+    "n_req": 97199
+  },
+  "C": {
+    "entropy_median": 0.0,
+    "dominant_median": 1.0,
+    "share_dom_gt80": 0.6836710924761239,
+    "persistence_test": 0.8450558567158751,
+    "n_users_ge5": 4293,
+    "majority": {
+      "gender": 0.7170529801324503,
+      "age": 0.34701986754966885,
+      "occupation": 0.12566225165562914
+    }
+  }
+}

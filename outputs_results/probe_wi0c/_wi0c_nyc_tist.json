@@ -1,0 +1,301 @@
+{
+  "dataset": "nyc_tist",
+  "gate_ok": true,
+  "anchor": 0.3416243469027141,
+  "anchor_ref": 0.34162,
+  "n_users": 4113,
+  "K": [
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "kap": 0.5,
+  "e1": [
+    {
+      "dataset": "nyc_tist",
+      "bucket": "d=0",
+      "n_req_mean_per_seed": 906,
+      "n_users": 1025,
+      "sit": 0.35878,
+      "base": 0.30428,
+      "delta": 0.0545,
+      "ci_lo": 0.01889,
+      "ci_hi": 0.09086,
+      "sit_ci_lo": 0.32144,
+      "sit_ci_hi": 0.39375,
+      "base_ci_lo": 0.26579,
+      "base_ci_hi": 0.35423,
+      "preregistered": 1
+    },
+    {
+      "dataset": "nyc_tist",
+      "bucket": "d1-2",
+      "n_req_mean_per_seed": 503,
+      "n_users": 578,
+      "sit": 0.3505,
+      "base": 0.31533,
+      "delta": 0.03518,
+      "ci_lo": 0.0022,
+      "ci_hi": 0.06722,
+      "sit_ci_lo": 0.31302,
+      "sit_ci_hi": 0.38743,
+      "base_ci_lo": 0.27331,
+      "base_ci_hi": 0.37088,
+      "preregistered": 1
+    },
+    {
+      "dataset": "nyc_tist",
+      "bucket": "d3-5",
+      "n_req_mean_per_seed": 175,
+      "n_users": 190,
+      "sit": 0.32158,
+      "base": 0.28544,
+      "delta": 0.03614,
+      "ci_lo": -0.0146,
+      "ci_hi": 0.0858,
+      "sit_ci_lo": 0.26021,
+      "sit_ci_hi": 0.38353,
+      "base_ci_lo": 0.23836,
+      "base_ci_hi": 0.33686,
+      "preregistered": 1
+    },
+    {
+      "dataset": "nyc_tist",
+      "bucket": "d>5",
+      "n_req_mean_per_seed": 96,
+      "n_users": 59,
+      "sit": 0.26269,
+      "base": 0.27085,
+      "delta": -0.00816,
+      "ci_lo": -0.06636,
+      "ci_hi": 0.08781,
+      "sit_ci_lo": 0.19269,
+      "sit_ci_hi": 0.35468,
+      "base_ci_lo": 0.19317,
+      "base_ci_hi": 0.35135,
+      "preregistered": 1
+    },
+    {
+      "dataset": "nyc_tist",
+      "bucket": "stable",
+      "n_req_mean_per_seed": 15045,
+      "n_users": 4036,
+      "sit": 0.33338,
+      "base": 0.27888,
+      "delta": 0.0545,
+      "ci_lo": 0.04339,
+      "ci_hi": 0.06568,
+      "sit_ci_lo": 0.32123,
+      "sit_ci_hi": 0.34599,
+      "base_ci_lo": 0.26875,
+      "base_ci_hi": 0.28983,
+      "preregistered": 1
+    },
+    {
+      "dataset": "nyc_tist",
+      "bucket": "pre_first_change",
+      "n_req_mean_per_seed": 976,
+      "n_users": 1025,
+      "sit": 0.31148,
+      "base": 0.30129,
+      "delta": 0.01018,
+      "ci_lo": -0.02551,
+      "ci_hi": 0.04992,
+      "sit_ci_lo": 0.28735,
+      "sit_ci_hi": 0.33342,
+      "base_ci_lo": 0.25921,
+      "base_ci_hi": 0.34353,
+      "preregistered": 0
+    }
+  ],
+  "contrasts": [
+    {
+      "dataset": "nyc_tist",
+      "contrast": "d=0 - d>5",
+      "point": 0.06267,
+      "ci_lo": -0.03907,
+      "ci_hi": 0.12936,
+      "ci_excludes_zero": 0,
+      "sit_diff": 0.0961,
+      "base_diff": 0.03343
+    },
+    {
+      "dataset": "nyc_tist",
+      "contrast": "d=0 - stable",
+      "point": 1e-05,
+      "ci_lo": -0.03918,
+      "ci_hi": 0.04138,
+      "ci_excludes_zero": 0,
+      "sit_diff": 0.02541,
+      "base_diff": 0.0254
+    },
+    {
+      "dataset": "nyc_tist",
+      "contrast": "d1-2 - d>5",
+      "point": 0.04334,
+      "ci_lo": -0.05626,
+      "ci_hi": 0.10336,
+      "ci_excludes_zero": 0,
+      "sit_diff": 0.08782,
+      "base_diff": 0.04448
+    },
+    {
+      "dataset": "nyc_tist",
+      "contrast": "d1-2 - stable",
+      "point": -0.01932,
+      "ci_lo": -0.05806,
+      "ci_hi": 0.01628,
+      "ci_excludes_zero": 0,
+      "sit_diff": 0.01712,
+      "base_diff": 0.03645
+    }
+  ],
+  "within": [
+    {
+      "dataset": "nyc_tist",
+      "bucket": "d=0",
+      "n_user_seed_cells": 2364,
+      "within_user_centered_delta": 0.02712,
+      "ci_lo": 0.01868,
+      "ci_hi": 0.03449
+    },
+    {
+      "dataset": "nyc_tist",
+      "bucket": "d1-2",
+      "n_user_seed_cells": 1295,
+      "within_user_centered_delta": -0.00528,
+      "ci_lo": -0.01591,
+      "ci_hi": 0.00554
+    },
+    {
+      "dataset": "nyc_tist",
+      "bucket": "d3-5",
+      "n_user_seed_cells": 417,
+      "within_user_centered_delta": -0.01692,
+      "ci_lo": -0.03723,
+      "ci_hi": 0.00396
+    },
+    {
+      "dataset": "nyc_tist",
+      "bucket": "d>5",
+      "n_user_seed_cells": 125,
+      "within_user_centered_delta": -0.01774,
+      "ci_lo": -0.04675,
+      "ci_hi": 0.01592
+    },
+    {
+      "dataset": "nyc_tist",
+      "bucket": "stable",
+      "n_user_seed_cells": 18201,
+      "within_user_centered_delta": 0.0,
+      "ci_lo": 0.0,
+      "ci_hi": 0.0
+    },
+    {
+      "dataset": "nyc_tist",
+      "bucket": "pre_first_change",
+      "n_user_seed_cells": 2364,
+      "within_user_centered_delta": -0.02191,
+      "ci_lo": -0.03115,
+      "ci_hi": -0.01246
+    }
+  ],
+  "e3": [
+    {
+      "dataset": "nyc_tist",
+      "term": "intercept",
+      "coef": -0.021522,
+      "se_cluster": 0.009215,
+      "t": -2.336,
+      "sig": 1,
+      "n_obs": 20565,
+      "n_clusters": 4113,
+      "r2": 0.01414
+    },
+    {
+      "dataset": "nyc_tist",
+      "term": "beta1_entropy",
+      "coef": 0.013712,
+      "se_cluster": 0.029266,
+      "t": 0.469,
+      "sig": 0,
+      "n_obs": 20565,
+      "n_clusters": 4113,
+      "r2": 0.01414
+    },
+    {
+      "dataset": "nyc_tist",
+      "term": "beta2_loglen",
+      "coef": 0.049861,
+      "se_cluster": 0.006414,
+      "t": 7.774,
+      "sig": 1,
+      "n_obs": 20565,
+      "n_clusters": 4113,
+      "r2": 0.01414
+    },
+    {
+      "dataset": "nyc_tist",
+      "term": "beta3_ntrans",
+      "coef": -0.007384,
+      "se_cluster": 0.002787,
+      "t": -2.649,
+      "sig": 1,
+      "n_obs": 20565,
+      "n_clusters": 4113,
+      "r2": 0.01414
+    },
+    {
+      "dataset": "nyc_tist",
+      "term": "corr(entropy,loglen)",
+      "coef": 0.1056,
+      "se_cluster": NaN,
+      "t": NaN,
+      "sig": NaN,
+      "n_obs": 20565,
+      "n_clusters": 4113,
+      "r2": NaN
+    },
+    {
+      "dataset": "nyc_tist",
+      "term": "corr(entropy,ntrans)",
+      "coef": 0.7217,
+      "se_cluster": NaN,
+      "t": NaN,
+      "sig": NaN,
+      "n_obs": 20565,
+      "n_clusters": 4113,
+      "r2": NaN
+    },
+    {
+      "dataset": "nyc_tist",
+      "term": "corr(loglen,ntrans)",
+      "coef": 0.2544,
+      "se_cluster": NaN,
+      "t": NaN,
+      "sig": NaN,
+      "n_obs": 20565,
+      "n_clusters": 4113,
+      "r2": NaN
+    }
+  ],
+  "corr": {
+    "entropy": {
+      "entropy": 1.0,
+      "loglen": 0.10564883217792145,
+      "ntrans": 0.7216618373496783
+    },
+    "loglen": {
+      "entropy": 0.10564883217792145,
+      "loglen": 1.0,
+      "ntrans": 0.2543781783214826
+    },
+    "ntrans": {
+      "entropy": 0.7216618373496783,
+      "loglen": 0.2543781783214826,
+      "ntrans": 1.0
+    }
+  }
+}

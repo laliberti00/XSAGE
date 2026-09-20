@@ -1,0 +1,8 @@
+dataset,term,coef,se_cluster,t,sig,n_obs,n_clusters,r2
+nyc_tist,intercept,-0.021522,0.009215,-2.336,1.0,20565,4113,0.01414
+nyc_tist,beta1_entropy,0.013712,0.029266,0.469,0.0,20565,4113,0.01414
+nyc_tist,beta2_loglen,0.049861,0.006414,7.774,1.0,20565,4113,0.01414
+nyc_tist,beta3_ntrans,-0.007384,0.002787,-2.649,1.0,20565,4113,0.01414
+nyc_tist,"corr(entropy,loglen)",0.1056,,,,20565,4113,
+nyc_tist,"corr(entropy,ntrans)",0.7217,,,,20565,4113,
+nyc_tist,"corr(loglen,ntrans)",0.2544,,,,20565,4113,

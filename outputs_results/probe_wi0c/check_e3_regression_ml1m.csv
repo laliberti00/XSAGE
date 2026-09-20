@@ -1,0 +1,8 @@
+dataset,term,coef,se_cluster,t,sig,n_obs,n_clusters,r2
+ml1m,intercept,0.02445,0.008071,3.029,1.0,30200,6040,0.03215
+ml1m,beta1_entropy,-0.151979,0.013043,-11.652,1.0,30200,6040,0.03215
+ml1m,beta2_loglen,0.010566,0.002908,3.633,1.0,30200,6040,0.03215
+ml1m,beta3_ntrans,-0.000809,0.000415,-1.951,0.0,30200,6040,0.03215
+ml1m,"corr(entropy,loglen)",0.0857,,,,30200,6040,
+ml1m,"corr(entropy,ntrans)",0.5432,,,,30200,6040,
+ml1m,"corr(loglen,ntrans)",0.4564,,,,30200,6040,

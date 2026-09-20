@@ -1,0 +1,301 @@
+{
+  "dataset": "saopaulo",
+  "gate_ok": true,
+  "anchor": 0.4004476549976816,
+  "anchor_ref": 0.40045,
+  "n_users": 4395,
+  "K": [
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "kap": 0.25,
+  "e1": [
+    {
+      "dataset": "saopaulo",
+      "bucket": "d=0",
+      "n_req_mean_per_seed": 2271,
+      "n_users": 2246,
+      "sit": 0.40131,
+      "base": 0.37817,
+      "delta": 0.02314,
+      "ci_lo": 0.0102,
+      "ci_hi": 0.03948,
+      "sit_ci_lo": 0.35085,
+      "sit_ci_hi": 0.45603,
+      "base_ci_lo": 0.33532,
+      "base_ci_hi": 0.42551,
+      "preregistered": 1
+    },
+    {
+      "dataset": "saopaulo",
+      "bucket": "d1-2",
+      "n_req_mean_per_seed": 1428,
+      "n_users": 1488,
+      "sit": 0.41467,
+      "base": 0.39401,
+      "delta": 0.02066,
+      "ci_lo": 0.00584,
+      "ci_hi": 0.04337,
+      "sit_ci_lo": 0.35618,
+      "sit_ci_hi": 0.47773,
+      "base_ci_lo": 0.34515,
+      "base_ci_hi": 0.44681,
+      "preregistered": 1
+    },
+    {
+      "dataset": "saopaulo",
+      "bucket": "d3-5",
+      "n_req_mean_per_seed": 537,
+      "n_users": 592,
+      "sit": 0.42503,
+      "base": 0.39373,
+      "delta": 0.0313,
+      "ci_lo": 0.01181,
+      "ci_hi": 0.05171,
+      "sit_ci_lo": 0.35686,
+      "sit_ci_hi": 0.49964,
+      "base_ci_lo": 0.33445,
+      "base_ci_hi": 0.45926,
+      "preregistered": 1
+    },
+    {
+      "dataset": "saopaulo",
+      "bucket": "d>5",
+      "n_req_mean_per_seed": 306,
+      "n_users": 193,
+      "sit": 0.49168,
+      "base": 0.44566,
+      "delta": 0.04602,
+      "ci_lo": 0.00426,
+      "ci_hi": 0.09344,
+      "sit_ci_lo": 0.39977,
+      "sit_ci_hi": 0.58904,
+      "base_ci_lo": 0.37306,
+      "base_ci_hi": 0.53103,
+      "preregistered": 1
+    },
+    {
+      "dataset": "saopaulo",
+      "bucket": "stable",
+      "n_req_mean_per_seed": 17105,
+      "n_users": 4169,
+      "sit": 0.39314,
+      "base": 0.36068,
+      "delta": 0.03246,
+      "ci_lo": 0.02297,
+      "ci_hi": 0.04296,
+      "sit_ci_lo": 0.36662,
+      "sit_ci_hi": 0.41975,
+      "base_ci_lo": 0.34093,
+      "base_ci_hi": 0.37996,
+      "preregistered": 1
+    },
+    {
+      "dataset": "saopaulo",
+      "bucket": "pre_first_change",
+      "n_req_mean_per_seed": 2172,
+      "n_users": 2246,
+      "sit": 0.39264,
+      "base": 0.37376,
+      "delta": 0.01888,
+      "ci_lo": 0.00369,
+      "ci_hi": 0.03438,
+      "sit_ci_lo": 0.33538,
+      "sit_ci_hi": 0.45728,
+      "base_ci_lo": 0.32523,
+      "base_ci_hi": 0.42935,
+      "preregistered": 0
+    }
+  ],
+  "contrasts": [
+    {
+      "dataset": "saopaulo",
+      "contrast": "d=0 - d>5",
+      "point": -0.02288,
+      "ci_lo": -0.06621,
+      "ci_hi": 0.01583,
+      "ci_excludes_zero": 0,
+      "sit_diff": -0.09037,
+      "base_diff": -0.06748
+    },
+    {
+      "dataset": "saopaulo",
+      "contrast": "d=0 - stable",
+      "point": -0.00932,
+      "ci_lo": -0.02778,
+      "ci_hi": 0.01061,
+      "ci_excludes_zero": 0,
+      "sit_diff": 0.00818,
+      "base_diff": 0.0175
+    },
+    {
+      "dataset": "saopaulo",
+      "contrast": "d1-2 - d>5",
+      "point": -0.02536,
+      "ci_lo": -0.06939,
+      "ci_hi": 0.0135,
+      "ci_excludes_zero": 0,
+      "sit_diff": -0.07701,
+      "base_diff": -0.05165
+    },
+    {
+      "dataset": "saopaulo",
+      "contrast": "d1-2 - stable",
+      "point": -0.0118,
+      "ci_lo": -0.03158,
+      "ci_hi": 0.01322,
+      "ci_excludes_zero": 0,
+      "sit_diff": 0.02153,
+      "base_diff": 0.03333
+    }
+  ],
+  "within": [
+    {
+      "dataset": "saopaulo",
+      "bucket": "d=0",
+      "n_user_seed_cells": 4694,
+      "within_user_centered_delta": 0.0044,
+      "ci_lo": 0.00168,
+      "ci_hi": 0.00732
+    },
+    {
+      "dataset": "saopaulo",
+      "bucket": "d1-2",
+      "n_user_seed_cells": 2972,
+      "within_user_centered_delta": -0.00474,
+      "ci_lo": -0.00946,
+      "ci_hi": -0.00043
+    },
+    {
+      "dataset": "saopaulo",
+      "bucket": "d3-5",
+      "n_user_seed_cells": 1084,
+      "within_user_centered_delta": -0.0034,
+      "ci_lo": -0.01098,
+      "ci_hi": 0.0031
+    },
+    {
+      "dataset": "saopaulo",
+      "bucket": "d>5",
+      "n_user_seed_cells": 347,
+      "within_user_centered_delta": -0.00626,
+      "ci_lo": -0.01843,
+      "ci_hi": 0.00557
+    },
+    {
+      "dataset": "saopaulo",
+      "bucket": "stable",
+      "n_user_seed_cells": 17281,
+      "within_user_centered_delta": 0.0,
+      "ci_lo": 0.0,
+      "ci_hi": 0.0
+    },
+    {
+      "dataset": "saopaulo",
+      "bucket": "pre_first_change",
+      "n_user_seed_cells": 4694,
+      "within_user_centered_delta": -0.0052,
+      "ci_lo": -0.00834,
+      "ci_hi": -0.00208
+    }
+  ],
+  "e3": [
+    {
+      "dataset": "saopaulo",
+      "term": "intercept",
+      "coef": 0.01434,
+      "se_cluster": 0.006708,
+      "t": 2.138,
+      "sig": 1,
+      "n_obs": 21975,
+      "n_clusters": 4395,
+      "r2": 0.0048
+    },
+    {
+      "dataset": "saopaulo",
+      "term": "beta1_entropy",
+      "coef": -0.058289,
+      "se_cluster": 0.010441,
+      "t": -5.582,
+      "sig": 1,
+      "n_obs": 21975,
+      "n_clusters": 4395,
+      "r2": 0.0048
+    },
+    {
+      "dataset": "saopaulo",
+      "term": "beta2_loglen",
+      "coef": 0.009676,
+      "se_cluster": 0.004054,
+      "t": 2.387,
+      "sig": 1,
+      "n_obs": 21975,
+      "n_clusters": 4395,
+      "r2": 0.0048
+    },
+    {
+      "dataset": "saopaulo",
+      "term": "beta3_ntrans",
+      "coef": 0.002404,
+      "se_cluster": 0.001447,
+      "t": 1.661,
+      "sig": 0,
+      "n_obs": 21975,
+      "n_clusters": 4395,
+      "r2": 0.0048
+    },
+    {
+      "dataset": "saopaulo",
+      "term": "corr(entropy,loglen)",
+      "coef": 0.1621,
+      "se_cluster": NaN,
+      "t": NaN,
+      "sig": NaN,
+      "n_obs": 21975,
+      "n_clusters": 4395,
+      "r2": NaN
+    },
+    {
+      "dataset": "saopaulo",
+      "term": "corr(entropy,ntrans)",
+      "coef": 0.7072,
+      "se_cluster": NaN,
+      "t": NaN,
+      "sig": NaN,
+      "n_obs": 21975,
+      "n_clusters": 4395,
+      "r2": NaN
+    },
+    {
+      "dataset": "saopaulo",
+      "term": "corr(loglen,ntrans)",
+      "coef": 0.379,
+      "se_cluster": NaN,
+      "t": NaN,
+      "sig": NaN,
+      "n_obs": 21975,
+      "n_clusters": 4395,
+      "r2": NaN
+    }
+  ],
+  "corr": {
+    "entropy": {
+      "entropy": 1.0,
+      "loglen": 0.16211077867646928,
+      "ntrans": 0.7072441337982758
+    },
+    "loglen": {
+      "entropy": 0.16211077867646928,
+      "loglen": 1.0,
+      "ntrans": 0.37897337052356594
+    },
+    "ntrans": {
+      "entropy": 0.7072441337982758,
+      "loglen": 0.37897337052356594,
+      "ntrans": 1.0
+    }
+  }
+}

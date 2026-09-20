@@ -1,0 +1,60 @@
+{
+  "dataset": "saopaulo",
+  "gate_ok": true,
+  "anchor": 0.4004476549976816,
+  "anchor_ref": 0.40045,
+  "K": 4,
+  "A2": {
+    "share_users_multi": 0.326962457337884,
+    "share_req_multi": 0.41114982578397213,
+    "n_users_multi": 1437,
+    "ss_sit_given_user": 0.0037117552988746327,
+    "ss_user_alone": 0.2762865541347668,
+    "spread_obs": 0.2462962962962964,
+    "spread_null": 0.2195248019684438,
+    "perm_p": 0.001996007984031936,
+    "kruskal_p": 5.379257732580041e-11,
+    "n_sit_positive": 4,
+    "n_sit": 4,
+    "delta_aggregate": 0.03561812208803056
+  },
+  "C2": {
+    "h": {
+      "train": {
+        "ent_med": 0.7141687445797399,
+        "dom_med": 0.5952380952380952,
+        "share80": 0.16860068259385666,
+        "dis_med": 4.0,
+        "n_users": 4395
+      },
+      "val": {
+        "ent_med": 0.0,
+        "dom_med": 1.0,
+        "share80": 0.7198757763975155,
+        "dis_med": 1.0,
+        "n_users": 1610
+      },
+      "test": {
+        "ent_med": 0.0,
+        "dom_med": 1.0,
+        "share80": 0.6975635593220338,
+        "dis_med": 1.0,
+        "n_users": 1888
+      },
+      "all": {
+        "ent_med": 0.7185907016043819,
+        "dom_med": 0.5869565217391305,
+        "share80": 0.17042093287827076,
+        "dis_med": 4.0,
+        "n_users": 4395
+      },
+      "win20": 0.6661756372187928,
+      "win50": 0.7145305746877186
+    },
+    "median_test_len": 4.0,
+    "median_tl_len": 36.0,
+    "split_violations": 0,
+    "split_ties": 0
+  },
+  "D": null
+}

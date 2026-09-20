@@ -1,0 +1,4 @@
+dataset,coppia,spearman_rho,n_utenti,soglia_preregistrata,supera
+ml1m,boundary_share ~ entropia,0.5473,6040,0.3,1.0
+ml1m,boundary_share ~ n_situazioni,0.5549,6040,0.3,1.0
+ml1m,boundary_share ~ lunghezza_test,0.0778,6040,,
