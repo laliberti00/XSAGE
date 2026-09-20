@@ -111,20 +111,27 @@ def stats_from(S, C, nmac, K):
 def boot_two_level(per_seed, rng, B, use_mean_rule=True):
     """CI a due livelli (utenti x semi), pattern di wi0d_probe.py:113-122.
     per_seed = lista di (A_sum, A_cnt, nmac, K), una per seme.
-    SOGLIA CORRETTA: scarta sulla MEDIA degli utenti fra i semi, non sul minimo."""
+
+    SOGLIA CORRETTA: scarta sulla MEDIA degli utenti fra i semi, non sul minimo.
+
+    Vettorizzato: il ricampionamento degli utenti di un seme e' una matrice di pesi W (B x n_utenti)
+    moltiplicata per A (n_utenti x K*nmac), cioe' UNA chiamata BLAS invece di B matvec. Il loop
+    ingenuo su B x semi x (backbone,metodo) costava ~1e11 flop per dataset ed era ineseguibile.
+    """
     ns = [len(a[0]) for a in per_seed]
     n_ref = float(np.mean(ns)) if use_mean_rule else float(min(ns))
     if n_ref < CI_MIN_USERS: return (np.nan,) * 8
-    acc = np.empty((B, 4))
-    for r in range(B):
-        si = rng.integers(0, len(per_seed), len(per_seed))
-        vals = np.empty((len(si), 4))
-        for t, j in enumerate(si):
-            A_s, A_c, nmac, K = per_seed[j]
-            pick = rng.integers(0, len(A_s), len(A_s))
-            w = np.bincount(pick, minlength=len(A_s)).astype(np.float64)
-            vals[t] = stats_from((w @ A_s)[None], (w @ A_c)[None], nmac, K)[0]
-        acc[r] = np.nanmean(vals, axis=0)
+    V = np.empty((len(per_seed), B, 4))
+    for j, (A_s, A_c, nmac, K) in enumerate(per_seed):
+        n = len(A_s)
+        # i pesi del bootstrap a cluster sono esattamente Multinomial(n, uniforme su n utenti):
+        # molto piu' veloce di np.add.at su B*n indici sparsi.
+        W = rng.multinomial(n, np.full(n, 1.0 / n), size=B).astype(np.float64)
+        V[j] = stats_from(W @ A_s, W @ A_c, nmac, K)
+    # livello 2: ricampiona i SEMI; per ogni seme estratto si prende un replicato indipendente
+    si = rng.integers(0, len(per_seed), size=(B, len(per_seed)))
+    ri = rng.integers(0, B, size=(B, len(per_seed)))
+    acc = np.nanmean(V[si, ri], axis=1)
     lo = np.nanpercentile(acc, 2.5, axis=0); hi = np.nanpercentile(acc, 97.5, axis=0)
     return tuple(np.concatenate([lo, hi]))
 
