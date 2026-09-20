@@ -272,3 +272,153 @@ Le due definizioni non sono intercambiabili. I numeri del Turno 0 sono validi **
 core-only con cui sono stati prodotti** e vanno citati così. Se B.2 usa «la quota di attribuzione di
 A.5», deve dichiarare quale delle due sta usando. Registrato in `scripts/explain/README.md`.
 
+---
+
+## A.3 — Il record per richiesta
+
+`scripts/explain/persist_records.py`. Sostituisce la selezione a cascata di
+`scripts/yelp/reco_examples.py`, che calcola queste stesse quantità per 60.000 richieste e **ne salva
+cinque**. Qui si salva ogni richiesta di test della griglia base, senza filtri.
+
+### Due riusi che tolgono ore di calcolo
+
+**1. L'assegnazione situazionale non dipende dal backbone.** `build_descriptor`, `select_K`,
+`select_eps`, `fit_rough_kmeans`, `_assign`, `b_z` e quindi `mem` e `nudge` dipendono **solo** da
+(dataset, seme): in `results_record.py:225-233` sono infatti calcolati **fuori** dal ciclo sui
+backbone, che cambia soltanto la funzione di punteggio e κ. Si calcola una volta per (dataset, seme)
+e si riusa sui 4 backbone: **20 calcoli invece di 60**.
+
+**2. I ranghi per richiesta erano già su disco.** `outputs_results/cache/raw_<ds>.npz` contiene
+`<backbone>|<metodo>|<seme>|{rk,catrk,g,gc,tk50}` per **7 backbone × 3 metodi × 5 semi**, su tutti e
+5 i dataset, più le chiavi `_shared|{u,tm,icm,nmac,nI,G1,Pu}`. Verificato: **zero celle mancanti**
+sulla griglia base. I ranghi non si ricalcolano — si leggono. Era la parte cara.
+
+### Il costo vero — il brief sbaglia di 7× su ml1m
+
+Il brief stima «circa 22 secondi per dataset», sommando da `cost_ml1m.txt` descrittore 8,25 +
+k-means 13,89 + bias 0,09 = 22,23. **Quella somma salta i due stadi dominanti**, che sono nello
+stesso file: selezione K **72,47 s** e selezione ε **73,64 s**. Il file dichiara `FIT totale 168,34 s`.
+
+Vince il disco. Tempo **misurato** per (dataset, seme):
+
+| dataset | atteso dal brief | `FIT totale` su disco | misurato (media 5 semi) |
+|---|---:|---:|---:|
+| ml1m | 22 s | 168,34 s | **~134 s** |
+| nyc_tist | 22 s | 30,85 s | **~35 s** |
+| saopaulo | 22 s | 31,15 s | ~32 s |
+
+I due dataset piccoli tornano; ml1m è più veloce del file di costo ma **sei volte** la stima del
+brief. Costo totale reale di A.3: **~18 minuti**, non «22 s per dataset».
+
+### Il punto tecnico — quantificato
+
+Il brief avverte che `reco_examples.py:70` usa `nudge = b_z[kte]` mentre la produzione usa `mem @ b_z`,
+e che sulle boundary i due divergono. Ora è misurato. Entrambe le forme sono persistite in colonne
+separate (`nudge_vector` e `nudge_core_only`) più la differenza massima per riga.
+
+| cella | `bfrac` | core: max\|Δ\| | boundary: mediana di max\|Δ\| | boundary: max | **boundary con top-1 diverso** |
+|---|---:|---:|---:|---:|---:|
+| ml1m seme 42 | 0,24229 | **0,00e+00** | 1,6258 | 2,7095 | **91,2%** |
+| ml1m seme 43 | 0,24236 | 0,00e+00 | 1,6272 | 2,6981 | 91,1% |
+| nyc_tist seme 42 | 0,25681 | 0,00e+00 | 1,2566 | 2,2842 | 67,9% |
+| nyc_tist seme 46 | 0,35403 | 0,00e+00 | 1,4271 | 2,7418 | 55,6% |
+
+Due letture:
+
+- **Sulle richieste core le due forme sono identiche bit a bit** (differenza massima esattamente zero,
+  non «entro tolleranza»): `mem` è one-hot, come atteso. Chi ha usato `b_z[k]` sulle core non ha
+  sbagliato nulla.
+- **Sulle boundary il 91,2% delle richieste ha una categoria dominante DIVERSA** fra le due forme, su
+  ml1m. Non è uno scarto numerico: è un'altra risposta alla domanda «quale categoria sta spingendo
+  questa raccomandazione». Combinato con `bfrac`: usare `b_z[k]` nominerebbe il driver sbagliato su
+  **0,24229 × 0,912 = 22,1% di tutte le richieste di test di ml1m**.
+
+Una spiegazione costruita su `b_z[k]` sarebbe quindi sbagliata su circa una richiesta su cinque, e
+sbagliata in modo invisibile — la frase resta plausibile, cita solo la categoria che non c'entra.
+
+### Composizione (ml1m, seme 42, B_blind)
+
+`|T|` — dimensione dell'insieme di situazioni: 1 → 73.649 · 2 → 17.980 · 3 → 5.182 · 4 → 388.
+
+| strato | boundary | core |
+|---|---:|---:|
+| `harm` | 6.721 | 29.376 |
+| `neutral` | 9.338 | 16.389 |
+| `win` | 7.491 | 27.884 |
+
+Le boundary **non** sono concentrate nelle vittorie: sono sovra-rappresentate nei `neutral`
+(9.338 su 25.727 = 36,3%, contro un `bfrac` del 24,2%). Il campione di `reco_examples.py`, che le
+scartava tutte alla riga 75, non era solo più piccolo: era **sbilanciato**.
+
+### Verifica finale di A.3
+
+**60 celle su 60 scritte**, 36 MB in parquet zstd (1,25–1,30 MB per cella su ml1m, 0,28 su nyc_tist,
+0,33 su saopaulo). Le colonne sono quelle del brief più `nudge_core_only`, `nudge_maxabs_diff`,
+`rank_base_item` e `rank_sit_item`.
+
+**Gate di ancoraggio — PASSATO.** Ricalcolato dai record persistiti, `CatMRR` di `B_blind|SIT|42`:
+
+| dataset | atteso | ricalcolato | differenza |
+|---|---:|---:|---:|
+| ml1m | 0,38479 | 0,384789 | 1,04e-06 |
+| nyc_tist | 0,34162 | 0,341624 | 4,35e-06 |
+| saopaulo | 0,40045 | 0,400448 | 2,35e-06 |
+
+Le differenze sono **sotto 5e-06**, cioè il solo errore di memorizzazione: `results_record.csv`
+conserva i valori già arrotondati a 5 decimali. È la stessa osservazione fatta dal run di
+`conditional_prior` dell'11 settembre (massimo osservato lì: 4,9e-06). Per questo il gate confronta
+la **differenza** contro una tolleranza di 5e-5 e non i valori arrotondati: `round(v,4)==round(rif,4)`
+dà un falso mismatch quando il valore cade sul bordo di arrotondamento.
+
+`bfrac` ricalcolato su ml1m è **0,24229 / 0,24236 / 0,24226 / 0,24229 / 0,24226** sui cinque semi,
+identico a `outputs_results/explain/cost_ml1m.txt` e a `sweep_sensitivity.csv` (0,2423). La catena
+di misura è ancorata a monte, non solo a valle.
+
+---
+
+## A.6 — Corpus stratificato
+
+`scripts/explain/build_corpus.py`. **60 celle scritte, 1,7 MB, 29.853 richieste in totale.**
+
+| voce | valore |
+|---|---|
+| seme di campionamento | **20260921**, deterministico per cella |
+| obiettivo per strato | 100 |
+| **strati sotto quota** | **nessuno**, in nessuna delle 60 celle |
+| unione media per cella | 497,6 richieste |
+| sovrapposizioni medie | 2,4 |
+
+### Il seme doveva essere fisso, e per poco non lo era
+
+Il brief chiede che il campione sia **lo stesso per tutti e tre i bracci LLM**. La prima stesura
+derivava il seme di cella da `hash((seed, ds, bk, sd))`: `hash()` su stringhe in Python è
+**randomizzato per processo** (`PYTHONHASHSEED`), quindi avrebbe prodotto un campione diverso a ogni
+rilancio — e diverso fra il braccio A, il B e il C, che è esattamente il confronto che il disegno
+deve reggere. Sostituito con `sha256` dei campi: verificato che due chiamate indipendenti diano lo
+stesso insieme di id.
+
+### Filtri rimossi
+
+Tutti e cinque quelli di `scripts/yelp/reco_examples.py`, elencati riga per riga nella docstring:
+`:75` (solo core), `:77` (`nudge <= 0`), `:81` (`rb < 4`), `:84` (`rs > 12 or rs >= rb`),
+`:86` (massimo guadagno per situazione).
+
+### La sovrapposizione degli strati, dichiarata
+
+`{win, neutral, harm}` e `{boundary, core}` sono **due partizioni della stessa popolazione**, non
+cinque insiemi disgiunti: una richiesta può essere insieme `win` e `boundary`. Si campionano 100 per
+strato in modo indipendente e si tiene l'unione, con una colonna di flag per strato — così ogni
+strato ha i suoi 100 pieni e le sovrapposizioni sono contate (`sovrapposti`, in media 2,4 per cella)
+invece di essere nascoste da una deduplicazione silenziosa.
+
+### Popolazioni disponibili per strato
+
+| dataset | `win` | `neutral` | `harm` | `boundary` | `core` |
+|---|---|---|---|---|---|
+| ml1m | 10.231–35.376 | 25.716–68.644 | 18.324–36.110 | 23.547–23.557 | 73.642–73.652 |
+| nyc_tist | 3.950–7.240 | 1.617–7.277 | 6.451–10.984 | 3.415–6.267 | 11.435–14.287 |
+| saopaulo | 5.507–11.019 | 5.610–11.579 | 6.295–8.917 | 4.111–6.192 | 17.629–19.710 |
+
+Il minimo assoluto su tutta la griglia è **1.617** (`neutral`, nyc_tist): sedici volte la quota. Il
+margine è ampio ovunque, quindi la quota di 100 può essere alzata senza rifare nulla se B.2 lo chiede.
+
