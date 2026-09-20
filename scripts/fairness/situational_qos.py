@@ -54,8 +54,24 @@ OUT = CLEAN / "outputs_results" / "fairness"
 MIN_USERS, MIN_REQS = 8, 20                 # soglia low_support del brief
 CI_MIN_USERS = 10                           # soglia dei CI (wi0d_probe.py:114)
 
+# terna pre-registrata del brief (regola 6). Vale per i tre dataset della griglia base.
 ANCHOR = {"ml1m": 0.38479, "nyc_tist": 0.34162, "saopaulo": 0.40045}
 GATE_TOL = 5e-5
+
+
+def published_catmrr(city):
+    """Valore pubblicato di CatMRR per (city, B_blind, SIT, seme 42) da results_record.csv.
+    Per i tre dataset della griglia base deve coincidere con ANCHOR: verificato qui sotto, cosi'
+    il gate copre anche yelp e kuairand, che non hanno una terna pre-registrata."""
+    rr = pd.read_csv(CLEAN / "outputs_results" / "results_record.csv")
+    m = rr[(rr.dataset == city) & (rr.backbone == "B_blind") &
+           (rr.metric == "CatMRR") & (rr.method == "SIT")]
+    if m.empty: return None
+    v = float(m.mean_s42.iloc[0])
+    if city in ANCHOR and abs(v - ANCHOR[city]) > GATE_TOL:
+        raise SystemExit(f"results_record.csv non concorda con la terna pre-registrata su {city}: "
+                         f"{v} vs {ANCHOR[city]}. STOP.")
+    return v
 
 
 def log(msg, f=None):
@@ -174,10 +190,14 @@ def main():
                         SS = A_s.sum(0); CC = A_c.sum(0)
                         Sc = SS.reshape(K, nmac).sum(0); Cc = CC.reshape(K, nmac).sum(0)
                         per = [Sc[c] / Cc[c] for c in range(nmac) if Cc[c] >= max(MSUPP, 1)]
-                        gate_rows.append(dict(dataset=city,
-                                              micro_atteso=ANCHOR[city], micro_ricomposto=micro_rec,
-                                              macro_atteso=macro_msupp(cm, tm, nmac),
-                                              macro_ricomposto=float(np.mean(per))))
+                        exp = published_catmrr(city)
+                        if exp is None:
+                            log(f"  [{city}] nessun CatMRR pubblicato: gate non applicabile", f)
+                        else:
+                            gate_rows.append(dict(dataset=city, preregistrato=city in ANCHOR,
+                                                  micro_atteso=exp, micro_ricomposto=micro_rec,
+                                                  macro_atteso=macro_msupp(cm, tm, nmac),
+                                                  macro_ricomposto=float(np.mean(per))))
         df = pd.concat(rows, ignore_index=True)
         df.to_csv(OUT / f"situational_qos_{city}.csv", index=False)
         log(f"  -> situational_qos_{city}.csv  {len(df)} righe  "
@@ -216,7 +236,8 @@ def main():
     for r in gate_rows:
         d1 = abs(r["micro_ricomposto"] - r["micro_atteso"]); d2 = abs(r["macro_ricomposto"] - r["macro_atteso"])
         g1, g2 = d1 < GATE_TOL, d2 < GATE_TOL; ok &= (g1 and g2)
-        log(f"  {r['dataset']:10s} micro {r['micro_atteso']:.5f} vs {r['micro_ricomposto']:.6f} "
+        tag = "pre-registrato" if r["preregistrato"] else "da results_record"
+        log(f"  {r['dataset']:10s} [{tag:17s}] micro {r['micro_atteso']:.5f} vs {r['micro_ricomposto']:.6f} "
             f"(diff {d1:.1e}) {'OK' if g1 else 'FALLITO'} | macro {r['macro_atteso']:.6f} vs "
             f"{r['macro_ricomposto']:.6f} (diff {d2:.1e}) {'OK' if g2 else 'FALLITO'}", f)
     log(f"  GATE: {'PASSATO' if ok else 'FALLITO — FERMARSI'}", f)

@@ -422,3 +422,112 @@ invece di essere nascoste da una deduplicazione silenziosa.
 Il minimo assoluto su tutta la griglia è **1.617** (`neutral`, nyc_tist): sedici volte la quota. Il
 margine è ampio ovunque, quindi la quota di 100 può essere alzata senza rifare nulla se B.2 lo chiede.
 
+---
+
+## A.4 — Equità per situazione
+
+`scripts/fairness/situational_qos.py` (la directory `scripts/fairness/` non esisteva: creata).
+Copertura: **griglia base 3 × 4 × 5** come risultato principale, **griglia piena 5 × 7 × 5** in
+appendice, per i tre metodi `BASE` / `SIT` / `Steck-b`. Righe prodotte: 525 (ml1m, K=5) ·
+840 (nyc_tist, K=8) · 420 (saopaulo, K=4). **Zero celle `low_support`** su tutta la griglia base:
+la soglia (< 8 utenti o < 20 richieste) non scarta nulla, nessuna cella è stata cancellata.
+
+### Gate di identità — PASSATO, e in quale forma
+
+Il brief chiede che «la media micro pesata per richieste sulle situazioni riproduca esattamente la
+macro-Cat-MRR aggregata». Preso alla lettera è **un test vacuo**: la macro è una media *non pesata*
+sulle categorie e non si decompone per situazione, quindi nessuna ricombinazione pesata delle
+macro-per-situazione può riprodurla. Applicata la regola 8 — controllare la vacuità prima di
+eseguire — il gate è verificato nelle due forme che sono esatte:
+
+| forma | identità | esito |
+|---|---|---|
+| **micro** | Σ_s n_s · media_s(cm) / N = `CatMRR` aggregato | ✅ |
+| **macro ricomposta** | ricombinazione per (situazione, categoria) → `macro-Cat-MRR` aggregato | ✅ |
+
+Forma micro contro i valori pubblicati, `B_blind|SIT|42`:
+
+| dataset | pubblicato | ricomposto | differenza |
+|---|---:|---:|---:|
+| ml1m | 0,38479 | 0,384789 | 1,04e-06 |
+| nyc_tist | 0,34162 | 0,341624 | 4,35e-06 |
+| saopaulo | 0,40045 | 0,400448 | 2,35e-06 |
+
+Un controllo indipendente: la ricomposizione pesata del **contrasto** `SIT − BASE` su ml1m/B_blind dà
+**+0,02517**, cioè esattamente il `delta_l1` pubblicato in `results_record.csv` per `CatMRR`. La
+partizione per situazione è completa e correttamente pesata.
+
+### Due scelte annotate
+
+**1. Le etichette di situazione non sono confrontabili fra semi.** Il clustering è ri-stimato a ogni
+seme (`results_record.py:230`, `fit_rough_kmeans(seed=seed)`): la situazione 3 del seme 42 non è la
+situazione 3 del seme 43, gli indici sono arbitrari. Quindi la tabella per situazione è riportata
+**per seme**, senza mai mediare un indice fra semi, e il CI a due livelli è applicato solo alle
+sintesi **senza etichetta** — minimo rawlsiano, quartile basso, divario, media — che sono statistiche
+d'ordine e quindi confrontabili.
+
+Ha una conseguenza pratica: il divario va calcolato **per seme e poi mediato**, non mediando prima le
+macro-per-situazione. L'ordine sbagliato dà su ml1m/B_blind −0,00445 → −0,00981 invece del corretto
+−0,00918 → −0,01421: stessa direzione, magnitudini diverse.
+
+**2. Il costo del bootstrap.** Il pattern di `wi0d_probe.py:113-122` è un doppio ciclo Python su
+B × semi; sulla griglia piena sarebbe stato ~1e11 flop per dataset. Riscritto come una matrice di
+pesi (B × n_utenti) moltiplicata per l'aggregato per (utente, situazione, categoria): una chiamata
+BLAS invece di B matvec, con i pesi estratti da una multinomiale (che *è* il bootstrap a cluster).
+Misurato: 0,27 s per seme. Risultato identico, tempo da ore a secondi.
+
+### Correzione della soglia dei CI
+
+`wi0d_probe.py:114` scarta una cella se il **minimo** di utenti fra i semi è < 10; qui si usa la
+**media**. Su tutta la griglia base il CI a due livelli è calcolato su **36 celle su 36, zero NaN**.
+
+### Il risultato — SIT peggiora il divario in 9 celle su 12
+
+Divario rawlsiano (minimo − media sulle situazioni), media dei divari per-seme:
+
+| dataset | backbone | BASE | SIT | SIT − BASE | |
+|---|---|---:|---:|---:|---|
+| ml1m | B_blind | −0,00918 | −0,01421 | −0,00502 | peggiora |
+| ml1m | EASE | −0,01181 | −0,01702 | −0,00520 | peggiora |
+| ml1m | AFM | −0,09610 | −0,09520 | +0,00090 | migliora |
+| ml1m | SASRec | −0,05993 | −0,05718 | +0,00275 | migliora |
+| nyc_tist | B_blind | −0,03516 | −0,04540 | −0,01023 | peggiora |
+| nyc_tist | EASE | −0,03874 | −0,05061 | −0,01188 | peggiora |
+| nyc_tist | AFM | −0,02592 | −0,05254 | −0,02662 | peggiora |
+| nyc_tist | SASRec | −0,04105 | −0,06548 | −0,02443 | peggiora |
+| saopaulo | B_blind | −0,02076 | −0,03034 | −0,00958 | peggiora |
+| saopaulo | EASE | −0,01881 | −0,04663 | −0,02782 | peggiora |
+| saopaulo | AFM | −0,03258 | −0,06967 | −0,03709 | peggiora |
+| saopaulo | SASRec | −0,04742 | −0,04600 | +0,00143 | migliora |
+
+**Il pattern è per dataset, non per famiglia di backbone.** Su ml1m il segno si divide fra ciechi al
+contesto (peggiora) e consapevoli (migliora); su nyc_tist peggiora su tutti e quattro; su saopaulo su
+tre su quattro. La lettura «X-SAGE distribuisce meglio dove guadagna meno» regge **solo su ml1m** e
+non va generalizzata.
+
+Dove i CI a due livelli **non si sovrappongono** fra BASE e SIT — il test più conservativo, perché
+confronta i due intervalli separati e non la differenza appaiata — il peggioramento è netto su
+**saopaulo/AFM** (BASE [−0,04303 · −0,02282] contro SIT [−0,08119 · −0,05713]) e
+**saopaulo/EASE** (BASE [−0,02874 · −0,01475] contro SIT [−0,05851 · −0,03443]). Altrove gli
+intervalli si toccano, il che con questo test non significa assenza di effetto.
+
+### La media non pesata delle macro-per-situazione
+
+Terza quantità, negativa in **11 celle su 12** (da −0,00124 a −0,06557; unica eccezione
+saopaulo/AFM, +0,00675). Non contraddice il guadagno aggregato: smette di pesare per dimensione
+**sia le situazioni sia le categorie**, quindi misura una cosa diversa. Dice però una cosa precisa:
+**il guadagno aggregato di X-SAGE è concentrato nelle situazioni e nelle categorie grandi**, non
+distribuito su tutte.
+
+### Steck-b dentro le situazioni
+
+Su **nyc_tist e saopaulo il profilo statico per-utente serve le situazioni molto più uniformemente di
+entrambi gli altri metodi** — macro-per-situazione 0,306 contro 0,208 di BASE su nyc_tist/AFM,
+0,319 contro 0,211 su saopaulo/AFM. Su ml1m sono alla pari (0,131 contro 0,130 su B_blind).
+
+Non è una sorpresa isolata: è coerente con `conditional_prior.md` dell'11 settembre, che ha trovato
+Steck-b avanti sull'aggregato negli stessi due dataset. Qui si aggiunge che lo è anche **dentro** le
+situazioni, cioè sul terreno dove X-SAGE dovrebbe vincere per costruzione.
+
+**Nessun p-value sul confronto lens-KL ↔ ΔQoS**, come da brief: è descrittivo.
+
