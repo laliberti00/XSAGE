@@ -201,3 +201,74 @@ e su quelle fuori abitudine. Positivo = X-SAGE avanti.
 Il file è già stato interpretato in `outputs_results/conditional_prior.md`: **H1 non confermata**,
 PASS su 2 dataset su 5 contro i 3 richiesti. Il gate di ancoraggio del suo §5 era passato su tutte le 80 celle.
 
+---
+
+## A.2 — Ricerca degli script perduti — **TROVATI**
+
+Gli script del Turno 0 (`t0_measure.py`, `t0_measure2.py`, `t0_measure3.py`, `t0_measure4.py`) **esistono
+e sono integri.** `scripts/explain/` non esisteva: creata. **Non sono stati eseguiti.**
+
+### Dove non erano
+
+| luogo cercato | comando | esito |
+|---|---|---|
+| directory `scratchpad/` sul sistema | `find /Users/lucaaliberti -maxdepth 6 -type d -name scratchpad` | tutte **vuote** |
+| per nome, ovunque nella home | `find /Users/lucaaliberti -name "t0_measure*"` | nessun risultato |
+| scratchpad di sessione | `ls /private/tmp/claude-501/*/*/scratchpad` | 9 directory, **tutte a 0 file** |
+| stash git | `git stash list` | 1 stash, contiene una riga di `.gitignore` |
+| backup su Desktop | `ls ~/Desktop/backup/` | la directory non esiste |
+| `~/Desktop/DEBUG_XSAGE/` | `ls` | 15 `.md` di audit, nessuno script |
+
+`/private/tmp` viene azzerato al riavvio della macchina. La copia su disco era persa davvero.
+
+### Dove erano
+
+`Turno0_fattibilita.md:19` dichiara che gli script stavano nello scratchpad della sessione. Quella
+sessione è **`5a2b49a6-047b-489b-ac20-87da8428826a`** (28 agosto 2026, 15:37–15:57). Gli script erano
+stati creati con heredoc via Bash, quindi **il sorgente integrale è registrato nel transcript**:
+
+```
+~/.claude/projects/-Users-lucaaliberti-Downloads-xsage-clean/5a2b49a6-047b-489b-ac20-87da8428826a.jsonl
+```
+
+`grep -c t0_measure` → 15 occorrenze; quattro blocchi `tool_use` di tipo `Bash` con `command` di
+7.812 / 5.955 / 4.090 / 3.782 caratteri, ciascuno un `cat > …/t0_measureN.py <<'PYEOF'`.
+Estratti **verbatim** dai campi `input.command`, senza riscrivere una riga.
+
+| file | righe | byte | compila | misura |
+|---|---:|---:|:--:|---|
+| `t0_measure.py` | 145 | 7.522 | ✓ | ancoraggi, costo di persistenza, core-only vs boundary-aware |
+| `t0_measure2.py` | 93 | 5.587 | ✓ | supporto di PN/PS, strati su tutto il test, costo |
+| `t0_measure3.py` | 61 | 3.729 | ✓ | PN/PS discrimina Ĉ vero da Ĉ falso? |
+| `t0_measure4.py` | 53 | 3.420 | ✓ | quota di spostamento attribuibile a Ĉ |
+
+Integrità verificata con `python -m py_compile` (compila, non esegue): 4 su 4.
+Le docstring corrispondono una a una alle misure descritte nel brief.
+
+### Conseguenza: **A.5 decade**
+
+Il brief prevedeva A.5 («Ricostruzione della validazione delle metriche») *solo se* A.2 falliva.
+A.2 non è fallito. La validazione delle metriche non va rifatta: va **rieseguita** quando serve,
+a partire da codice che ora è sotto git.
+
+### Il caveat che conta più del recupero
+
+Gli script usano la forma **corretta** per il nudge — `mem @ b_z` a `t0_measure3.py:22`,
+`t0_measure4.py:21`, `t0_measure.py:58` — e `t0_measure.py:59` tiene apposta anche
+`nudge_core_only = b_z[kte]` per misurare la differenza fra le due. Su quello il Turno 0 è pulito.
+
+**Ma l'insieme Ĉ è costruito core-only.** `t0_measure3.py:33`:
+
+```python
+top3 = np.argsort(-b_z, axis=1)[:, :3]; bot3 = np.argsort(b_z, axis=1)[:, :3]
+...  gets = lambda r: set(top3[int(kte[r])].tolist())
+```
+
+cioè le top-3 della **riga `b_z[k]` della situazione principale**, non le top-*m* del vettore
+`mem @ b_z` **della richiesta**, che è ciò che specifica A.5. Sulle richieste core coincidono;
+sulle boundary (**24,2% su ml1m**) no.
+
+Le due definizioni non sono intercambiabili. I numeri del Turno 0 sono validi **per la definizione
+core-only con cui sono stati prodotti** e vanno citati così. Se B.2 usa «la quota di attribuzione di
+A.5», deve dichiarare quale delle due sta usando. Registrato in `scripts/explain/README.md`.
+
