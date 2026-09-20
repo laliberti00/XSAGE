@@ -1,0 +1,22 @@
+dataset,backbone,method,situation,n_users_per_seed,min,media,vecchia_regola,nuova_regola
+yelp,B_blind,BASE,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,B_blind,SIT,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,B_blind,Steck-b,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,B_full,BASE,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,B_full,SIT,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,B_full,Steck-b,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,EASE,BASE,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,EASE,SIT,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,EASE,Steck-b,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,DeepFM,BASE,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,DeepFM,SIT,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,DeepFM,Steck-b,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,AFM,BASE,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,AFM,SIT,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,AFM,Steck-b,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,FPMC,BASE,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,FPMC,SIT,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,FPMC,Steck-b,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,SASRec,BASE,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,SASRec,SIT,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta
+yelp,SASRec,Steck-b,2,"[0, 0, 3222, 0, 0]",0,644.4,scartata,tenuta

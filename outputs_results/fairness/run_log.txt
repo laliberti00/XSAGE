@@ -1,0 +1,46 @@
+=== A.4 situational_qos — avvio 2026-09-21 00:42:11 — B=600 ===
+[ml1m seme 42] K=5 eps=0.03 bfrac=0.24229 (153.01s)
+[ml1m seme 43] K=5 eps=0.03 bfrac=0.24236 (150.45s)
+[ml1m seme 44] K=5 eps=0.03 bfrac=0.24226 (154.27s)
+[ml1m seme 45] K=5 eps=0.03 bfrac=0.24229 (173.68s)
+[ml1m seme 46] K=5 eps=0.03 bfrac=0.24226 (138.04s)
+  -> situational_qos_ml1m.csv  525 righe  (0 celle low_support, mai cancellate)
+  -> rawlsian_ml1m.csv
+[nyc_tist seme 42] K=8 eps=0.02 bfrac=0.25681 (45.2s)
+[nyc_tist seme 43] K=8 eps=0.02 bfrac=0.23365 (42.41s)
+[nyc_tist seme 44] K=8 eps=0.02 bfrac=0.20258 (44.71s)
+[nyc_tist seme 45] K=8 eps=0.02 bfrac=0.19292 (44.79s)
+[nyc_tist seme 46] K=8 eps=0.02 bfrac=0.35403 (42.37s)
+  -> situational_qos_nyc_tist.csv  840 righe  (0 celle low_support, mai cancellate)
+  -> rawlsian_nyc_tist.csv
+[saopaulo seme 42] K=4 eps=0.03 bfrac=0.17258 (44.71s)
+[saopaulo seme 43] K=4 eps=0.03 bfrac=0.24932 (48.54s)
+[saopaulo seme 44] K=4 eps=0.03 bfrac=0.25994 (47.69s)
+[saopaulo seme 45] K=4 eps=0.03 bfrac=0.19013 (43.3s)
+[saopaulo seme 46] K=4 eps=0.03 bfrac=0.19462 (44.97s)
+  -> situational_qos_saopaulo.csv  420 righe  (0 celle low_support, mai cancellate)
+  -> rawlsian_saopaulo.csv
+[yelp seme 42] K=3 eps=0.05 bfrac=0.23058 (58.93s)
+=== A.4 situational_qos — avvio 2026-09-21 01:05:33 — B=600 ===
+[yelp seme 42] K=3 eps=0.05 bfrac=0.23058 (46.62s)
+=== A.4 situational_qos — avvio 2026-09-21 01:06:57 — B=600 ===
+[yelp seme 42] K=3 eps=0.05 bfrac=0.23058 (44.39s)
+[yelp seme 43] K=3 eps=0.05 bfrac=0.76942 (67.25s)
+[yelp seme 44] K=3 eps=0.05 bfrac=0.20722 (58.13s)
+[yelp seme 45] K=3 eps=0.05 bfrac=0.76942 (49.11s)
+[yelp seme 46] K=3 eps=0.05 bfrac=0.76942 (44.57s)
+  -> situational_qos_yelp.csv  315 righe  (84 celle low_support, mai cancellate)
+  -> rawlsian_yelp.csv
+[kuairand seme 42] K=4 eps=0.01 bfrac=0.24284 (109.34s)
+[kuairand seme 43] K=4 eps=0.01 bfrac=0.24447 (119.34s)
+[kuairand seme 44] K=4 eps=0.01 bfrac=0.24268 (91.24s)
+[kuairand seme 45] K=4 eps=0.01 bfrac=0.23645 (81.92s)
+[kuairand seme 46] K=4 eps=0.01 bfrac=0.23683 (84.82s)
+  -> situational_qos_kuairand.csv  420 righe  (0 celle low_support, mai cancellate)
+  -> rawlsian_kuairand.csv
+
+=== GATE DI IDENTITA' (B_blind, SIT, seme 42) ===
+  yelp       [da results_record] micro 0.75422 vs 0.754223 (diff 3.5e-06) OK | macro 0.086408 vs 0.086408 (diff 0.0e+00) OK
+  kuairand   [da results_record] micro 0.27815 vs 0.278154 (diff 3.8e-06) OK | macro 0.084523 vs 0.084523 (diff 4.2e-17) OK
+  GATE: PASSATO
+  celle che cambiano stato con la soglia media (invece del minimo): 21

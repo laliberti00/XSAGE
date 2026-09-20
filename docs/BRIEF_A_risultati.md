@@ -531,3 +531,156 @@ situazioni, cioè sul terreno dove X-SAGE dovrebbe vincere per costruzione.
 
 **Nessun p-value sul confronto lens-KL ↔ ΔQoS**, come da brief: è descrittivo.
 
+### Griglia piena 5 × 7 (appendice)
+
+Gate di identità passato anche su yelp e kuairand, letto da `results_record.csv` invece che dalla
+terna pre-registrata (che copre solo i tre dataset base): yelp micro 0,754223 contro 0,75422
+(diff 3,5e-06), kuairand 0,278154 contro 0,27815 (3,8e-06). **La ricomposizione macro è esatta**:
+differenza 0,0e+00 su yelp e 4,2e-17 su kuairand.
+
+SIT − BASE del divario rawlsiano, tutte e 35 le celle:
+
+| dataset | AFM | B_blind | B_full | DeepFM | EASE | FPMC | SASRec |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| ml1m | +0,0009 | −0,0050 | +0,0035 | −0,0004 | −0,0052 | +0,0075 | +0,0028 |
+| nyc_tist | −0,0266 | −0,0102 | −0,0317 | −0,0099 | −0,0119 | −0,0081 | −0,0244 |
+| saopaulo | −0,0371 | −0,0096 | −0,0231 | −0,0084 | −0,0278 | +0,0002 | +0,0014 |
+| yelp | −0,0039 | −0,0083 | −0,0036 | −0,0055 | −0,0057 | −0,0083 | −0,0052 |
+| kuairand | −0,0042 | −0,0028 | −0,0022 | −0,0077 | −0,0119 | −0,0017 | −0,0021 |
+
+**SIT peggiora il divario in 29 celle su 35.** L'unico dataset con esito misto è **ml1m** (4 su 7
+migliorano). Sugli altri quattro il segno è quasi uniformemente negativo. La griglia piena conferma
+e rafforza la griglia base: non è un effetto dei quattro backbone scelti.
+
+### Celle a supporto basso e stabilità del clustering
+
+`low_support`: **zero** su ml1m, nyc_tist, saopaulo, kuairand. **84 su 315 (26,7%) su yelp.**
+
+`bfrac` per seme — è la diagnosi di quanto tiene l'assegnazione situazionale:
+
+| dataset | per seme | spread |
+|---|---|---:|
+| ml1m | 0,242 · 0,242 · 0,242 · 0,242 · 0,242 | **0,000** |
+| kuairand | 0,243 · 0,244 · 0,243 · 0,236 · 0,237 | 0,008 |
+| saopaulo | 0,173 · 0,249 · 0,260 · 0,190 · 0,195 | 0,087 |
+| nyc_tist | 0,257 · 0,234 · 0,203 · 0,193 · 0,354 | 0,161 |
+| yelp | 0,231 · **0,769** · 0,207 · **0,769** · **0,769** | **0,562** |
+
+ml1m è perfettamente stabile; kuairand quasi; nyc_tist e saopaulo oscillano del 40–80% del proprio
+valore; **yelp collassa** — su tre semi su cinque il **77% delle richieste è boundary**, cioè
+l'assegnazione situazionale non discrimina più nulla. Conferma indipendente, e più forte, della
+diagnosi già nota su yelp (lens-KL 0,000–0,036). Va riportata come osservazione negativa.
+
+Nota operativa: la fragilità di nyc_tist e saopaulo è un dato nuovo che riguarda la **griglia base**,
+non solo i dataset esclusi. Accanto ai loro numeri di equità va scritto che le loro situazioni non
+sono lo stesso oggetto da un seme all'altro.
+
+### La correzione della soglia — l'evidenza dice che la vecchia regola era giusta
+
+Il brief chiede di passare dal **minimo** alla **media** degli utenti fra i semi, e di annotare quali
+celle cambiano stato. Applicato. **Cambiano stato 21 celle**, tutte da *scartata* a *tenuta*, e sono
+tutte **la stessa cella**: yelp, situazione 2, ripetuta sui 7 backbone × 3 metodi.
+
+Utenti per seme in quella cella: **`[0, 0, 3222, 0, 0]`**.
+
+La situazione **non esiste in quattro semi su cinque**.
+
+- vecchia regola — minimo = 0 < 10 → **scartata**. Corretto.
+- nuova regola — media = 644,4 ≥ 10 → **tenuta**. Sbagliato: calcolerebbe un CI a due livelli su
+  cinque semi di cui quattro non contribuiscono niente.
+
+**La media nasconde l'assenza; il minimo la rileva.** Nei soli 21 casi in cui la correzione morde,
+peggiora la misura. Sulla griglia base è inerte: zero celle cambiano stato.
+
+**Raccomandazione: tenere il minimo.** La correzione resta implementata e disattivabile
+(`use_mean_rule` in `boot_two_level`), e l'elenco completo è in
+`outputs_results/fairness/soglia_cambi_stato.csv`.
+
+---
+
+## A.5 — Non eseguita
+
+Il brief la prevede **solo se A.2 fallisce**. A.2 non è fallito: i quattro script del Turno 0 sono
+stati recuperati integri e sono sotto git. La validazione delle metriche non va ricostruita.
+
+Resta aperto il punto definitorio di A.2: gli script implementano Ĉ sulle top-3 di `b_z[k]`
+(core-only), mentre A.5 lo specifica sulle top-*m* di `mem @ b_z` della richiesta. Chiunque riusi
+«la quota di attribuzione di A.5» deve dichiarare quale delle due definizioni sta usando.
+
+---
+
+## Gate di Luca — le cinque risposte
+
+**1. Il gate di ancoraggio torna a 5 decimali dai record persistiti?**
+**Sì.** ml1m 0,384789 · nyc_tist 0,341624 · saopaulo 0,400448, contro 0,38479 / 0,34162 / 0,40045.
+Differenze **1,04e-06 · 4,35e-06 · 2,35e-06**, cioè il solo arrotondamento a 5 decimali con cui
+`results_record.csv` conserva i valori. Il gate confronta le differenze contro 5e-5 e non i valori
+arrotondati, perché `round(v,4)==round(rif,4)` dà falsi mismatch sui bordi.
+
+**2. Il gate di identità micro-pesata di A.4 torna a 5 decimali?**
+**Sì, in entrambe le forme esatte, e su tutti e 5 i dataset** — non solo sui 3 della griglia base.
+Forma micro: differenza massima 4,35e-06. Forma macro ricomposta: **esatta** (0,0e+00 su yelp,
+4,2e-17 su kuairand). La forma letterale chiesta dal brief — media micro-pesata delle
+*macro*-per-situazione — non è stata eseguita perché è vacua: la macro non si decompone così.
+Controllo indipendente: il contrasto `SIT − BASE` ricomposto su ml1m/B_blind dà **+0,02517**,
+identico al `delta_l1` pubblicato.
+
+**3. `sweep_sensitivity` estende il gradiente di ambiguità a 5 dataset?**
+**Sì — un esperimento in meno.** Colonna `boundary_frac` presente; 1.520 righe su 1.520 trovano la
+baseline a `kappa=0`, che è valida per ogni `(K, ε)` perché a nudge azzerato il punteggio non dipende
+da K, ε o gating (verificato su 100 celle, spread 0,0 esatto). Copertura: **5 dataset × 4 backbone ×
+5 semi**, 15–16 punti di ambiguità per seme. 14 celle su 20 con pendenza negativa, 17 su 20 con i 5
+semi concordi, e il segno tiene in 20 su 20 deconfondendo dentro K.
+⚠️ Tre limiti: κ fisso a 0,25 (non al κ\* del dataset), solo gating `double`, **nessun CI nel file**.
+
+**4. La numerosità reale per strato del corpus.**
+**100 su 100 in tutte e 60 le celle. Nessuno strato sotto quota.** Unione media 497,6 richieste per
+cella (2,4 sovrapposizioni, perché `{win,neutral,harm}` e `{boundary,core}` sono due partizioni della
+stessa popolazione). Il minimo assoluto disponibile su tutta la griglia è 1.617 (`neutral`,
+nyc_tist), sedici volte la quota: si può alzare a 200–300 senza rifare nulla.
+
+**5. Quante celle cambiano stato con la correzione della soglia dei CI.**
+**21 — e sono tutte la stessa cella.** yelp, situazione 2, ripetuta su 7 backbone × 3 metodi. Utenti
+per seme: `[0, 0, 3222, 0, 0]`: la situazione non esiste in quattro semi su cinque. Il minimo (=0) la
+scarta correttamente, la media (=644,4) la tiene a torto. **Nei soli casi in cui la correzione morde,
+peggiora la misura. Raccomandazione: tenere il minimo.** Sulla griglia base è inerte.
+
+---
+
+## Discrepanze fra brief e disco (regola 3)
+
+| # | il brief dice | il disco dice |
+|---|---|---|
+| 1 | `battery_bfull.py:59` contiene `mem @ b_z` | è a **`:178`**; a `:59` non c'è nulla di pertinente. Gli altri quattro riferimenti sono corretti |
+| 2 | il codice di produzione usa `mem @ b_z` in cinque punti | il **prodotto** c'è in tutti e cinque, ma la stringa letterale **non compare mai**: è sempre `mem_x.astype(np.float32) @ b_z`. Un refactoring via grep testuale mancherebbe il bersaglio |
+| 3 | `wi0d_probe.py:115-116` è la regola della soglia sui semi | quelle righe sono il **bootstrap a due livelli**. La soglia è a **`:114`** (`n = min(...); if n < 10`); `RHO_MIN = 0.30` a `:73` è un'altra soglia ancora |
+| 4 | A.3 costa «circa 22 s per dataset» | quella somma **salta i due stadi dominanti** di `cost_ml1m.txt`: selezione K 72,47 s + selezione ε 73,64 s. Lo stesso file dichiara `FIT totale 168,34 s`; misurato ~134 s per seme. A.3 costa **~18 minuti** |
+| 5 | «un documento riporta 14 s» per il record per richiesta | né 14 s né 22 s: il costo dipende dal dataset e va da ~32 s (saopaulo) a ~134 s (ml1m) per seme |
+| 6 | gate di identità = micro pesata ↔ macro aggregata | **vacuo** come scritto: la macro è una media non pesata sulle categorie e non si decompone per situazione. Verificato nelle due forme esatte (§A.4) |
+| 7 | correggere la soglia dei CI da minimo a media | applicato, ma **l'evidenza dice il contrario**: le 21 celle che cambiano stato sono una situazione assente in 4 semi su 5, che il minimo scarta correttamente |
+| 8 | `.gitignore` «ignora solo `outputs_results/*.npy`, `cache/`, …» | vero ma **la regola non è ricorsiva**: i 60 `.npy` in `exp_s1/{parts,peruser}` (9,7 MB) non erano intercettati. Corretto con `outputs_results/**/*.npy` |
+
+Nessuna di queste ha richiesto di toccare il metodo. Il gate di ancoraggio è invariato.
+
+---
+
+## Scelte conservative annotate (regola 1)
+
+1. **A.0** — committati anche i due CSV di settembre, `CAP5/CAP6_NUMERI.md`, `scripts/validation/` e
+   le due figure, oltre a quanto elencato dal brief: erano untracked per lo stesso motivo.
+2. **A.3** — persistito anche `nudge_core_only` per intero (non solo lo scalare), più
+   `rank_base_item` e `rank_sit_item`, che costano nulla e rendono misurabile il divario fra le forme.
+3. **A.4** — tabella per situazione riportata **per seme**; CI a due livelli solo sulle statistiche
+   d'ordine, perché gli indici di situazione non sono confrontabili fra semi.
+4. **A.4** — gate esteso ai 5 dataset leggendo il valore atteso da `results_record.csv`, con verifica
+   che sui 3 dataset base coincida con la terna pre-registrata.
+5. **A.6** — campionati 100 per strato in modo indipendente e tenuta l'unione con flag per strato,
+   invece di deduplicare in silenzio: le 2,4 sovrapposizioni medie sono contate e riportate.
+
+## Cosa resta fuori
+
+- `CLAUDE.md` è **0 byte**. Da scrivere o cancellare.
+- Il commit di stanotte è **locale**: `git push` non è stato eseguito.
+- `main` è **70 commit indietro** e non ha commit unici.
+- **10 branch locali non hanno mai visto un push.**
+
